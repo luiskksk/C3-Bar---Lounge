@@ -3,124 +3,293 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>C3 | Bar & Lounge</title>
 
-  <link rel="stylesheet" href="./css/style.css">
+  <link
+    rel="stylesheet"
+    href="./css/style.css"
+  >
 </head>
 
 <body>
 
+  <!-- =====================================
+       HEADER
+  ====================================== -->
+
   <header class="header">
 
-    <div class="logo-area">
+    <a
+      href="./index.html"
+      class="logo-link"
+      aria-label="Página inicial do C3"
+    >
+
       <img
         src="./assets/imgs/Logos/logo-c3.png"
-        alt="Logo C3 Bar & Lounge"
+        alt="C3 Bar & Lounge"
         class="logo"
       >
-    </div>
+
+    </a>
+
+
+    <!-- MENU RESPONSIVO -->
+
+    <input
+      type="checkbox"
+      id="menu-toggle"
+      class="menu-toggle"
+    >
+
+    <label
+      for="menu-toggle"
+      class="menu-icon"
+      aria-label="Abrir menu"
+    >
+
+      <span></span>
+      <span></span>
+      <span></span>
+
+    </label>
+
 
     <nav class="nav">
-      <a href="./index.html">Início</a>
-      <a href="./pages/sobre.html">Sobre</a>
-      <a href="./pages/cardapio.html">Cardápio</a>
-      <a href="./pages/produtos.html">Produtos</a>
-      <a href="./pages/contato.html">Contato</a>
+
+      <a
+        href="./index.html"
+        class="ativo"
+      >
+        Início
+      </a>
+
+      <a href="./pages/sobre.html">
+        Sobre
+      </a>
+
+      <a href="./pages/cardapio.html">
+        Cardápio
+      </a>
+
+      <a href="./pages/produtos.html">
+        Produtos
+      </a>
+
+      <a href="./pages/contato.html">
+        Contato
+      </a>
+
     </nav>
 
-    <a href="./pages/login.html" class="btn-login">
+
+    <a
+      href="./pages/login.html"
+      class="btn-login"
+    >
       Entrar
     </a>
 
   </header>
 
+
   <main>
 
-    <section class="hero">
+    <!-- =====================================
+         HERO
+    ====================================== -->
 
-      <div class="hero-conteudo">
+    <section class="home-hero">
 
-        <p class="hero-tag">
-          UMA EXPERIÊNCIA DE OUTRA GALÁXIA
+      <div class="home-hero-fundo"></div>
+
+      <div class="home-hero-conteudo">
+
+        <p class="tag">
+          BEM-VINDO AO UNIVERSO C3
         </p>
 
         <h1>
-          C3
-          <span>BAR & LOUNGE</span>
+          NÃO É APENAS
+          <span>UM LUGAR.</span>
         </h1>
 
-        <p class="hero-texto">
-          Gastronomia, entretenimento e tecnologia
-          reunidos em uma experiência única.
+        <p class="home-hero-texto">
+          Uma experiência onde gastronomia,
+          tecnologia e entretenimento se encontram
+          em um ambiente criado para transportar
+          você para outro universo.
         </p>
 
-        <div class="hero-botoes">
+        <div class="hero-acoes">
 
           <a
             href="./pages/cardapio.html"
-            class="btn-principal"
+            class="botao botao-roxo"
           >
-            Ver Cardápio
+            Explorar Cardápio
           </a>
 
           <a
             href="./pages/sobre.html"
-            class="btn-secundario"
+            class="botao botao-outline"
           >
-            Conhecer o C3
+            Descobrir o C3
           </a>
 
         </div>
 
       </div>
 
-      <div class="hero-visual">
 
-        <div class="glow"></div>
+      <div class="home-hero-visual">
+
+        <div class="orbita orbita-a"></div>
+        <div class="orbita orbita-b"></div>
+        <div class="orbita orbita-c"></div>
+
+        <div class="estrela estrela-a"></div>
+        <div class="estrela estrela-b"></div>
+        <div class="estrela estrela-c"></div>
 
         <img
           src="./assets/imgs/Logos/logo-c3.png"
-          alt="Logo C3"
+          alt=""
           class="hero-logo"
         >
 
       </div>
 
-    </section>
 
-    <section class="destaques">
+      <div class="scroll-indicador">
 
-      <div class="titulo-secao">
-        <p>DESCUBRA O C3</p>
-        <h2>Mais do que um bar</h2>
+        <span>DESCUBRA</span>
+
+        <div class="scroll-linha"></div>
+
       </div>
 
-      <div class="cards">
+    </section>
 
-        <article class="card">
 
-          <h3>Cardápio</h3>
+    <!-- =====================================
+         EXPERIÊNCIA
+    ====================================== -->
+
+    <section class="experiencia">
+
+      <div class="experiencia-numero">
+        01
+      </div>
+
+      <div class="experiencia-conteudo">
+
+        <p class="tag">
+          A EXPERIÊNCIA
+        </p>
+
+        <h2>
+          ENTRE EM UM
+          <span>NOVO UNIVERSO</span>
+        </h2>
+
+        <p>
+          O C3 foi pensado para transformar uma saída
+          comum em algo memorável. Luzes, sons,
+          gastronomia temática e tecnologia fazem
+          parte de uma experiência construída em
+          cada detalhe.
+        </p>
+
+        <a
+          href="./pages/sobre.html"
+          class="link-seta"
+        >
+          Conheça nossa história
+          <span>→</span>
+        </a>
+
+      </div>
+
+
+      <div class="experiencia-visual">
+
+        <div class="planeta"></div>
+
+        <div class="anel-planeta"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================
+         TRÊS PILARES
+    ====================================== -->
+
+    <section class="pilares">
+
+      <div class="pilares-titulo">
+
+        <p class="tag">
+          DESCUBRA O C3
+        </p>
+
+        <h2>
+          UMA EXPERIÊNCIA
+          <span>COMPLETA</span>
+        </h2>
+
+      </div>
+
+
+      <div class="pilares-grid">
+
+        <article class="pilar">
+
+          <span class="pilar-numero">
+            01
+          </span>
+
+          <div class="pilar-linha"></div>
+
+          <h3>
+            Gastronomia
+          </h3>
 
           <p>
-            Pratos, sobremesas e bebidas exclusivas
-            inspiradas no universo espacial.
+            Pratos e criações exclusivas
+            inspiradas em uma atmosfera espacial.
           </p>
 
           <a href="./pages/cardapio.html">
-            Explorar →
+            Ver cardápio →
           </a>
 
         </article>
 
-        <article class="card">
 
-          <h3>Experiência</h3>
+        <article class="pilar">
+
+          <span class="pilar-numero">
+            02
+          </span>
+
+          <div class="pilar-linha"></div>
+
+          <h3>
+            Ambiente
+          </h3>
 
           <p>
-            Um ambiente futurista criado para unir
-            gastronomia, tecnologia e entretenimento.
+            Um espaço futurista criado para fazer
+            cada visitante se sentir parte do C3.
           </p>
 
           <a href="./pages/sobre.html">
@@ -129,13 +298,22 @@
 
         </article>
 
-        <article class="card">
 
-          <h3>C3 Collection</h3>
+        <article class="pilar">
+
+          <span class="pilar-numero">
+            03
+          </span>
+
+          <div class="pilar-linha"></div>
+
+          <h3>
+            C3 Collection
+          </h3>
 
           <p>
-            Produtos exclusivos para levar um pouco
-            da experiência C3 com você.
+            Produtos exclusivos inspirados
+            na identidade e no universo do C3.
           </p>
 
           <a href="./pages/produtos.html">
@@ -148,21 +326,119 @@
 
     </section>
 
+
+    <!-- =====================================
+         CHAMADA CARDÁPIO
+    ====================================== -->
+
+    <section class="chamada-cardapio">
+
+      <div class="chamada-luz"></div>
+
+      <div class="chamada-conteudo">
+
+        <p class="tag">
+          SABORES DE OUTRO MUNDO
+        </p>
+
+        <h2>
+          CONHEÇA NOSSO
+          <span>CARDÁPIO</span>
+        </h2>
+
+        <p>
+          Uma seleção de pratos, sobremesas e
+          bebidas não alcoólicas criadas para
+          completar a experiência C3.
+        </p>
+
+        <a
+          href="./pages/cardapio.html"
+          class="botao botao-roxo"
+        >
+          Abrir Cardápio
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================
+         FINAL
+    ====================================== -->
+
+    <section class="home-final">
+
+      <img
+        src="./assets/imgs/Logos/logo-c3.png"
+        alt="Logo C3"
+        class="final-logo"
+      >
+
+      <p>
+        UMA EXPERIÊNCIA DE OUTRA GALÁXIA
+      </p>
+
+      <h2>
+        O UNIVERSO
+        <span>C3</span>
+        ESPERA POR VOCÊ.
+      </h2>
+
+      <a
+        href="./pages/sobre.html"
+        class="botao botao-outline"
+      >
+        Conhecer o C3
+      </a>
+
+    </section>
+
   </main>
+
 
   <footer class="footer">
 
-    <h2>C3</h2>
+    <div class="footer-logo">
+
+      <img
+        src="./assets/imgs/Logos/logo-c3.png"
+        alt="C3"
+      >
+
+    </div>
+
+    <div class="footer-links">
+
+      <a href="./index.html">
+        Início
+      </a>
+
+      <a href="./pages/sobre.html">
+        Sobre
+      </a>
+
+      <a href="./pages/cardapio.html">
+        Cardápio
+      </a>
+
+      <a href="./pages/produtos.html">
+        Produtos
+      </a>
+
+      <a href="./pages/contato.html">
+        Contato
+      </a>
+
+    </div>
 
     <p>
-      Bar & Lounge
+      © 2026 C3 Bar & Lounge
     </p>
 
-    <span>
-      © 2026 C3 Bar & Lounge
-    </span>
-
   </footer>
+
 
   <script src="./js/script.js"></script>
 
