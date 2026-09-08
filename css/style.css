@@ -3114,3 +3114,2806 @@ a {
   }
 
 }
+
+/* ==================================================
+   CARDÁPIO NOVO
+================================================== */
+
+
+/* =========================
+   HERO
+========================= */
+
+.cardapio-novo-hero {
+
+  min-height: 100svh;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(360px, .9fr);
+
+  align-items: center;
+
+  gap: 70px;
+
+  padding:
+    125px 7%
+    75px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 80% 50%,
+      rgba(125, 55, 210, .23),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      #050507,
+      #08080c
+    );
+
+}
+
+
+.cardapio-novo-texto {
+
+  max-width: 750px;
+
+}
+
+
+.cardapio-novo-texto h1 {
+
+  margin-top: 18px;
+
+  font-size:
+    clamp(58px, 7vw, 100px);
+
+  line-height: .9;
+
+  letter-spacing: -4px;
+
+}
+
+
+.cardapio-novo-texto h1 span {
+
+  display: block;
+
+  color: var(--roxo);
+
+}
+
+
+.cardapio-novo-texto
+> p:not(.tag) {
+
+  max-width: 590px;
+
+  margin-top: 28px;
+
+  color: var(--cinza);
+
+  font-size: 17px;
+
+  line-height: 1.8;
+
+}
+
+
+.cardapio-novo-texto
+.botao {
+
+  margin-top: 30px;
+
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.cardapio-logo-box {
+
+  min-height: 500px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+
+.cardapio-logo-glow {
+
+  width:
+    min(40vw, 500px);
+
+  height:
+    min(40vw, 500px);
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(169, 88, 255, .30),
+      rgba(83, 94, 220, .10) 45%,
+      transparent 70%
+    );
+
+  filter: blur(20px);
+
+}
+
+
+.cardapio-logo-img {
+
+  width:
+    min(32vw, 420px);
+
+  max-height: 420px;
+
+  position: relative;
+
+  z-index: 5;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(
+      0 0 30px
+      rgba(164, 92, 255, .27)
+    );
+
+  animation:
+    flutuar 5s
+    ease-in-out
+    infinite;
+
+}
+
+
+.cardapio-orbita {
+
+  position: absolute;
+
+  border-radius: 50%;
+
+}
+
+
+.cardapio-orbita-1 {
+
+  width:
+    min(35vw, 440px);
+
+  height:
+    min(35vw, 440px);
+
+  border:
+    1px solid
+    rgba(164, 92, 255, .22);
+
+  animation:
+    girar 28s
+    linear infinite;
+
+}
+
+
+.cardapio-orbita-2 {
+
+  width:
+    min(44vw, 550px);
+
+  height:
+    min(23vw, 285px);
+
+  border:
+    1px solid
+    rgba(102, 140, 255, .16);
+
+  transform:
+    rotate(26deg);
+
+  animation:
+    girarContrario 34s
+    linear infinite;
+
+}
+
+
+/* =========================
+   INTRO
+========================= */
+
+.cardapio-novo-intro {
+
+  min-height: 470px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    75px 7%;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      180deg,
+      #08080c,
+      #09090d
+    );
+
+}
+
+
+.cardapio-novo-intro h2 {
+
+  margin-top: 15px;
+
+  font-size:
+    clamp(42px, 5vw, 68px);
+
+  line-height: 1;
+
+}
+
+
+.cardapio-novo-intro h2 span {
+
+  display: block;
+
+  color: var(--roxo);
+
+}
+
+
+.cardapio-novo-intro
+> p:not(.tag) {
+
+  max-width: 620px;
+
+  margin-top: 24px;
+
+  color: var(--cinza);
+
+  font-size: 16px;
+
+  line-height: 1.8;
+
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+.cardapio-novo-menu {
+
+  padding:
+    90px 7%
+    110px;
+
+  background:
+    radial-gradient(
+      circle at 50% 10%,
+      rgba(109, 51, 190, .08),
+      transparent 25%
+    ),
+    linear-gradient(
+      180deg,
+      #09090d,
+      #060608
+    );
+
+}
+
+
+.cardapio-novo-grid {
+
+  width: 100%;
+
+  max-width: 1280px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 32px;
+
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.cardapio-produto {
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(164, 92, 255, .20);
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.035),
+      rgba(255,255,255,.012)
+    );
+
+  transition:
+    transform .3s,
+    border-color .3s,
+    box-shadow .3s;
+
+}
+
+
+.cardapio-produto:hover {
+
+  transform:
+    translateY(-6px);
+
+  border-color:
+    rgba(164, 92, 255, .55);
+
+  box-shadow:
+    0 22px 60px
+    rgba(0, 0, 0, .30);
+
+}
+
+
+/* =========================
+   IMAGENS
+========================= */
+
+.cardapio-produto-img {
+
+  width: 100%;
+
+  aspect-ratio: 16 / 10;
+
+  position: relative;
+
+  overflow: hidden;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 4px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(164, 92, 255, .60),
+      rgba(80, 100, 210, .22),
+      rgba(164, 92, 255, .45)
+    );
+
+}
+
+
+/* moldura escura */
+
+.cardapio-produto-img::before {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 4px;
+
+  z-index: 3;
+
+  pointer-events: none;
+
+  border:
+    4px solid #08080c;
+
+  box-shadow:
+    inset 0 0 24px
+    rgba(0, 0, 0, .55);
+
+}
+
+
+/* degradê */
+
+.cardapio-produto-img::after {
+
+  content: "";
+
+  position: absolute;
+
+  inset: 4px;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      transparent 60%,
+      rgba(5, 5, 7, .28)
+    );
+
+}
+
+
+/* FOTO */
+
+.cardapio-produto-img img {
+
+  width:
+    calc(100% + 18px);
+
+  height:
+    calc(100% + 18px);
+
+  max-width: none;
+
+  flex-shrink: 0;
+
+  object-fit: cover;
+
+  object-position: center;
+
+  transform:
+    scale(1.05);
+
+  transition:
+    transform .45s;
+
+}
+
+
+.cardapio-produto:hover
+.cardapio-produto-img img {
+
+  transform:
+    scale(1.09);
+
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.cardapio-produto-info {
+
+  min-height: 230px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  padding:
+    28px 30px
+    30px;
+
+  text-align: center;
+
+}
+
+
+.cardapio-produto-info
+> span {
+
+  color:
+    rgba(255,255,255,.15);
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 3px;
+
+}
+
+
+.cardapio-produto-info h3 {
+
+  margin-top: 12px;
+
+  font-size:
+    clamp(25px, 2.5vw, 34px);
+
+}
+
+
+.cardapio-produto-info p {
+
+  max-width: 430px;
+
+  margin-top: 14px;
+
+  color: var(--cinza);
+
+  font-size: 15px;
+
+  line-height: 1.7;
+
+}
+
+
+.cardapio-produto-info strong {
+
+  margin-top: auto;
+
+  padding-top: 22px;
+
+  color: var(--roxo);
+
+  font-size: 19px;
+
+}
+
+
+/* =========================
+   FINAL
+========================= */
+
+.cardapio-novo-final {
+
+  min-height: 540px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    80px 7%;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(113,49,192,.2),
+      transparent 32%
+    ),
+    #060608;
+
+}
+
+
+.cardapio-novo-final h2 {
+
+  max-width: 900px;
+
+  margin:
+    16px 0
+    34px;
+
+  font-size:
+    clamp(40px, 6vw, 72px);
+
+  line-height: 1;
+
+}
+
+
+.cardapio-novo-final h2 span {
+
+  display: block;
+
+  color: var(--roxo);
+
+}
+
+
+/* ==================================================
+   TABLET
+================================================== */
+
+@media
+(max-width: 900px) {
+
+  .cardapio-novo-hero {
+
+    min-height: auto;
+
+    grid-template-columns:
+      1fr;
+
+    gap: 20px;
+
+    padding:
+      120px 7%
+      65px;
+
+    text-align: center;
+
+  }
+
+
+  .cardapio-novo-texto {
+
+    margin: auto;
+
+  }
+
+
+  .cardapio-novo-texto
+  > p:not(.tag) {
+
+    margin-left: auto;
+
+    margin-right: auto;
+
+  }
+
+
+  .cardapio-logo-box {
+
+    min-height: 400px;
+
+  }
+
+
+  .cardapio-logo-img {
+
+    width:
+      min(50vw, 350px);
+
+  }
+
+
+  .cardapio-novo-grid {
+
+    grid-template-columns:
+      1fr;
+
+    max-width: 680px;
+
+  }
+
+}
+
+
+/* ==================================================
+   CELULAR
+================================================== */
+
+@media
+(max-width: 600px) {
+
+  .cardapio-novo-hero {
+
+    padding:
+      105px 20px
+      50px;
+
+  }
+
+
+  .cardapio-novo-texto h1 {
+
+    font-size:
+      clamp(
+        48px,
+        15vw,
+        67px
+      );
+
+    letter-spacing: -3px;
+
+  }
+
+
+  .cardapio-novo-texto
+  > p:not(.tag) {
+
+    font-size: 15px;
+
+  }
+
+
+  .cardapio-logo-box {
+
+    min-height: 310px;
+
+  }
+
+
+  .cardapio-logo-img {
+
+    width:
+      min(68vw, 275px);
+
+    max-height: 275px;
+
+  }
+
+
+  .cardapio-orbita-1 {
+
+    width: 245px;
+
+    height: 245px;
+
+  }
+
+
+  .cardapio-orbita-2 {
+
+    width: 305px;
+
+    height: 160px;
+
+  }
+
+
+  .cardapio-novo-intro {
+
+    min-height: 380px;
+
+    padding:
+      55px 20px;
+
+  }
+
+
+  .cardapio-novo-intro h2 {
+
+    font-size:
+      clamp(
+        35px,
+        11vw,
+        47px
+      );
+
+  }
+
+
+  .cardapio-novo-menu {
+
+    padding:
+      60px 20px
+      75px;
+
+  }
+
+
+  .cardapio-novo-grid {
+
+    gap: 22px;
+
+  }
+
+
+  .cardapio-produto {
+
+    border-radius: 17px;
+
+  }
+
+
+  .cardapio-produto-img {
+
+    aspect-ratio: 4 / 3;
+
+  }
+
+
+  .cardapio-produto-img img {
+
+    transform:
+      scale(1.07);
+
+  }
+
+
+  .cardapio-produto:hover
+  .cardapio-produto-img img {
+
+    transform:
+      scale(1.10);
+
+  }
+
+
+  .cardapio-produto-info {
+
+    min-height: 215px;
+
+    padding:
+      24px 22px
+      27px;
+
+  }
+
+
+  .cardapio-produto-info h3 {
+
+    font-size: 27px;
+
+  }
+
+
+  .cardapio-produto-info p {
+
+    font-size: 14px;
+
+  }
+
+
+  .cardapio-novo-final {
+
+    min-height: 470px;
+
+    padding:
+      65px 20px;
+
+  }
+
+}
+
+/* ==================================================
+   PÁGINA DE PRODUTOS
+================================================== */
+
+
+/* HERO */
+
+.produtos-page-hero {
+
+  min-height: 100svh;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(360px, .9fr);
+
+  align-items: center;
+
+  gap: 70px;
+
+  padding:
+    125px 7% 75px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 80% 48%,
+      rgba(125, 55, 210, .23),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      #050507,
+      #08080c
+    );
+
+}
+
+
+.produtos-page-texto {
+
+  max-width: 760px;
+
+}
+
+
+.produtos-page-texto h1 {
+
+  margin-top: 18px;
+
+  font-size:
+    clamp(55px, 6.8vw, 96px);
+
+  line-height: .91;
+
+  letter-spacing: -4px;
+
+}
+
+
+.produtos-page-texto h1 span {
+
+  display: block;
+
+  color: var(--roxo);
+
+}
+
+
+.produtos-page-texto
+> p:not(.tag) {
+
+  max-width: 590px;
+
+  margin-top: 27px;
+
+  color: var(--cinza);
+
+  font-size: 17px;
+
+  line-height: 1.8;
+
+}
+
+
+.produtos-page-texto
+.botao {
+
+  margin-top: 30px;
+
+}
+
+
+/* LOGO LOJA */
+
+.produtos-page-logo {
+
+  min-height: 500px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+
+.produtos-logo-glow {
+
+  width:
+    min(40vw, 500px);
+
+  height:
+    min(40vw, 500px);
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(164, 92, 255, .30),
+      rgba(90, 100, 220, .10) 45%,
+      transparent 70%
+    );
+
+  filter: blur(20px);
+
+}
+
+
+.produtos-logo-img {
+
+  width:
+    min(32vw, 420px);
+
+  max-height: 420px;
+
+  position: relative;
+
+  z-index: 5;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(
+      0 0 30px
+      rgba(164, 92, 255, .25)
+    );
+
+  animation:
+    flutuar 5s
+    ease-in-out
+    infinite;
+
+}
+
+
+.produtos-logo-orbita {
+
+  position: absolute;
+
+  border-radius: 50%;
+
+}
+
+
+.produtos-logo-orbita-1 {
+
+  width:
+    min(35vw, 440px);
+
+  height:
+    min(35vw, 440px);
+
+  border:
+    1px solid
+    rgba(164, 92, 255, .22);
+
+  animation:
+    girar 27s
+    linear infinite;
+
+}
+
+
+.produtos-logo-orbita-2 {
+
+  width:
+    min(44vw, 550px);
+
+  height:
+    min(23vw, 285px);
+
+  border:
+    1px solid
+    rgba(102, 140, 255, .17);
+
+  transform:
+    rotate(25deg);
+
+}
+
+
+/* INTRO */
+
+.produtos-page-intro {
+
+  min-height: 450px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    75px 7%;
+
+  text-align: center;
+
+  background:
+    linear-gradient(
+      180deg,
+      #08080c,
+      #09090d
+    );
+
+}
+
+
+.produtos-page-intro h2 {
+
+  margin-top: 15px;
+
+  font-size:
+    clamp(42px, 5vw, 68px);
+
+  line-height: 1;
+
+}
+
+
+.produtos-page-intro h2 span {
+
+  display: block;
+
+  color: var(--roxo);
+
+}
+
+
+.produtos-page-intro
+> p:not(.tag) {
+
+  max-width: 620px;
+
+  margin-top: 24px;
+
+  color: var(--cinza);
+
+  font-size: 16px;
+
+  line-height: 1.8;
+
+}
+
+
+/* SECTION */
+
+.produtos-page-section {
+
+  padding:
+    90px 7% 115px;
+
+  background:
+    radial-gradient(
+      circle at 50% 8%,
+      rgba(110, 50, 190, .08),
+      transparent 25%
+    ),
+    linear-gradient(
+      180deg,
+      #09090d,
+      #060608
+    );
+
+}
+
+
+/* GRID */
+
+.produtos-page-grid {
+
+  width: 100%;
+
+  max-width: 1300px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 28px;
+
+}
+
+
+/* CARD */
+
+.produto-loja-card {
+
+  overflow: hidden;
+
+  border:
+    1px solid
+    rgba(255,255,255,.075);
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.035),
+      rgba(255,255,255,.012)
+    );
+
+  transition:
+    transform .3s,
+    border-color .3s,
+    box-shadow .3s;
+
+}
+
+
+.produto-loja-card:hover {
+
+  transform:
+    translateY(-6px);
+
+  border-color:
+    rgba(164,92,255,.38);
+
+  box-shadow:
+    0 20px 55px
+    rgba(0,0,0,.28);
+
+}
+
+
+/* IMAGEM */
+
+.produto-loja-img {
+
+  width: 100%;
+
+  aspect-ratio: 1 / 1;
+
+  position: relative;
+
+  overflow: hidden;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    32px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(121, 61, 198, .11),
+      transparent 60%
+    ),
+    #09090d;
+
+}
+
+
+.produto-loja-img::before {
+
+  content: "";
+
+  width: 65%;
+
+  aspect-ratio: 1;
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  background:
+    rgba(143, 71, 225, .10);
+
+  filter:
+    blur(50px);
+
+  transition:
+    opacity .3s;
+
+}
+
+
+.produto-loja-img img {
+
+  width: 85%;
+
+  height: 85%;
+
+  max-width: 320px;
+
+  max-height: 320px;
+
+  position: relative;
+
+  z-index: 2;
+
+  object-fit: contain;
+
+  object-position: center;
+
+  transition:
+    transform .4s,
+    filter .4s;
+
+}
+
+
+.produto-loja-card:hover
+.produto-loja-img img {
+
+  transform:
+    scale(1.055)
+    translateY(-4px);
+
+  filter:
+    drop-shadow(
+      0 14px 18px
+      rgba(0,0,0,.25)
+    );
+
+}
+
+
+/* INFO */
+
+.produto-loja-info {
+
+  min-height: 215px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  padding:
+    26px;
+
+  text-align: center;
+
+}
+
+
+.produto-loja-info
+> span {
+
+  color:
+    rgba(255,255,255,.15);
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 3px;
+
+}
+
+
+.produto-loja-info h3 {
+
+  margin-top: 12px;
+
+  font-size:
+    clamp(21px, 2vw, 28px);
+
+}
+
+
+.produto-loja-info p {
+
+  max-width: 340px;
+
+  margin-top: 13px;
+
+  color: var(--cinza);
+
+  font-size: 14px;
+
+  line-height: 1.7;
+
+}
+
+
+.produto-loja-info strong {
+
+  margin-top: auto;
+
+  padding-top: 21px;
+
+  color: var(--roxo);
+
+  font-size: 18px;
+
+}
+
+
+/* ==================================================
+   BOX C3
+================================================== */
+
+.box-c3-destaque {
+
+  min-height: 700px;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(360px, .9fr)
+    minmax(0, 1fr);
+
+  align-items: center;
+
+  gap:
+    clamp(55px, 8vw, 120px);
+
+  padding:
+    95px 7%;
+
+  background:
+    radial-gradient(
+      circle at 22% 50%,
+      rgba(141, 66, 227, .20),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      #060608,
+      #08080c
+    );
+
+}
+
+
+.box-c3-imagem {
+
+  min-height: 480px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+
+.box-c3-glow {
+
+  width:
+    min(40vw, 480px);
+
+  height:
+    min(40vw, 480px);
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(163, 89, 255, .25),
+      transparent 68%
+    );
+
+  filter:
+    blur(15px);
+
+}
+
+
+.box-c3-imagem img {
+
+  width:
+    min(38vw, 480px);
+
+  max-height: 480px;
+
+  position: relative;
+
+  z-index: 3;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(
+      0 30px 40px
+      rgba(0,0,0,.35)
+    );
+
+  transition:
+    transform .4s;
+
+}
+
+
+.box-c3-imagem:hover img {
+
+  transform:
+    scale(1.04);
+
+}
+
+
+.box-c3-conteudo {
+
+  max-width: 650px;
+
+}
+
+
+.box-numero {
+
+  display: block;
+
+  margin-top: 22px;
+
+  color:
+    rgba(255,255,255,.14);
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  letter-spacing: 4px;
+
+}
+
+
+.box-c3-conteudo h2 {
+
+  margin-top: 12px;
+
+  font-size:
+    clamp(55px, 7vw, 90px);
+
+  line-height: .9;
+
+}
+
+
+.box-c3-conteudo h2 span {
+
+  display: block;
+
+  color: var(--roxo);
+
+}
+
+
+.box-c3-conteudo p {
+
+  max-width: 550px;
+
+  margin-top: 25px;
+
+  color: var(--cinza);
+
+  font-size: 16px;
+
+  line-height: 1.8;
+
+}
+
+
+.box-c3-conteudo strong {
+
+  display: block;
+
+  margin-top: 28px;
+
+  color: var(--roxo);
+
+  font-size: 24px;
+
+}
+
+
+/* FINAL */
+
+.produtos-page-final {
+
+  min-height: 540px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    80px 7%;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(113,49,192,.20),
+      transparent 32%
+    ),
+    #060608;
+
+}
+
+
+.produtos-page-final h2 {
+
+  max-width: 900px;
+
+  margin:
+    16px 0 34px;
+
+  font-size:
+    clamp(40px, 6vw, 72px);
+
+  line-height: 1;
+
+}
+
+
+.produtos-page-final h2 span {
+
+  display: block;
+
+  color: var(--roxo);
+
+}
+
+
+/* ==================================================
+   TABLET
+================================================== */
+
+@media (max-width: 900px) {
+
+  .produtos-page-hero {
+
+    min-height: auto;
+
+    grid-template-columns:
+      1fr;
+
+    gap: 20px;
+
+    padding:
+      120px 7% 65px;
+
+    text-align: center;
+
+  }
+
+
+  .produtos-page-texto {
+
+    margin: auto;
+
+  }
+
+
+  .produtos-page-texto
+  > p:not(.tag) {
+
+    margin-left: auto;
+
+    margin-right: auto;
+
+  }
+
+
+  .produtos-page-logo {
+
+    min-height: 400px;
+
+  }
+
+
+  .produtos-logo-img {
+
+    width:
+      min(50vw, 350px);
+
+  }
+
+
+  .produtos-page-grid {
+
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+  }
+
+
+  .box-c3-destaque {
+
+    grid-template-columns:
+      1fr;
+
+    gap: 20px;
+
+    text-align: center;
+
+  }
+
+
+  .box-c3-imagem {
+
+    min-height: 390px;
+
+  }
+
+
+  .box-c3-imagem img {
+
+    width:
+      min(60vw, 410px);
+
+  }
+
+
+  .box-c3-conteudo {
+
+    margin: auto;
+
+  }
+
+
+  .box-c3-conteudo p {
+
+    margin-left: auto;
+
+    margin-right: auto;
+
+  }
+
+}
+
+
+/* ==================================================
+   CELULAR
+================================================== */
+
+@media (max-width: 600px) {
+
+  .produtos-page-hero {
+
+    padding:
+      105px 20px 50px;
+
+  }
+
+
+  .produtos-page-texto h1 {
+
+    font-size:
+      clamp(
+        45px,
+        14vw,
+        63px
+      );
+
+    letter-spacing: -3px;
+
+  }
+
+
+  .produtos-page-texto
+  > p:not(.tag) {
+
+    font-size: 15px;
+
+  }
+
+
+  .produtos-page-logo {
+
+    min-height: 310px;
+
+  }
+
+
+  .produtos-logo-img {
+
+    width:
+      min(68vw, 275px);
+
+  }
+
+
+  .produtos-page-intro {
+
+    min-height: 380px;
+
+    padding:
+      55px 20px;
+
+  }
+
+
+  .produtos-page-intro h2 {
+
+    font-size:
+      clamp(
+        35px,
+        11vw,
+        47px
+      );
+
+  }
+
+
+  .produtos-page-section {
+
+    padding:
+      60px 20px 75px;
+
+  }
+
+
+  .produtos-page-grid {
+
+    grid-template-columns:
+      1fr;
+
+    gap: 22px;
+
+  }
+
+
+  .produto-loja-card {
+
+    width: 100%;
+
+    max-width: 430px;
+
+    margin: auto;
+
+  }
+
+
+  .produto-loja-img {
+
+    padding: 28px;
+
+  }
+
+
+  .produto-loja-img img {
+
+    width: 82%;
+
+    height: 82%;
+
+  }
+
+
+  .produto-loja-info {
+
+    min-height: 200px;
+
+    padding:
+      24px 22px 27px;
+
+  }
+
+
+  .produto-loja-info h3 {
+
+    font-size: 25px;
+
+  }
+
+
+  .box-c3-destaque {
+
+    min-height: 650px;
+
+    padding:
+      65px 20px;
+
+  }
+
+
+  .box-c3-imagem {
+
+    min-height: 310px;
+
+  }
+
+
+  .box-c3-imagem img {
+
+    width:
+      min(80vw, 315px);
+
+  }
+
+
+  .box-c3-conteudo h2 {
+
+    font-size:
+      clamp(
+        50px,
+        16vw,
+        68px
+      );
+
+  }
+
+
+  .produtos-page-final {
+
+    min-height: 470px;
+
+    padding:
+      65px 20px;
+
+  }
+
+}
+
+/* ==================================================
+   CONTATO
+================================================== */
+
+
+/* HERO */
+
+.contato-hero {
+
+  min-height: 100svh;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(360px, .9fr);
+
+  align-items: center;
+
+  gap: 70px;
+
+  padding:
+    125px 7% 75px;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 80% 48%,
+      rgba(125, 55, 210, .23),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      #050507,
+      #08080c
+    );
+
+}
+
+
+.contato-hero-texto {
+
+  max-width: 760px;
+
+}
+
+
+.contato-hero-texto h1 {
+
+  margin-top: 18px;
+
+  font-size:
+    clamp(58px, 7vw, 100px);
+
+  line-height: .9;
+
+  letter-spacing: -4px;
+
+}
+
+
+.contato-hero-texto h1 span {
+
+  display: block;
+
+  color: var(--roxo);
+
+}
+
+
+.contato-hero-texto
+> p:not(.tag) {
+
+  max-width: 600px;
+
+  margin-top: 28px;
+
+  color: var(--cinza);
+
+  font-size: 17px;
+
+  line-height: 1.8;
+
+}
+
+
+.contato-hero-texto
+.botao {
+
+  margin-top: 30px;
+
+}
+
+
+/* LOGO */
+
+.contato-logo-area {
+
+  min-height: 500px;
+
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+}
+
+
+.contato-logo-glow {
+
+  width:
+    min(40vw, 500px);
+
+  height:
+    min(40vw, 500px);
+
+  position: absolute;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(164, 92, 255, .30),
+      rgba(90, 105, 225, .10) 45%,
+      transparent 70%
+    );
+
+  filter: blur(20px);
+
+}
+
+
+.contato-logo-img {
+
+  width:
+    min(32vw, 420px);
+
+  max-height: 420px;
+
+  position: relative;
+
+  z-index: 5;
+
+  object-fit: contain;
+
+  filter:
+    drop-shadow(
+      0 0 30px
+      rgba(164, 92, 255, .25)
+    );
+
+  animation:
+    flutuar 5s
+    ease-in-out
+    infinite;
+
+}
+
+
+.contato-orbita {
+
+  position: absolute;
+
+  border-radius: 50%;
+
+}
+
+
+.contato-orbita-1 {
+
+  width:
+    min(35vw, 440px);
+
+  height:
+    min(35vw, 440px);
+
+  border:
+    1px solid
+    rgba(164,92,255,.22);
+
+  animation:
+    girar 28s
+    linear infinite;
+
+}
+
+
+.contato-orbita-2 {
+
+  width:
+    min(44vw, 550px);
+
+  height:
+    min(23vw, 285px);
+
+  border:
+    1px solid
+    rgba(102,140,255,.17);
+
+  transform:
+    rotate(25deg);
+
+}
+
+
+/* ==================================================
+   INFO
+================================================== */
+
+.contato-info-section {
+
+  padding:
+    95px 7%;
+
+  background:
+    linear-gradient(
+      180deg,
+      #08080c,
+      #09090d
+    );
+
+}
+
+
+.contato-info-header {
+
+  width: 100%;
+
+  max-width: 1250px;
+
+  margin:
+    0 auto 60px;
+
+}
+
+
+.contato-info-header h2 {
+
+  margin-top: 15px;
+
+  font-size:
+    clamp(42px, 5vw, 68px);
+
+  line-height: 1;
+
+}
+
+
+.contato-info-header h2 span {
+
+  display: block;
+
+  color: var(--roxo);
+
+}
+
+
+.contato-info-grid {
+
+  width: 100%;
+
+  max-width: 1250px;
+
+  margin: auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 25px;
+
+}
+
+
+.contato-info-card {
+
+  min-height: 230px;
+
+  padding: 30px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.075);
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.035),
+      rgba(255,255,255,.012)
+    );
+
+  transition:
+    transform .3s,
+    border-color .3s;
+
+}
+
+
+.contato-info-card:hover {
+
+  transform:
+    translateY(-5px);
+
+  border-color:
+    rgba(164,92,255,.35);
+
+}
+
+
+.contato-info-numero {
+
+  color:
+    rgba(255,255,255,.16);
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 3px;
+
+}
+
+
+.contato-info-card h3 {
+
+  margin-top: 18px;
+
+  font-size: 28px;
+
+}
+
+
+.contato-info-card p {
+
+  margin-top: 15px;
+
+  color: var(--cinza);
+
+  font-size: 15px;
+
+  line-height: 1.7;
+
+}
+
+
+/* ==================================================
+   FORMULÁRIO
+================================================== */
+
+.contato-form-section {
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, .8fr)
+    minmax(450px, 1fr);
+
+  align-items: start;
+
+  gap:
+    clamp(55px, 8vw, 120px);
+
+  padding:
+    110px 7%;
+
+  background:
+    radial-gradient(
+      circle at 70% 50%,
+      rgba(118, 53, 203, .11),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      #09090d,
+      #060608
+    );
+
+}
+
+
+.contato-form-texto {
+
+  max-width: 560px;
+
+  position: sticky;
+
+  top: 130px;
+
+}
+
+
+.contato-form-texto h2 {
+
+  margin-top: 15px;
+
+  font-size:
+    clamp(45px, 5vw, 70px);
+
+  line-height: .95;
+
+}
+
+
+.contato-form-texto h2 span {
+
+  display: block;
+
+  color: var(--roxo);
+
+}
+
+
+.contato-form-texto
+> p:not(.tag) {
+
+  margin-top: 24px;
+
+  color: var(--cinza);
+
+  font-size: 16px;
+
+  line-height: 1.8;
+
+}
+
+
+/* FORM */
+
+.contato-form {
+
+  width: 100%;
+
+  max-width: 700px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 24px;
+
+  padding: 38px;
+
+  border:
+    1px solid
+    rgba(255,255,255,.08);
+
+  border-radius: 22px;
+
+  background:
+    rgba(255,255,255,.025);
+
+  box-shadow:
+    0 25px 70px
+    rgba(0,0,0,.22);
+
+}
+
+
+.contato-campo {
+
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 10px;
+
+}
+
+
+.contato-campo label {
+
+  color: var(--cinza-claro);
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+}
+
+
+.contato-campo input,
+.contato-campo textarea {
+
+  width: 100%;
+
+  border:
+    1px solid
+    rgba(255,255,255,.09);
+
+  outline: none;
+
+  border-radius: 13px;
+
+  padding:
+    15px 16px;
+
+  color: var(--branco);
+
+  background:
+    rgba(255,255,255,.025);
+
+  font-family: inherit;
+
+  font-size: 15px;
+
+  resize: vertical;
+
+  transition:
+    border-color .25s,
+    box-shadow .25s,
+    background .25s;
+
+}
+
+
+.contato-campo input {
+
+  min-height: 52px;
+
+}
+
+
+.contato-campo textarea {
+
+  min-height: 180px;
+
+}
+
+
+.contato-campo input::placeholder,
+.contato-campo textarea::placeholder {
+
+  color:
+    rgba(255,255,255,.28);
+
+}
+
+
+.contato-campo input:focus,
+.contato-campo textarea:focus {
+
+  border-color:
+    rgba(164,92,255,.65);
+
+  background:
+    rgba(164,92,255,.035);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(164,92,255,.08);
+
+}
+
+
+.contato-btn {
+
+  border: none;
+
+  cursor: pointer;
+
+  align-self: flex-start;
+
+}
+
+
+/* ==================================================
+   FINAL
+================================================== */
+
+.contato-final {
+
+  min-height: 540px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding:
+    80px 7%;
+
+  text-align: center;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(113,49,192,.20),
+      transparent 32%
+    ),
+    #060608;
+
+}
+
+
+.contato-final h2 {
+
+  max-width: 900px;
+
+  margin:
+    16px 0 34px;
+
+  font-size:
+    clamp(40px, 6vw, 72px);
+
+  line-height: 1;
+
+}
+
+
+.contato-final h2 span {
+
+  display: block;
+
+  color: var(--roxo);
+
+}
+
+
+/* ==================================================
+   TABLET
+================================================== */
+
+@media (max-width: 900px) {
+
+  .contato-hero {
+
+    min-height: auto;
+
+    grid-template-columns:
+      1fr;
+
+    gap: 20px;
+
+    padding:
+      120px 7% 65px;
+
+    text-align: center;
+
+  }
+
+
+  .contato-hero-texto {
+
+    margin: auto;
+
+  }
+
+
+  .contato-hero-texto
+  > p:not(.tag) {
+
+    margin-left: auto;
+
+    margin-right: auto;
+
+  }
+
+
+  .contato-logo-area {
+
+    min-height: 400px;
+
+  }
+
+
+  .contato-logo-img {
+
+    width:
+      min(50vw, 350px);
+
+  }
+
+
+  .contato-info-grid {
+
+    grid-template-columns:
+      1fr;
+
+    max-width: 700px;
+
+  }
+
+
+  .contato-info-header {
+
+    text-align: center;
+
+  }
+
+
+  .contato-form-section {
+
+    grid-template-columns:
+      1fr;
+
+    gap: 50px;
+
+  }
+
+
+  .contato-form-texto {
+
+    position: static;
+
+    margin: auto;
+
+    text-align: center;
+
+  }
+
+
+  .contato-form {
+
+    margin: auto;
+
+  }
+
+}
+
+
+/* ==================================================
+   CELULAR
+================================================== */
+
+@media (max-width: 600px) {
+
+  .contato-hero {
+
+    padding:
+      105px 20px 50px;
+
+  }
+
+
+  .contato-hero-texto h1 {
+
+    font-size:
+      clamp(
+        48px,
+        15vw,
+        67px
+      );
+
+    letter-spacing: -3px;
+
+  }
+
+
+  .contato-hero-texto
+  > p:not(.tag) {
+
+    font-size: 15px;
+
+  }
+
+
+  .contato-logo-area {
+
+    min-height: 310px;
+
+  }
+
+
+  .contato-logo-img {
+
+    width:
+      min(68vw, 275px);
+
+  }
+
+
+  .contato-info-section {
+
+    padding:
+      65px 20px;
+
+  }
+
+
+  .contato-info-header h2 {
+
+    font-size:
+      clamp(
+        35px,
+        11vw,
+        47px
+      );
+
+  }
+
+
+  .contato-info-card {
+
+    min-height: 200px;
+
+    padding: 25px;
+
+  }
+
+
+  .contato-form-section {
+
+    padding:
+      70px 20px;
+
+  }
+
+
+  .contato-form-texto h2 {
+
+    font-size:
+      clamp(
+        38px,
+        12vw,
+        50px
+      );
+
+  }
+
+
+  .contato-form {
+
+    padding:
+      25px 20px;
+
+    border-radius: 18px;
+
+  }
+
+
+  .contato-btn {
+
+    width: 100%;
+
+  }
+
+
+  .contato-final {
+
+    min-height: 470px;
+
+    padding:
+      65px 20px;
+
+  }
+
+
+  .contato-final h2 {
+
+    font-size:
+      clamp(
+        37px,
+        11vw,
+        50px
+      );
+
+  }
+
+}

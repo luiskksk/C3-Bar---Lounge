@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Contato | C3 Bar & Lounge</title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+
+</head>
+
+<body>
+
+  <!-- HEADER -->
+
+  <header class="header">
+
+    <a
+      href="../index.html"
+      class="logo-link"
+    >
+
+      <img
+        src="../assets/imgs/Logos/logo-c3.png"
+        alt="C3 Bar & Lounge"
+        class="logo"
+      >
+
+    </a>
+
+
+    <input
+      type="checkbox"
+      id="menu-toggle"
+      class="menu-toggle"
+    >
+
+
+    <label
+      for="menu-toggle"
+      class="menu-icon"
+      aria-label="Abrir menu"
+    >
+
+      <span></span>
+      <span></span>
+      <span></span>
+
+    </label>
+
+
+    <nav class="nav">
+
+      <a href="../index.html">
+        Início
+      </a>
+
+      <a href="./sobre.html">
+        Sobre
+      </a>
+
+      <a href="./cardapio.html">
+        Cardápio
+      </a>
+
+      <a href="./produtos.html">
+        Produtos
+      </a>
+
+      <a
+        href="./contato.html"
+        class="ativo"
+      >
+        Contato
+      </a>
+
+    </nav>
+
+
+    <a
+      href="./login.html"
+      class="btn-login"
+    >
+      Entrar
+    </a>
+
+  </header>
+
+
+  <main>
+
+
+    <!-- HERO -->
+
+    <section class="contato-hero">
+
+      <div class="contato-hero-texto">
+
+        <p class="tag">
+          FALE COM O C3
+        </p>
+
+        <h1>
+          ENTRE EM
+          <span>CONTATO.</span>
+        </h1>
+
+        <p>
+          Tem alguma dúvida, sugestão ou quer
+          saber mais sobre a experiência C3?
+          Envie uma mensagem para a nossa equipe.
+        </p>
+
+        <a
+          href="#formulario-contato"
+          class="botao botao-roxo"
+        >
+          Enviar mensagem
+        </a>
+
+      </div>
+
+
+      <!-- LOGO CONTATO -->
+
+      <div class="contato-logo-area">
+
+        <div class="contato-logo-glow"></div>
+
+        <div class="contato-orbita contato-orbita-1"></div>
+
+        <div class="contato-orbita contato-orbita-2"></div>
+
+
+        <img
+          src="../assets/imgs/Logos/logo-contato-c3.png"
+          alt="Contato C3"
+          class="contato-logo-img"
+        >
+
+      </div>
+
+    </section>
+
+
+
+    <!-- INFORMAÇÕES -->
+
+    <section class="contato-info-section">
+
+      <div class="contato-info-header">
+
+        <p class="tag">
+          ONDE NOS ENCONTRAR
+        </p>
+
+        <h2>
+          CONECTE-SE
+          <span>COM O C3</span>
+        </h2>
+
+      </div>
+
+
+      <div class="contato-info-grid">
+
+
+        <article class="contato-info-card">
+
+          <span class="contato-info-numero">
+            01
+          </span>
+
+          <h3>
+            Localização
+          </h3>
+
+          <p>
+            Gramado, Rio Grande do Sul
+          </p>
+
+        </article>
+
+
+        <article class="contato-info-card">
+
+          <span class="contato-info-numero">
+            02
+          </span>
+
+          <h3>
+            E-mail
+          </h3>
+
+          <p>
+            contato@c3barlounge.com
+          </p>
+
+        </article>
+
+
+        <article class="contato-info-card">
+
+          <span class="contato-info-numero">
+            03
+          </span>
+
+          <h3>
+            Atendimento
+          </h3>
+
+          <p>
+            Entre em contato pelo formulário
+            e nossa equipe responderá assim que possível.
+          </p>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- FORMULÁRIO -->
+
+    <section
+      class="contato-form-section"
+      id="formulario-contato"
+    >
+
+      <div class="contato-form-texto">
+
+        <p class="tag">
+          ENVIE SUA MENSAGEM
+        </p>
+
+        <h2>
+          FALE
+          <span>COM A GENTE.</span>
+        </h2>
+
+        <p>
+          Preencha os campos ao lado.
+          Sua mensagem poderá ser integrada
+          ao Firebase posteriormente.
+        </p>
+
+      </div>
+
+
+      <form
+        class="contato-form"
+        id="contato-form"
+      >
+
+        <div class="contato-campo">
+
+          <label for="nome">
+            Nome
+          </label>
+
+          <input
+            type="text"
+            id="nome"
+            name="nome"
+            placeholder="Seu nome"
+            required
+          >
+
+        </div>
+
+
+        <div class="contato-campo">
+
+          <label for="email">
+            E-mail
+          </label>
+
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="seuemail@exemplo.com"
+            required
+          >
+
+        </div>
+
+
+        <div class="contato-campo">
+
+          <label for="assunto">
+            Assunto
+          </label>
+
+          <input
+            type="text"
+            id="assunto"
+            name="assunto"
+            placeholder="Sobre o que deseja falar?"
+            required
+          >
+
+        </div>
+
+
+        <div class="contato-campo">
+
+          <label for="mensagem">
+            Mensagem
+          </label>
+
+          <textarea
+            id="mensagem"
+            name="mensagem"
+            rows="7"
+            placeholder="Digite sua mensagem..."
+            required
+          ></textarea>
+
+        </div>
+
+
+        <button
+          type="submit"
+          class="botao botao-roxo contato-btn"
+        >
+          Enviar mensagem
+        </button>
+
+      </form>
+
+    </section>
+
+
+
+    <!-- FINAL -->
+
+    <section class="contato-final">
+
+      <p class="tag">
+        C3 BAR & LOUNGE
+      </p>
+
+      <h2>
+        NOS VEMOS
+        <span>NO UNIVERSO C3.</span>
+      </h2>
+
+      <a
+        href="../index.html"
+        class="botao botao-outline"
+      >
+        Voltar ao início
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+
+  <footer class="footer">
+
+    <div class="footer-logo">
+
+      <img
+        src="../assets/imgs/Logos/logo-c3.png"
+        alt="C3"
+      >
+
+    </div>
+
+
+    <div class="footer-links">
+
+      <a href="../index.html">
+        Início
+      </a>
+
+      <a href="./sobre.html">
+        Sobre
+      </a>
+
+      <a href="./cardapio.html">
+        Cardápio
+      </a>
+
+      <a href="./produtos.html">
+        Produtos
+      </a>
+
+      <a href="./contato.html">
+        Contato
+      </a>
+
+    </div>
+
+
+    <p>
+      © 2026 C3 Bar & Lounge
+    </p>
+
+  </footer>
+
+
+  <script src="../js/script.js"></script>
+
+</body>
+
+</html>
