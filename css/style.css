@@ -5917,3 +5917,158 @@ a {
   }
 
 }
+
+/* ==================================================
+   C3 — PREMIUM TCC / BUSINESS BOOSTER
+   Refinamento final sem alterar o HTML existente
+================================================== */
+
+:root {
+  --c3-glow: rgba(164,92,255,.22);
+  --c3-blue-glow: rgba(102,140,255,.14);
+  --c3-line: rgba(255,255,255,.075);
+  --c3-surface: rgba(255,255,255,.025);
+}
+
+body { background:#050507; }
+section { position:relative; isolation:isolate; }
+
+/* Remove os planetas grandes antigos */
+.planeta,.anel-planeta,.universo-planeta,.universo-anel { display:none !important; }
+
+/* Acabamento global */
+.header { box-shadow:0 12px 50px rgba(0,0,0,.18); }
+.botao,.btn-login,.contato-btn { letter-spacing:.2px; }
+.botao:focus-visible,.btn-login:focus-visible,.nav a:focus-visible,.contato-btn:focus-visible {
+  outline:2px solid var(--roxo); outline-offset:4px;
+}
+
+/* HOME — logo deslocada e composição mais cinematográfica */
+.home-hero {
+  grid-template-columns:minmax(0,1.05fr) minmax(380px,.95fr);
+  background:
+    radial-gradient(ellipse at 78% 44%,rgba(164,92,255,.18),transparent 31%),
+    radial-gradient(ellipse at 92% 70%,rgba(102,140,255,.08),transparent 27%),
+    linear-gradient(135deg,#050507 0%,#07070b 58%,#090711 100%);
+}
+.home-hero::before {
+  content:""; position:absolute; width:46vw; height:46vw; max-width:720px; max-height:720px;
+  right:-18vw; top:8%; left:auto; border:1px solid rgba(164,92,255,.075); border-radius:50%;
+  box-shadow:0 0 0 85px rgba(164,92,255,.018),0 0 0 170px rgba(102,140,255,.012);
+}
+.home-hero-visual { transform:translate(4%,-1%); }
+.home-hero-visual::before {
+  content:""; position:absolute; width:min(37vw,480px); height:min(37vw,480px); border-radius:44% 56% 61% 39%/47% 39% 61% 53%;
+  border:1px solid rgba(164,92,255,.14); background:transparent; filter:none; animation:c3Morph 12s ease-in-out infinite;
+}
+.hero-logo { width:min(27vw,355px); }
+.experiencia-visual::before,.universo-visual::before {
+  content:""; position:absolute; width:82%; height:58%; left:50%; top:50%; transform:translate(-50%,-50%) rotate(-10deg);
+  border:1px solid rgba(164,92,255,.14); border-radius:44% 56% 37% 63%/56% 43% 57% 44%;
+  box-shadow:inset 0 0 80px rgba(164,92,255,.035),0 0 60px rgba(102,140,255,.045);
+}
+.experiencia-visual::after,.universo-visual::after {
+  content:""; position:absolute; width:58%; height:38%; left:50%; top:50%; transform:translate(-50%,-50%) rotate(20deg);
+  border:1px solid rgba(102,140,255,.10); border-radius:50%;
+}
+
+/* SOBRE — quebra a repetição: imagem à esquerda, texto à direita */
+.sobre-hero {
+  grid-template-columns:minmax(360px,.9fr) minmax(0,1.1fr);
+  gap:clamp(55px,8vw,125px);
+  background:radial-gradient(ellipse at 20% 48%,rgba(164,92,255,.16),transparent 28%),linear-gradient(180deg,#050507,#08080c);
+}
+.sobre-logo-area { grid-column:1; grid-row:1; overflow:visible; }
+.sobre-hero-conteudo { grid-column:2; grid-row:1; max-width:760px; }
+.sobre-glow { opacity:.72; transform:scale(.9); }
+.logo-sobre { width:min(32vw,420px); }
+.sobre-orbita-a { width:min(31vw,405px); height:min(31vw,405px); opacity:.65; }
+.sobre-orbita-b { width:min(39vw,500px); height:min(20vw,255px); opacity:.55; }
+.sobre-orbita-c { opacity:.35; }
+.historia-frase { background:linear-gradient(90deg,rgba(164,92,255,.035),transparent); }
+.conceito-item { border-bottom:1px solid rgba(255,255,255,.035); }
+
+/* CARDÁPIO — abertura central, como capa de apresentação premium */
+.cardapio-novo-hero {
+  min-height:100svh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:0; padding:125px 7% 80px; text-align:center;
+  background:
+    radial-gradient(ellipse at 50% 42%,rgba(164,92,255,.19),transparent 28%),
+    radial-gradient(ellipse at 50% 78%,rgba(102,140,255,.07),transparent 24%),
+    linear-gradient(180deg,#050507,#08080c);
+}
+.cardapio-logo-box { order:1; min-height:310px; width:100%; margin-bottom:8px; }
+.cardapio-novo-texto { order:2; max-width:900px; position:relative; z-index:5; }
+.cardapio-novo-texto h1 { font-size:clamp(56px,7vw,96px); }
+.cardapio-novo-texto > p:not(.tag) { margin-left:auto; margin-right:auto; max-width:670px; }
+.cardapio-logo-img { width:min(25vw,310px); max-height:310px; }
+.cardapio-logo-glow { width:min(38vw,440px); height:min(38vw,440px); opacity:.75; }
+.cardapio-orbita-1 { width:min(29vw,360px); height:min(29vw,360px); opacity:.6; }
+.cardapio-orbita-2 { width:min(39vw,480px); height:min(18vw,220px); opacity:.55; }
+.cardapio-novo-intro { min-height:390px; }
+.cardapio-produto { border:1px solid rgba(255,255,255,.065); box-shadow:0 20px 70px rgba(0,0,0,.15); }
+.cardapio-produto:hover { border-color:rgba(164,92,255,.24); transform:translateY(-6px); }
+
+/* PRODUTOS — cara de catálogo / marca */
+.produtos-page-hero {
+  grid-template-columns:minmax(0,1.15fr) minmax(330px,.75fr);
+  background:radial-gradient(ellipse at 82% 45%,rgba(102,140,255,.11),transparent 27%),radial-gradient(ellipse at 70% 55%,rgba(164,92,255,.14),transparent 30%),linear-gradient(180deg,#050507,#08080c);
+}
+.produtos-page-logo { transform:translateY(35px); }
+.produtos-logo-img { width:min(27vw,350px); }
+.produto-loja-card { border:1px solid rgba(255,255,255,.06); box-shadow:0 20px 60px rgba(0,0,0,.13); }
+.produto-loja-card:hover { transform:translateY(-7px); border-color:rgba(164,92,255,.25); }
+.produto-loja-img { background:radial-gradient(circle at 50% 48%,rgba(164,92,255,.095),transparent 48%),#09090d; }
+.box-c3-destaque { border:1px solid rgba(164,92,255,.17); box-shadow:0 30px 100px rgba(0,0,0,.22); }
+
+/* CONTATO — visual corporativo, limpo e confiável */
+.contato-hero {
+  grid-template-columns:minmax(0,1.15fr) minmax(320px,.7fr);
+  background:linear-gradient(120deg,#050507 0%,#08080c 62%,#0b0711 100%);
+}
+.contato-logo-area { min-height:430px; transform:translate(4%,8%); }
+.contato-logo-img { width:min(25vw,330px); }
+.contato-info-card { background:linear-gradient(180deg,rgba(255,255,255,.028),rgba(255,255,255,.012)); border:1px solid rgba(255,255,255,.06); }
+.contato-info-card:hover { border-color:rgba(164,92,255,.23); transform:translateY(-5px); }
+.contato-form { background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.015)); border:1px solid rgba(255,255,255,.07); box-shadow:0 30px 100px rgba(0,0,0,.2); }
+.contato-campo input,.contato-campo textarea { transition:border-color .2s,box-shadow .2s,background .2s; }
+.contato-campo input:focus,.contato-campo textarea:focus { border-color:rgba(164,92,255,.6); box-shadow:0 0 0 4px rgba(164,92,255,.07); outline:none; }
+
+/* FOOTER */
+.footer { background:linear-gradient(180deg,#050507,#040405); }
+
+@keyframes c3Morph {
+  0%,100% { border-radius:44% 56% 61% 39%/47% 39% 61% 53%; transform:rotate(12deg) scale(1); }
+  50% { border-radius:58% 42% 39% 61%/40% 57% 43% 60%; transform:rotate(20deg) scale(1.035); }
+}
+
+/* TABLET */
+@media (max-width:900px) {
+  .sobre-hero,.produtos-page-hero,.contato-hero { grid-template-columns:1fr; text-align:center; }
+  .sobre-logo-area { grid-column:1; grid-row:2; }
+  .sobre-hero-conteudo { grid-column:1; grid-row:1; margin:auto; }
+  .sobre-hero-conteudo > p:not(.tag),.produtos-page-texto > p:not(.tag),.contato-hero-texto > p:not(.tag) { margin-left:auto; margin-right:auto; }
+  .produtos-page-logo,.contato-logo-area { transform:none; }
+  .cardapio-logo-box { min-height:280px; }
+  .cardapio-logo-img { width:min(42vw,290px); }
+  .cardapio-logo-glow { width:min(60vw,420px); height:min(60vw,420px); }
+  .home-hero-visual { transform:none; }
+}
+
+/* CELULAR */
+@media (max-width:600px) {
+  .cardapio-novo-hero { padding:105px 20px 60px; }
+  .cardapio-logo-box { min-height:235px; }
+  .cardapio-logo-img { width:min(58vw,235px); }
+  .cardapio-logo-glow { width:300px; height:300px; }
+  .cardapio-orbita-1 { width:250px; height:250px; }
+  .cardapio-orbita-2 { width:310px; height:145px; }
+  .sobre-logo-area { min-height:300px; }
+  .logo-sobre { width:min(66vw,270px); }
+  .produtos-logo-img,.contato-logo-img { width:min(62vw,260px); }
+  .experiencia-visual,.universo-visual { min-height:260px; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .home-hero-visual::before { animation:none !important; }
+}
