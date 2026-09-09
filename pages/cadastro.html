@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Criar Conta | C3 Bar & Lounge</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header class="header">
+
+        <a href="../index.html" class="logo-link" aria-label="Página inicial do C3">
+            <img
+                src="../assets/imgs/Logos/logo-c3.png"
+                alt="C3 Bar & Lounge"
+                class="logo"
+            >
+        </a>
+
+        <input
+            type="checkbox"
+            id="menu-toggle"
+            class="menu-toggle"
+        >
+
+        <label
+            for="menu-toggle"
+            class="menu-icon"
+            aria-label="Abrir menu"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+
+        <nav class="nav">
+            <a href="../index.html">Início</a>
+            <a href="./sobre.html">Sobre</a>
+            <a href="./cardapio.html">Cardápio</a>
+            <a href="./produtos.html">Produtos</a>
+            <a href="./contato.html">Contato</a>
+        </nav>
+
+        <a href="./login.html" class="btn-login">
+            Entrar
+        </a>
+
+    </header>
+
+
+    <main class="login-page">
+
+        <section class="login-container">
+
+            <div class="login-visual">
+
+                <div class="login-glow"></div>
+
+                <div class="login-orbita login-orbita-1"></div>
+                <div class="login-orbita login-orbita-2"></div>
+
+                <img
+                    src="../assets/imgs/Logos/logo-c3.png"
+                    alt="C3 Bar & Lounge"
+                    class="login-logo"
+                >
+
+            </div>
+
+
+            <div class="login-box">
+
+                <p class="tag">
+                    JUNTE-SE AO C3
+                </p>
+
+                <h1>
+                    CRIE SUA
+                    <span>CONTA.</span>
+                </h1>
+
+                <p class="login-descricao">
+                    Crie sua conta e faça parte do universo C3.
+                </p>
+
+
+                <form id="form-cadastro" class="login-form">
+
+                    <div class="login-campo">
+
+                        <label for="cadastro-nome">
+                            Nome
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cadastro-nome"
+                            name="nome"
+                            placeholder="Seu nome"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="login-campo">
+
+                        <label for="cadastro-email">
+                            E-mail
+                        </label>
+
+                        <input
+                            type="email"
+                            id="cadastro-email"
+                            name="email"
+                            placeholder="seuemail@email.com"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="login-campo">
+
+                        <label for="cadastro-senha">
+                            Senha
+                        </label>
+
+                        <input
+                            type="password"
+                            id="cadastro-senha"
+                            name="senha"
+                            placeholder="Crie uma senha"
+                            autocomplete="new-password"
+                            minlength="6"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="login-campo">
+
+                        <label for="cadastro-confirmar-senha">
+                            Confirmar senha
+                        </label>
+
+                        <input
+                            type="password"
+                            id="cadastro-confirmar-senha"
+                            name="confirmar-senha"
+                            placeholder="Repita sua senha"
+                            autocomplete="new-password"
+                            minlength="6"
+                            required
+                        >
+
+                    </div>
+
+
+                    <button type="submit" class="login-btn">
+                        Criar conta
+                    </button>
+
+                </form>
+
+
+                <div class="login-divisor">
+                    <span></span>
+                    <p>OU</p>
+                    <span></span>
+                </div>
+
+
+                <button
+                    id="cadastro-google"
+                    type="button"
+                    class="login-google"
+                >
+                    <span class="google-g">G</span>
+
+                    Criar com Google
+                </button>
+
+
+                <p
+                    id="cadastro-mensagem"
+                    class="login-mensagem"
+                    aria-live="polite"
+                ></p>
+
+
+                <p class="login-cadastro">
+                    Já possui uma conta?
+
+                    <a href="./login.html">
+                        Entrar
+                    </a>
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- JS EXTERNO -->
+   <script type="module" src="../js/script.js"></script>
+<script type="module" src="../js/cadastro.js"></script>
+
+</body>
+
+</html>
