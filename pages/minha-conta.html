@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Minha Conta | C3 Bar & Lounge</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+</head>
+
+<body>
+
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
+    <header class="header">
+
+        <a
+            href="../index.html"
+            class="logo-link"
+        >
+
+            <img
+                src="../assets/imgs/Logos/logo-c3.png"
+                alt="C3 Bar & Lounge"
+                class="logo"
+            >
+
+        </a>
+
+
+        <input
+            type="checkbox"
+            id="menu-toggle"
+            class="menu-toggle"
+        >
+
+
+        <label
+            for="menu-toggle"
+            class="menu-icon"
+            aria-label="Abrir menu"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </label>
+
+
+        <nav class="nav">
+
+            <a href="../index.html">
+                Início
+            </a>
+
+            <a href="./sobre.html">
+                Sobre
+            </a>
+
+            <a href="./cardapio.html">
+                Cardápio
+            </a>
+
+            <a href="./produtos.html">
+                Produtos
+            </a>
+
+            <a href="./reservas.html">
+                Reservas
+            </a>
+
+            <a href="./contato.html">
+                Contato
+            </a>
+
+        </nav>
+
+
+        <a
+            href="./login.html"
+            class="btn-login"
+        >
+            Entrar
+        </a>
+
+    </header>
+
+
+    <!-- =====================================
+         CONTEÚDO PRINCIPAL
+    ====================================== -->
+
+    <main class="minha-conta-page">
+
+
+        <!-- =====================================
+             HERO
+        ====================================== -->
+
+        <section class="minha-conta-hero">
+
+            <div class="minha-conta-hero-texto">
+
+                <p class="tag">
+                    ÁREA DO USUÁRIO
+                </p>
+
+                <h1>
+                    MINHA
+                    <span>CONTA.</span>
+                </h1>
+
+                <p>
+                    Gerencie seus dados
+                    e acompanhe suas atividades
+                    dentro do universo C3.
+                </p>
+
+            </div>
+
+
+            <div class="minha-conta-avatar-area">
+
+                <div class="minha-conta-glow"></div>
+
+                <div
+                    class="minha-conta-avatar"
+                    id="minha-conta-avatar"
+                >
+                    C
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================
+             DADOS DA CONTA
+        ====================================== -->
+
+        <section class="minha-conta-section">
+
+            <div class="minha-conta-header">
+
+                <p class="tag">
+                    SEUS DADOS
+                </p>
+
+                <h2>
+                    INFORMAÇÕES
+                    <span>DA CONTA.</span>
+                </h2>
+
+            </div>
+
+
+            <div class="minha-conta-dados">
+
+                <div class="minha-conta-card">
+
+                    <span class="minha-conta-numero">
+                        01
+                    </span>
+
+                    <p>
+                        Nome
+                    </p>
+
+                    <strong id="conta-nome">
+                        Carregando...
+                    </strong>
+
+                </div>
+
+
+                <div class="minha-conta-card">
+
+                    <span class="minha-conta-numero">
+                        02
+                    </span>
+
+                    <p>
+                        E-mail
+                    </p>
+
+                    <strong id="conta-email">
+                        Carregando...
+                    </strong>
+
+                </div>
+
+
+                <div class="minha-conta-card">
+
+                    <span class="minha-conta-numero">
+                        03
+                    </span>
+
+                    <p>
+                        Identificação
+                    </p>
+
+                    <strong id="conta-uid">
+                        Carregando...
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================
+             MINHAS RESERVAS
+        ====================================== -->
+
+        <section class="minha-conta-section">
+
+            <div class="minha-conta-header">
+
+                <p class="tag">
+                    SUAS RESERVAS
+                </p>
+
+                <h2>
+                    MINHAS
+                    <span>RESERVAS.</span>
+                </h2>
+
+                <p>
+                    Acompanhe suas reservas,
+                    consulte os horários
+                    e cancele quando necessário.
+                </p>
+
+            </div>
+
+
+            <div
+                class="minha-conta-reservas"
+                id="lista-reservas"
+            >
+
+                <div class="reservas-conta-loading">
+                    Carregando suas reservas...
+                </div>
+
+            </div>
+
+
+            <div class="minha-conta-acoes">
+
+                <a
+                    href="./reservas.html"
+                    class="botao botao-roxo"
+                >
+                    + Nova reserva
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================
+             AÇÕES DA CONTA
+        ====================================== -->
+
+        <section class="minha-conta-acoes">
+
+            <button
+                type="button"
+                id="conta-sair"
+                class="botao botao-outline"
+            >
+                Sair da conta
+            </button>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================
+         FOOTER
+    ====================================== -->
+
+    <footer class="footer">
+
+        <div class="footer-logo">
+
+            <img
+                src="../assets/imgs/Logos/logo-c3.png"
+                alt="C3"
+            >
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="../index.html">
+                Início
+            </a>
+
+            <a href="./sobre.html">
+                Sobre
+            </a>
+
+            <a href="./cardapio.html">
+                Cardápio
+            </a>
+
+            <a href="./produtos.html">
+                Produtos
+            </a>
+
+            <a href="./reservas.html">
+                Reservas
+            </a>
+
+            <a href="./contato.html">
+                Contato
+            </a>
+
+        </div>
+
+
+        <p>
+            © 2026 C3 Bar & Lounge
+        </p>
+
+    </footer>
+
+
+    <!-- =====================================
+         SCRIPTS
+    ====================================== -->
+
+    <script
+        type="module"
+        src="../js/script.js"
+    ></script>
+
+    <script
+        type="module"
+        src="../js/minha-conta.js"
+    ></script>
+
+</body>
+
+</html>

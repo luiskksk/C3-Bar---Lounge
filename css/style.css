@@ -4522,7 +4522,7 @@ a {
 
 .box-c3-destaque {
 
-  min-height: 700px;
+  min-height: 100px;
 
   display: grid;
 
@@ -7893,6 +7893,2412 @@ section { position:relative; isolation:isolate; }
         );
 
         right: 0;
+    }
+
+}
+
+/* =====================================
+   MINHA CONTA
+===================================== */
+
+.minha-conta-page {
+    min-height: 100vh;
+    background:
+        radial-gradient(
+            circle at 85% 15%,
+            rgba(121, 61, 198, 0.16),
+            transparent 35%
+        ),
+        linear-gradient(
+            180deg,
+            #07070a,
+            #0b0b10
+        );
+}
+
+.minha-conta-hero {
+    min-height: 520px;
+
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+
+    align-items: center;
+
+    gap: 60px;
+
+    padding:
+        140px
+        clamp(24px, 7vw, 110px)
+        80px;
+}
+
+.minha-conta-hero-texto {
+    max-width: 700px;
+}
+
+.minha-conta-hero-texto h1 {
+    margin-top: 14px;
+
+    font-size:
+        clamp(
+            3.3rem,
+            7vw,
+            7rem
+        );
+
+    line-height: 0.92;
+}
+
+.minha-conta-hero-texto h1 span {
+    color: #a45cff;
+}
+
+.minha-conta-hero-texto > p:last-child {
+    max-width: 560px;
+
+    margin-top: 25px;
+
+    line-height: 1.8;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.65
+        );
+}
+
+.minha-conta-avatar-area {
+    min-height: 350px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+}
+
+.minha-conta-glow {
+    width: 270px;
+    height: 270px;
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            164,
+            92,
+            255,
+            0.22
+        );
+
+    filter: blur(70px);
+}
+
+.minha-conta-avatar {
+    width: 180px;
+    height: 180px;
+
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(
+            164,
+            92,
+            255,
+            0.45
+        );
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(
+                164,
+                92,
+                255,
+                0.2
+            ),
+            rgba(
+                255,
+                255,
+                255,
+                0.03
+            )
+        );
+
+    box-shadow:
+        0 0 50px
+        rgba(
+            121,
+            61,
+            198,
+            0.18
+        );
+
+    font-size: 5rem;
+    font-weight: 800;
+
+    color: #ffffff;
+}
+
+.minha-conta-section {
+    padding:
+        90px
+        clamp(24px, 7vw, 110px);
+}
+
+.minha-conta-header {
+    margin-bottom: 45px;
+}
+
+.minha-conta-header h2 {
+    margin-top: 10px;
+
+    font-size:
+        clamp(
+            2.3rem,
+            5vw,
+            4.6rem
+        );
+}
+
+.minha-conta-header h2 span {
+    color: #a45cff;
+}
+
+.minha-conta-dados {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.minha-conta-card {
+    min-height: 190px;
+
+    padding: 30px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.025
+        );
+
+    transition:
+        transform 0.3s,
+        border-color 0.3s,
+        background 0.3s;
+}
+
+.minha-conta-card:hover {
+    transform:
+        translateY(-5px);
+
+    border-color:
+        rgba(
+            164,
+            92,
+            255,
+            0.45
+        );
+
+    background:
+        rgba(
+            164,
+            92,
+            255,
+            0.055
+        );
+}
+
+.minha-conta-numero {
+    display: block;
+
+    margin-bottom: 45px;
+
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+
+    color: #a45cff;
+}
+
+.minha-conta-card p {
+    margin-bottom: 8px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.45
+        );
+}
+
+.minha-conta-card strong {
+    display: block;
+
+    word-break: break-word;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.9
+        );
+}
+
+.minha-conta-vazio {
+    min-height: 250px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    gap: 24px;
+
+    padding: 40px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(
+                164,
+                92,
+                255,
+                0.06
+            ),
+            rgba(
+                255,
+                255,
+                255,
+                0.015
+            )
+        );
+}
+
+.minha-conta-vazio p {
+    font-size: 1.05rem;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.6
+        );
+}
+
+.minha-conta-acoes {
+    padding:
+        20px
+        clamp(24px, 7vw, 110px)
+        100px;
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+.usuario-conta {
+    text-decoration: none;
+}
+
+
+/* =====================================
+   MINHA CONTA RESPONSIVO
+===================================== */
+
+@media (
+    max-width: 900px
+) {
+
+    .minha-conta-hero {
+        grid-template-columns: 1fr;
+
+        padding-top: 120px;
+    }
+
+    .minha-conta-avatar-area {
+        min-height: 250px;
+    }
+
+    .minha-conta-avatar {
+        width: 150px;
+        height: 150px;
+
+        font-size: 4rem;
+    }
+
+    .minha-conta-dados {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (
+    max-width: 600px
+) {
+
+    .minha-conta-hero {
+        gap: 25px;
+
+        padding:
+            110px
+            20px
+            50px;
+    }
+
+    .minha-conta-section {
+        padding:
+            60px
+            20px;
+    }
+
+    .minha-conta-avatar-area {
+        min-height: 200px;
+    }
+
+    .minha-conta-avatar {
+        width: 120px;
+        height: 120px;
+
+        font-size: 3.2rem;
+    }
+
+    .minha-conta-card {
+        min-height: 160px;
+
+        padding: 24px;
+    }
+
+    .minha-conta-numero {
+        margin-bottom: 32px;
+    }
+
+    .minha-conta-vazio {
+        padding: 28px 22px;
+    }
+
+    .minha-conta-acoes {
+        padding:
+            10px
+            20px
+            70px;
+
+        justify-content: stretch;
+    }
+
+    .minha-conta-acoes .botao {
+        width: 100%;
+    }
+
+}
+
+/* =====================================
+   MINHA CONTA - RESERVAS
+===================================== */
+
+.minha-conta-reservas {
+    width: 100%;
+
+    margin-top: 45px;
+
+    display: grid;
+
+    gap: 22px;
+}
+
+
+/* CARD */
+
+.reserva-conta-card {
+    width: 100%;
+
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 30px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(
+                255,
+                255,
+                255,
+                0.065
+            ),
+            rgba(
+                255,
+                255,
+                255,
+                0.018
+            )
+        );
+
+    backdrop-filter:
+        blur(25px);
+
+    -webkit-backdrop-filter:
+        blur(25px);
+
+    box-shadow:
+        0 25px 70px
+        rgba(
+            0,
+            0,
+            0,
+            0.28
+        );
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+.reserva-conta-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 200px;
+
+    right: -150px;
+    top: -120px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            164,
+            92,
+            255,
+            0.16
+        );
+
+    filter:
+        blur(55px);
+
+    pointer-events: none;
+}
+
+
+.reserva-conta-card:hover {
+    transform:
+        translateY(-4px);
+
+    border-color:
+        rgba(
+            164,
+            92,
+            255,
+            0.28
+        );
+
+    box-shadow:
+        0 30px 80px
+        rgba(
+            0,
+            0,
+            0,
+            0.38
+        );
+}
+
+
+/* TOPO */
+
+.reserva-conta-topo {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+.reserva-conta-data {
+    font-size:
+        clamp(
+            1.4rem,
+            3vw,
+            2rem
+        );
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: -0.02em;
+}
+
+
+/* STATUS */
+
+.reserva-status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        8px
+        13px;
+
+    border-radius: 999px;
+
+    font-size: 0.7rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
+}
+
+
+.reserva-status.pendente {
+    color:
+        #d3b4ff;
+
+    border:
+        1px solid
+        rgba(
+            164,
+            92,
+            255,
+            0.25
+        );
+
+    background:
+        rgba(
+            164,
+            92,
+            255,
+            0.10
+        );
+}
+
+
+.reserva-status.confirmada {
+    color:
+        #7de7a7;
+
+    border:
+        1px solid
+        rgba(
+            125,
+            231,
+            167,
+            0.25
+        );
+
+    background:
+        rgba(
+            125,
+            231,
+            167,
+            0.08
+        );
+}
+
+
+.reserva-status.cancelada {
+    color:
+        #ff8b9a;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            139,
+            154,
+            0.22
+        );
+
+    background:
+        rgba(
+            255,
+            139,
+            154,
+            0.07
+        );
+}
+
+
+/* DETALHES */
+
+.reserva-conta-detalhes {
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 30px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 20px;
+}
+
+
+.reserva-conta-detalhes > div {
+    padding:
+        18px
+        20px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.06
+        );
+
+    border-radius: 13px;
+
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            0.18
+        );
+}
+
+
+.reserva-conta-detalhes span,
+.reserva-conta-observacoes > span {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.40
+        );
+
+    font-size: 0.72rem;
+
+    font-weight: 700;
+
+    letter-spacing: 0.10em;
+}
+
+
+.reserva-conta-detalhes strong {
+    color: #ffffff;
+
+    font-size: 1.05rem;
+}
+
+
+/* OBSERVAÇÕES */
+
+.reserva-conta-observacoes {
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 20px;
+
+    padding:
+        18px
+        20px;
+
+    border-left:
+        2px solid
+        rgba(
+            164,
+            92,
+            255,
+            0.50
+        );
+
+    background:
+        rgba(
+            164,
+            92,
+            255,
+            0.035
+        );
+}
+
+
+.reserva-conta-observacoes p {
+    margin: 0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.62
+        );
+
+    line-height: 1.7;
+}
+
+
+/* AÇÕES */
+
+.reserva-conta-acoes {
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 25px;
+
+    display: flex;
+
+    justify-content: flex-end;
+}
+
+
+.reserva-cancelar {
+    padding:
+        11px
+        17px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            110,
+            130,
+            0.24
+        );
+
+    border-radius: 9px;
+
+    background:
+        rgba(
+            255,
+            110,
+            130,
+            0.06
+        );
+
+    color:
+        #ff8c9d;
+
+    font: inherit;
+
+    font-size: 0.82rem;
+
+    cursor: pointer;
+
+    transition:
+        0.25s ease;
+}
+
+
+.reserva-cancelar:hover {
+    border-color:
+        rgba(
+            255,
+            110,
+            130,
+            0.50
+        );
+
+    background:
+        rgba(
+            255,
+            110,
+            130,
+            0.12
+        );
+}
+
+
+.reserva-cancelar:disabled {
+    opacity: 0.5;
+
+    cursor: wait;
+}
+
+
+/* LOADING */
+
+.reservas-conta-loading,
+.reservas-conta-erro {
+    padding: 35px;
+
+    text-align: center;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
+
+    border-radius: 16px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.50
+        );
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.02
+        );
+}
+
+
+.reservas-conta-erro {
+    color: #ff8294;
+}
+
+
+/* VAZIO */
+
+.reservas-conta-vazio {
+    min-height: 300px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px;
+
+    text-align: center;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    border-radius: 20px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.025
+        );
+}
+
+
+.reservas-conta-vazio-numero {
+    margin-bottom: 20px;
+
+    color:
+        rgba(
+            164,
+            92,
+            255,
+            0.28
+        );
+
+    font-size: 4rem;
+
+    font-weight: 900;
+
+    letter-spacing: -0.08em;
+}
+
+
+.reservas-conta-vazio h3 {
+    margin: 0;
+
+    font-size: 1.5rem;
+}
+
+
+.reservas-conta-vazio p {
+    max-width: 400px;
+
+    margin:
+        12px
+        auto
+        0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.48
+        );
+
+    line-height: 1.7;
+}
+
+
+/* =====================================
+   RESPONSIVO
+===================================== */
+
+@media (max-width: 600px) {
+
+    .reserva-conta-card {
+        padding:
+            24px
+            18px;
+    }
+
+
+    .reserva-conta-topo {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+    }
+
+
+    .reserva-conta-detalhes {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .reserva-conta-acoes {
+        justify-content:
+            stretch;
+    }
+
+
+    .reserva-cancelar {
+        width: 100%;
+    }
+
+}
+
+/* =========================================================
+   C3 | RESERVAS
+   VERSÃO FINAL - GLASS / BLUR / RESPONSIVO
+========================================================= */
+
+
+/* =========================================================
+   PÁGINA
+========================================================= */
+
+.reservas-page {
+    min-height: 100vh;
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    color: #ffffff;
+
+    background:
+        radial-gradient(
+            ellipse at 90% 10%,
+            rgba(132, 54, 255, 0.20) 0%,
+            rgba(132, 54, 255, 0.08) 22%,
+            transparent 48%
+        ),
+        radial-gradient(
+            ellipse at 5% 62%,
+            rgba(86, 37, 190, 0.18) 0%,
+            rgba(86, 37, 190, 0.06) 25%,
+            transparent 52%
+        ),
+        linear-gradient(
+            180deg,
+            #050508 0%,
+            #08070d 45%,
+            #06060a 100%
+        );
+}
+
+
+/* =========================================================
+   LUZES BORRADAS DO FUNDO
+========================================================= */
+
+.reservas-page::before {
+    content: "";
+
+    position: absolute;
+
+    width: 1000px;
+    height: 700px;
+
+    top: 350px;
+    left: -350px;
+
+    z-index: -2;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(145, 65, 255, 0.38) 0%,
+            rgba(103, 43, 220, 0.20) 30%,
+            transparent 70%
+        );
+
+    filter: blur(120px);
+
+    transform: rotate(-18deg);
+
+    pointer-events: none;
+}
+
+
+.reservas-page::after {
+    content: "";
+
+    position: absolute;
+
+    width: 1000px;
+    height: 800px;
+
+    top: 750px;
+    right: -450px;
+
+    z-index: -2;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(173, 86, 255, 0.32) 0%,
+            rgba(100, 43, 210, 0.16) 35%,
+            transparent 72%
+        );
+
+    filter: blur(140px);
+
+    transform: rotate(20deg);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.reservas-hero {
+    min-height: 690px;
+
+    position: relative;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.1fr)
+        minmax(320px, 0.9fr);
+
+    align-items: center;
+
+    gap: 70px;
+
+    padding:
+        145px
+        clamp(25px, 7vw, 110px)
+        90px;
+}
+
+
+/* luz atrás do C3 */
+
+.reservas-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 600px;
+    height: 300px;
+
+    right: 3%;
+    top: 45%;
+
+    transform:
+        translateY(-50%)
+        rotate(-12deg);
+
+    z-index: -1;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(160, 75, 255, 0.30),
+            transparent 68%
+        );
+
+    filter: blur(75px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   TEXTO HERO
+========================================================= */
+
+.reservas-hero-texto {
+    max-width: 760px;
+
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.reservas-hero-texto .tag {
+    margin-bottom: 18px;
+}
+
+
+.reservas-hero-texto h1 {
+    margin: 0;
+
+    font-size:
+        clamp(
+            3.4rem,
+            7vw,
+            7.2rem
+        );
+
+    line-height: 0.90;
+
+    letter-spacing: -0.055em;
+}
+
+
+.reservas-hero-texto h1 span {
+    display: block;
+
+    color: #ad69ff;
+
+    text-shadow:
+        0 0 35px
+        rgba(165, 90, 255, 0.25);
+}
+
+
+.reservas-hero-texto > p:last-of-type {
+    max-width: 570px;
+
+    margin-top: 28px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.62
+        );
+
+    font-size: 1rem;
+
+    line-height: 1.8;
+}
+
+
+.reservas-hero-texto .botao {
+    margin-top: 32px;
+}
+
+
+/* =========================================================
+   C3 HERO
+========================================================= */
+
+.reservas-hero-visual {
+    min-height: 390px;
+
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+.reservas-glow {
+    width: 75%;
+    height: 55%;
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        rotate(-12deg);
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            154,
+            69,
+            255,
+            0.30
+        );
+
+    filter: blur(80px);
+
+    pointer-events: none;
+}
+
+
+.reservas-numero {
+    position: relative;
+
+    z-index: 2;
+
+    font-size:
+        clamp(
+            7rem,
+            14vw,
+            13rem
+        );
+
+    font-weight: 900;
+
+    line-height: 1;
+
+    letter-spacing: -0.09em;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.025
+        );
+
+    -webkit-text-stroke:
+        1px
+        rgba(
+            191,
+            133,
+            255,
+            0.58
+        );
+
+    text-shadow:
+        0 0 50px
+        rgba(
+            153,
+            71,
+            255,
+            0.15
+        );
+}
+
+
+/* =========================================================
+   ÁREA DE RESERVAS
+========================================================= */
+
+.reservas-form-section {
+    width: 100%;
+
+    position: relative;
+
+    padding:
+        110px
+        clamp(25px, 7vw, 110px)
+        120px;
+}
+
+
+/* luz borrada ATRÁS do card */
+
+.reservas-form-section::before {
+    content: "";
+
+    position: absolute;
+
+    width: 850px;
+    height: 420px;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        rotate(-8deg);
+
+    z-index: 0;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(143, 61, 255, 0.38) 0%,
+            rgba(104, 43, 219, 0.20) 35%,
+            transparent 72%
+        );
+
+    filter: blur(90px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   IMPORTANTE:
+   GARANTE QUE O ATRIBUTO HIDDEN FUNCIONE
+========================================================= */
+
+.reservas-sem-login[hidden],
+.reservas-area-logada[hidden] {
+    display: none !important;
+}
+
+
+/* =========================================================
+   SEM LOGIN
+========================================================= */
+
+.reservas-sem-login {
+    width: min(
+        100%,
+        950px
+    );
+
+    min-height: 430px;
+
+    margin: 0 auto;
+
+    position: relative;
+
+    z-index: 2;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        75px
+        55px;
+
+    text-align: center;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.14
+        );
+
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.075),
+            rgba(255, 255, 255, 0.025)
+        );
+
+    backdrop-filter:
+        blur(35px)
+        saturate(145%);
+
+    -webkit-backdrop-filter:
+        blur(35px)
+        saturate(145%);
+
+    box-shadow:
+        0 40px 100px
+        rgba(
+            0,
+            0,
+            0,
+            0.48
+        ),
+        inset
+        0 1px 0
+        rgba(
+            255,
+            255,
+            255,
+            0.09
+        );
+}
+
+
+/* reflexo superior do vidro */
+
+.reservas-sem-login::before {
+    content: "";
+
+    position: absolute;
+
+    width: 70%;
+    height: 160px;
+
+    top: -120px;
+    left: 15%;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+
+    filter: blur(45px);
+
+    pointer-events: none;
+}
+
+
+/* luz roxa dentro do vidro */
+
+.reservas-sem-login::after {
+    content: "";
+
+    position: absolute;
+
+    width: 420px;
+    height: 280px;
+
+    right: -210px;
+    bottom: -150px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            158,
+            72,
+            255,
+            0.22
+        );
+
+    filter: blur(75px);
+
+    pointer-events: none;
+}
+
+
+.reservas-sem-login .tag,
+.reservas-sem-login h2,
+.reservas-sem-login p,
+.reservas-sem-login-acoes {
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.reservas-sem-login h2 {
+    max-width: 760px;
+
+    margin:
+        15px
+        auto
+        0;
+
+    font-size:
+        clamp(
+            2.6rem,
+            6vw,
+            5.1rem
+        );
+
+    line-height: 0.96;
+
+    letter-spacing: -0.045em;
+}
+
+
+.reservas-sem-login h2 span {
+    display: block;
+
+    margin-top: 7px;
+
+    color: #ad69ff;
+
+    text-shadow:
+        0 0 35px
+        rgba(
+            165,
+            89,
+            255,
+            0.22
+        );
+}
+
+
+.reservas-sem-login > p:last-of-type {
+    max-width: 570px;
+
+    margin:
+        28px
+        auto
+        0;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.60
+        );
+
+    line-height: 1.8;
+}
+
+
+.reservas-sem-login-acoes {
+    margin-top: 38px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-wrap: wrap;
+
+    gap: 14px;
+}
+
+
+/* =========================================================
+   ÁREA LOGADA
+========================================================= */
+
+.reservas-area-logada {
+    width: 100%;
+
+    position: relative;
+
+    z-index: 2;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(280px, 0.8fr)
+        minmax(0, 1.2fr);
+
+    align-items: start;
+
+    gap: 75px;
+}
+
+
+/* =========================================================
+   TEXTO DO FORMULÁRIO
+========================================================= */
+
+.reservas-form-texto {
+    padding-top: 25px;
+}
+
+
+.reservas-form-texto h2 {
+    margin-top: 13px;
+
+    font-size:
+        clamp(
+            2.7rem,
+            5vw,
+            5rem
+        );
+
+    line-height: 0.96;
+
+    letter-spacing: -0.045em;
+}
+
+
+.reservas-form-texto h2 span {
+    display: block;
+
+    color: #ad69ff;
+}
+
+
+.reservas-form-texto > p:last-child {
+    max-width: 440px;
+
+    margin-top: 26px;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.56
+        );
+
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   FORMULÁRIO - VIDRO
+========================================================= */
+
+.reservas-form {
+    width: 100%;
+
+    position: relative;
+
+    overflow: hidden;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 22px;
+
+    padding: 38px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.13
+        );
+
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.07),
+            rgba(255, 255, 255, 0.025)
+        );
+
+    backdrop-filter:
+        blur(32px)
+        saturate(140%);
+
+    -webkit-backdrop-filter:
+        blur(32px)
+        saturate(140%);
+
+    box-shadow:
+        0 40px 100px
+        rgba(
+            0,
+            0,
+            0,
+            0.42
+        ),
+        inset
+        0 1px 0
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
+}
+
+
+/* reflexo do vidro */
+
+.reservas-form::before {
+    content: "";
+
+    position: absolute;
+
+    width: 70%;
+    height: 140px;
+
+    left: 15%;
+    top: -110px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
+
+    filter: blur(45px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   CAMPOS
+========================================================= */
+
+.reservas-campo {
+    min-width: 0;
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.reservas-campo-full {
+    grid-column:
+        1 / -1;
+}
+
+
+.reservas-campo label {
+    font-size: 0.83rem;
+
+    font-weight: 500;
+
+    letter-spacing: 0.07em;
+
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.68
+        );
+}
+
+
+.reservas-campo input,
+.reservas-campo select,
+.reservas-campo textarea {
+    width: 100%;
+
+    min-width: 0;
+
+    padding:
+        15px
+        16px;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.10
+        );
+
+    border-radius: 11px;
+
+    outline: none;
+
+    background:
+        rgba(
+            3,
+            3,
+            7,
+            0.42
+        );
+
+    color: #ffffff;
+
+    font: inherit;
+
+    transition:
+        border-color 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.reservas-campo input::placeholder,
+.reservas-campo textarea::placeholder {
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.30
+        );
+}
+
+
+.reservas-campo input:focus,
+.reservas-campo select:focus,
+.reservas-campo textarea:focus {
+    border-color:
+        rgba(
+            177,
+            111,
+            255,
+            0.72
+        );
+
+    background:
+        rgba(
+            15,
+            10,
+            25,
+            0.65
+        );
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            164,
+            92,
+            255,
+            0.09
+        ),
+        0 0 30px
+        rgba(
+            164,
+            92,
+            255,
+            0.08
+        );
+}
+
+
+.reservas-campo input[readonly] {
+    opacity: 0.62;
+
+    cursor: not-allowed;
+}
+
+
+.reservas-campo select {
+    cursor: pointer;
+}
+
+
+.reservas-campo textarea {
+    min-height: 135px;
+
+    resize: vertical;
+}
+
+
+/* =========================================================
+   MENSAGENS
+========================================================= */
+
+.reservas-mensagem {
+    min-height: 21px;
+
+    grid-column:
+        1 / -1;
+
+    position: relative;
+
+    z-index: 2;
+
+    font-size: 0.9rem;
+}
+
+
+.reservas-mensagem.sucesso {
+    color: #7de7a7;
+}
+
+
+.reservas-mensagem.erro {
+    color: #ff8396;
+}
+
+
+.reservas-mensagem.carregando {
+    color: #cba8ff;
+}
+
+
+/* =========================================================
+   BOTÃO FORM
+========================================================= */
+
+.reservas-btn {
+    grid-column:
+        1 / -1;
+
+    position: relative;
+
+    z-index: 2;
+
+    justify-self: start;
+}
+
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+.reservas-final {
+    min-height: 430px;
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding:
+        100px
+        clamp(25px, 7vw, 110px);
+
+    text-align: center;
+}
+
+
+.reservas-final::before {
+    content: "";
+
+    width: 700px;
+    height: 280px;
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    z-index: -1;
+
+    background:
+        radial-gradient(
+            ellipse,
+            rgba(
+                138,
+                59,
+                255,
+                0.23
+            ),
+            transparent 70%
+        );
+
+    filter: blur(80px);
+
+    pointer-events: none;
+}
+
+
+.reservas-final h2 {
+    max-width: 820px;
+
+    margin:
+        14px
+        auto
+        35px;
+
+    font-size:
+        clamp(
+            2.7rem,
+            6vw,
+            5.2rem
+        );
+
+    line-height: 0.97;
+
+    letter-spacing: -0.04em;
+}
+
+
+.reservas-final h2 span {
+    color: #ad69ff;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (
+    max-width: 900px
+) {
+
+    .reservas-hero {
+        min-height: auto;
+
+        grid-template-columns:
+            1fr;
+
+        gap: 25px;
+
+        padding:
+            125px
+            35px
+            70px;
+    }
+
+
+    .reservas-hero-visual {
+        min-height: 230px;
+    }
+
+
+    .reservas-area-logada {
+        grid-template-columns:
+            1fr;
+
+        gap: 45px;
+    }
+
+
+    .reservas-form-texto {
+        padding-top: 0;
+    }
+
+
+    .reservas-form-section {
+        padding:
+            85px
+            35px;
+    }
+
+
+    .reservas-form-section::before {
+        width: 650px;
+        height: 400px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (
+    max-width: 600px
+) {
+
+    .reservas-page::before {
+        width: 650px;
+        height: 500px;
+
+        left: -400px;
+
+        filter: blur(90px);
+    }
+
+
+    .reservas-page::after {
+        width: 650px;
+        height: 550px;
+
+        right: -400px;
+
+        filter: blur(100px);
+    }
+
+
+    .reservas-hero {
+        min-height: auto;
+
+        grid-template-columns:
+            1fr;
+
+        gap: 15px;
+
+        padding:
+            110px
+            20px
+            50px;
+    }
+
+
+    .reservas-hero-texto h1 {
+        font-size:
+            clamp(
+                2.8rem,
+                14vw,
+                4.5rem
+            );
+    }
+
+
+    .reservas-hero-visual {
+        min-height: 170px;
+    }
+
+
+    .reservas-numero {
+        font-size:
+            clamp(
+                6rem,
+                34vw,
+                9rem
+            );
+    }
+
+
+    .reservas-glow {
+        width: 220px;
+        height: 120px;
+
+        filter: blur(55px);
+    }
+
+
+    .reservas-form-section {
+        padding:
+            65px
+            20px;
+    }
+
+
+    .reservas-form-section::before {
+        width: 500px;
+        height: 380px;
+
+        filter: blur(75px);
+    }
+
+
+    .reservas-sem-login {
+        min-height: 400px;
+
+        padding:
+            55px
+            22px;
+
+        border-radius: 20px;
+
+        backdrop-filter:
+            blur(26px)
+            saturate(140%);
+
+        -webkit-backdrop-filter:
+            blur(26px)
+            saturate(140%);
+    }
+
+
+    .reservas-sem-login h2 {
+        font-size:
+            clamp(
+                2.1rem,
+                11vw,
+                3.4rem
+            );
+    }
+
+
+    .reservas-sem-login-acoes {
+        width: 100%;
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .reservas-sem-login-acoes .botao {
+        width: 100%;
+
+        justify-content: center;
+    }
+
+
+    .reservas-area-logada {
+        grid-template-columns:
+            1fr;
+
+        gap: 35px;
+    }
+
+
+    .reservas-form {
+        grid-template-columns:
+            1fr;
+
+        gap: 18px;
+
+        padding:
+            25px
+            20px;
+
+        border-radius: 18px;
+    }
+
+
+    .reservas-campo-full,
+    .reservas-mensagem,
+    .reservas-btn {
+        grid-column: auto;
+    }
+
+
+    .reservas-btn {
+        width: 100%;
+
+        justify-content: center;
+    }
+
+
+    .reservas-final {
+        min-height: 350px;
+
+        padding:
+            75px
+            20px;
+    }
+
+
+    .reservas-final::before {
+        width: 400px;
+        height: 220px;
+    }
+
+}
+
+
+/* =========================================================
+   CELULARES PEQUENOS
+========================================================= */
+
+@media (
+    max-width: 380px
+) {
+
+    .reservas-hero {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+
+    .reservas-form-section {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+
+    .reservas-sem-login {
+        padding:
+            48px
+            17px;
+    }
+
+
+    .reservas-form {
+        padding:
+            22px
+            16px;
     }
 
 }

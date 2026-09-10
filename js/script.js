@@ -132,16 +132,22 @@ function criarMenuUsuario(user) {
             </div>
 
 
-            <div class="usuario-menu-linha"></div>
+           <div class="usuario-menu-linha"></div>
 
+<a
+    href="${estaNaPastaPages() ? "./minha-conta.html" : "./pages/minha-conta.html"}"
+    class="usuario-menu-item usuario-conta"
+>
+    Minha conta
+</a>
 
-            <button
-                type="button"
-                class="usuario-menu-item usuario-sair"
-                id="usuario-sair"
-            >
-                Sair da conta
-            </button>
+<button
+    type="button"
+    class="usuario-menu-item usuario-sair"
+    id="usuario-sair"
+>
+    Sair da conta
+</button>
 
         </div>
 

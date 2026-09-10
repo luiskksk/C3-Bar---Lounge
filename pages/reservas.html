@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Reservas | C3 Bar & Lounge</title>
+
+  <link
+    rel="stylesheet"
+    href="../css/style.css"
+  >
+
+</head>
+
+<body>
+
+
+  <!-- HEADER -->
+
+  <header class="header">
+
+    <a
+      href="../index.html"
+      class="logo-link"
+    >
+
+      <img
+        src="../assets/imgs/Logos/logo-c3.png"
+        alt="C3 Bar & Lounge"
+        class="logo"
+      >
+
+    </a>
+
+
+    <input
+      type="checkbox"
+      id="menu-toggle"
+      class="menu-toggle"
+    >
+
+
+    <label
+      for="menu-toggle"
+      class="menu-icon"
+      aria-label="Abrir menu"
+    >
+
+      <span></span>
+      <span></span>
+      <span></span>
+
+    </label>
+
+
+    <nav class="nav">
+
+      <a href="../index.html">
+        Início
+      </a>
+
+      <a href="./sobre.html">
+        Sobre
+      </a>
+
+      <a href="./cardapio.html">
+        Cardápio
+      </a>
+
+      <a href="./produtos.html">
+        Produtos
+      </a>
+
+<a href="./contato.html">
+        Contato
+      </a>
+
+      <a href="./reservas.html">
+  Reservas
+</a>
+    </nav>
+
+
+    <a
+      href="./login.html"
+      class="btn-login"
+    >
+      Entrar
+    </a>
+
+  </header>
+
+
+  <main class="reservas-page">
+
+
+    <!-- HERO -->
+
+    <section class="reservas-hero">
+
+      <div class="reservas-hero-texto">
+
+        <p class="tag">
+          RESERVAS C3
+        </p>
+
+        <h1>
+          SUA MESA.
+          <span>SUA EXPERIÊNCIA.</span>
+        </h1>
+
+        <p>
+          Escolha a data e o horário
+          para viver a experiência C3.
+        </p>
+
+        <a
+          href="#reservar"
+          class="botao botao-roxo"
+        >
+          Reservar mesa
+        </a>
+
+      </div>
+
+
+      <div class="reservas-hero-visual">
+
+        <div class="reservas-glow"></div>
+
+        <span class="reservas-numero">
+          C3
+        </span>
+
+      </div>
+
+    </section>
+
+
+    <!-- ÁREA DE RESERVA -->
+
+    <section
+      class="reservas-form-section"
+      id="reservar"
+    >
+
+
+      <!-- SEM LOGIN -->
+
+      <div
+        class="reservas-sem-login"
+        id="reservas-sem-login"
+        hidden
+      >
+
+        <p class="tag">
+          RESERVAS C3
+        </p>
+
+        <h2>
+          OPS...
+          <span>
+            VOCÊ AINDA NÃO ESTÁ LOGADO.
+          </span>
+        </h2>
+
+        <p>
+          Para reservar uma mesa no C3,
+          você precisa entrar na sua conta
+          ou criar uma nova.
+        </p>
+
+
+        <div class="reservas-sem-login-acoes">
+
+          <a
+            href="./cadastro.html"
+            class="botao botao-roxo"
+          >
+            Criar conta
+          </a>
+
+          <a
+            href="./login.html"
+            class="botao botao-outline"
+          >
+            Entrar
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- USUÁRIO LOGADO -->
+
+      <div
+        class="reservas-area-logada"
+        id="reservas-area-logada"
+        hidden
+      >
+
+
+        <div class="reservas-form-texto">
+
+          <p class="tag">
+            FAÇA SUA RESERVA
+          </p>
+
+          <h2>
+            ESCOLHA
+            <span>SEU MOMENTO.</span>
+          </h2>
+
+          <p>
+            As reservas são vinculadas
+            à sua conta C3 e poderão ser
+            acompanhadas posteriormente
+            pela página Minha Conta.
+          </p>
+
+        </div>
+
+
+        <form
+          class="reservas-form"
+          id="reservas-form"
+        >
+
+
+          <!-- NOME -->
+
+          <div class="reservas-campo">
+
+            <label for="reserva-nome">
+              Nome
+            </label>
+
+            <input
+              type="text"
+              id="reserva-nome"
+              readonly
+            >
+
+          </div>
+
+
+          <!-- EMAIL -->
+
+          <div class="reservas-campo">
+
+            <label for="reserva-email">
+              E-mail
+            </label>
+
+            <input
+              type="email"
+              id="reserva-email"
+              readonly
+            >
+
+          </div>
+
+
+          <!-- DATA -->
+
+          <div class="reservas-campo">
+
+            <label for="reserva-data">
+              Data
+            </label>
+
+            <input
+              type="date"
+              id="reserva-data"
+              required
+            >
+
+          </div>
+
+
+          <!-- HORÁRIO -->
+
+          <div class="reservas-campo">
+
+            <label for="reserva-horario">
+              Horário
+            </label>
+
+            <select
+              id="reserva-horario"
+              required
+            >
+
+              <option value="">
+                Selecione um horário
+              </option>
+
+              <option value="18:00">
+                18:00
+              </option>
+
+              <option value="18:30">
+                18:30
+              </option>
+
+              <option value="19:00">
+                19:00
+              </option>
+
+              <option value="19:30">
+                19:30
+              </option>
+
+              <option value="20:00">
+                20:00
+              </option>
+
+              <option value="20:30">
+                20:30
+              </option>
+
+              <option value="21:00">
+                21:00
+              </option>
+
+              <option value="21:30">
+                21:30
+              </option>
+
+              <option value="22:00">
+                22:00
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- PESSOAS -->
+
+          <div class="reservas-campo">
+
+            <label for="reserva-pessoas">
+              Quantidade de pessoas
+            </label>
+
+            <select
+              id="reserva-pessoas"
+              required
+            >
+
+              <option value="">
+                Selecione
+              </option>
+
+              <option value="1">
+                1 pessoa
+              </option>
+
+              <option value="2">
+                2 pessoas
+              </option>
+
+              <option value="3">
+                3 pessoas
+              </option>
+
+              <option value="4">
+                4 pessoas
+              </option>
+
+              <option value="5">
+                5 pessoas
+              </option>
+
+              <option value="6">
+                6 pessoas
+              </option>
+
+              <option value="7">
+                7 pessoas
+              </option>
+
+              <option value="8">
+                8 pessoas
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- OBSERVAÇÕES -->
+
+          <div
+            class="reservas-campo reservas-campo-full"
+          >
+
+            <label for="reserva-observacoes">
+              Observações
+            </label>
+
+            <textarea
+              id="reserva-observacoes"
+              rows="5"
+              maxlength="300"
+              placeholder="Alguma observação para a equipe?"
+            ></textarea>
+
+          </div>
+
+
+          <div
+            class="reservas-mensagem"
+            id="reservas-mensagem"
+          ></div>
+
+
+          <button
+            type="submit"
+            class="botao botao-roxo reservas-btn"
+          >
+            Confirmar reserva
+          </button>
+
+        </form>
+
+      </div>
+
+    </section>
+
+
+    <!-- FINAL -->
+
+    <section class="reservas-final">
+
+      <p class="tag">
+        C3 BAR & LOUNGE
+      </p>
+
+      <h2>
+        SUA EXPERIÊNCIA
+        <span>COMEÇA AQUI.</span>
+      </h2>
+
+      <a
+        href="./minha-conta.html"
+        class="botao botao-outline"
+      >
+        Minha conta
+      </a>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+
+  <footer class="footer">
+
+    <div class="footer-logo">
+
+      <img
+        src="../assets/imgs/Logos/logo-c3.png"
+        alt="C3"
+      >
+
+    </div>
+
+
+    <div class="footer-links">
+
+      <a href="../index.html">
+        Início
+      </a>
+
+      <a href="./sobre.html">
+        Sobre
+      </a>
+
+      <a href="./cardapio.html">
+        Cardápio
+      </a>
+
+      <a href="./produtos.html">
+        Produtos
+      </a>
+
+<a href="./contato.html">
+        Contato
+      </a>
+
+      <a href="./reservas.html">
+        Reservas
+      </a>
+
+      
+
+    </div>
+
+
+    <p>
+      © 2026 C3 Bar & Lounge
+    </p>
+
+  </footer>
+
+
+  <script
+    type="module"
+    src="../js/script.js"
+  ></script>
+
+  <script
+    type="module"
+    src="../js/reservas.js"
+  ></script>
+
+</body>
+
+</html>
