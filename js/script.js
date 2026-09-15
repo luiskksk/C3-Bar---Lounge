@@ -1,24 +1,41 @@
-console.log('C3 Bar & Lounge carregado com sucesso!')
+console.log("C3 Bar & Lounge carregado com sucesso!");
+
 
 import {
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
+
 import {
-    auth
+    doc,
+    getDoc
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+import {
+    auth,
+    db
 } from "./firebase.js";
 
 
-console.log("C3 Bar & Lounge carregado com sucesso!");
+/* =====================================
+   ELEMENTOS
+===================================== */
+
+const botaoLogin =
+    document.querySelector(".btn-login");
 
 
-const botaoLogin = document.querySelector(".btn-login");
-
+/* =====================================
+   CAMINHOS
+===================================== */
 
 function estaNaPastaPages() {
 
-    return window.location.pathname.includes("/pages/");
+    return window.location.pathname.includes(
+        "/pages/"
+    );
 }
 
 
@@ -42,7 +59,74 @@ function caminhoHome() {
 }
 
 
-function criarMenuUsuario(user) {
+function caminhoMinhaConta() {
+
+    if (estaNaPastaPages()) {
+        return "./minha-conta.html";
+    }
+
+    return "./pages/minha-conta.html";
+}
+
+
+function caminhoAdmin() {
+
+    if (estaNaPastaPages()) {
+        return "./admin.html";
+    }
+
+    return "./pages/admin.html";
+}
+
+
+/* =====================================
+   VERIFICAR SE É ADMIN
+===================================== */
+
+async function verificarSeAdmin(user) {
+
+    try {
+
+        const referenciaUsuario =
+            doc(
+                db,
+                "usuarios",
+                user.uid
+            );
+
+
+        const usuarioSnap =
+            await getDoc(
+                referenciaUsuario
+            );
+
+
+        if (!usuarioSnap.exists()) {
+            return false;
+        }
+
+
+        return (
+            usuarioSnap.data().admin === true
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao verificar administrador:",
+            erro
+        );
+
+        return false;
+    }
+}
+
+
+/* =====================================
+   CRIAR MENU DO USUÁRIO
+===================================== */
+
+async function criarMenuUsuario(user) {
 
     if (!botaoLogin) {
         return;
@@ -59,19 +143,28 @@ function criarMenuUsuario(user) {
         nomeUsuario.split(" ")[0];
 
 
+    /* VERIFICA ADMIN */
+
+    const usuarioAdmin =
+        await verificarSeAdmin(user);
+
+
     /*
-        Remove o botão Entrar
+        Remove botão Entrar
     */
 
-    botaoLogin.style.display = "none";
+    botaoLogin.style.display =
+        "none";
 
 
     /*
-        Evita criar o menu duas vezes
+        Evita criar duas vezes
     */
 
     const menuExistente =
-        document.querySelector(".usuario-area");
+        document.querySelector(
+            ".usuario-area"
+        );
 
 
     if (menuExistente) {
@@ -87,7 +180,9 @@ function criarMenuUsuario(user) {
         document.createElement("div");
 
 
-    usuarioArea.classList.add("usuario-area");
+    usuarioArea.classList.add(
+        "usuario-area"
+    );
 
 
     usuarioArea.innerHTML = `
@@ -132,22 +227,57 @@ function criarMenuUsuario(user) {
             </div>
 
 
-           <div class="usuario-menu-linha"></div>
+            <div class="usuario-menu-linha"></div>
 
-<a
-    href="${estaNaPastaPages() ? "./minha-conta.html" : "./pages/minha-conta.html"}"
-    class="usuario-menu-item usuario-conta"
->
-    Minha conta
-</a>
 
-<button
-    type="button"
-    class="usuario-menu-item usuario-sair"
-    id="usuario-sair"
->
-    Sair da conta
-</button>
+            <a
+                href="${caminhoMinhaConta()}"
+                class="usuario-menu-item usuario-conta"
+            >
+                <span class="usuario-menu-icone">
+                    ◉
+                </span>
+
+                Minha conta
+            </a>
+
+
+            ${
+                usuarioAdmin
+                    ? `
+                        <a
+                            href="${caminhoAdmin()}"
+                            class="usuario-menu-item usuario-admin"
+                        >
+
+                            <span class="usuario-menu-icone usuario-admin-icone">
+                                ◈
+                            </span>
+
+                            Painel Admin
+
+                        </a>
+                    `
+                    : ""
+            }
+
+
+            <div class="usuario-menu-linha"></div>
+
+
+            <button
+                type="button"
+                class="usuario-menu-item usuario-sair"
+                id="usuario-sair"
+            >
+
+                <span class="usuario-menu-icone">
+                    ↪
+                </span>
+
+                Sair da conta
+
+            </button>
 
         </div>
 
@@ -155,7 +285,7 @@ function criarMenuUsuario(user) {
 
 
     /*
-        Coloca ao lado do botão Entrar
+        Coloca menu ao lado do botão Entrar
     */
 
     botaoLogin.insertAdjacentElement(
@@ -165,86 +295,101 @@ function criarMenuUsuario(user) {
 
 
     const usuarioBtn =
-        usuarioArea.querySelector("#usuario-btn");
-
-
-    const usuarioMenu =
-        usuarioArea.querySelector("#usuario-menu");
+        usuarioArea.querySelector(
+            "#usuario-btn"
+        );
 
 
     const usuarioSair =
-        usuarioArea.querySelector("#usuario-sair");
-
-
-    /*
-        Abrir / fechar menu
-    */
-
-    usuarioBtn.addEventListener("click", () => {
-
-        const aberto =
-            usuarioArea.classList.toggle("aberto");
-
-
-        usuarioBtn.setAttribute(
-            "aria-expanded",
-            aberto
+        usuarioArea.querySelector(
+            "#usuario-sair"
         );
 
-    });
+
+    /* =====================================
+       ABRIR / FECHAR MENU
+    ===================================== */
+
+    usuarioBtn.addEventListener(
+        "click",
+        (event) => {
+
+            event.stopPropagation();
 
 
-    /*
-        Logout
-    */
-
-    usuarioSair.addEventListener("click", async () => {
-
-        try {
-
-            await signOut(auth);
-
-
-            window.location.href =
-                caminhoHome();
-
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao sair da conta:",
-                erro
-            );
-
-        }
-
-    });
-
-
-    /*
-        Fecha clicando fora
-    */
-
-    document.addEventListener("click", (event) => {
-
-        if (
-            !usuarioArea.contains(event.target)
-        ) {
-
-            usuarioArea.classList.remove("aberto");
+            const aberto =
+                usuarioArea.classList.toggle(
+                    "aberto"
+                );
 
 
             usuarioBtn.setAttribute(
                 "aria-expanded",
-                "false"
+                String(aberto)
             );
-
         }
+    );
 
-    });
 
+    /* =====================================
+       LOGOUT
+    ===================================== */
+
+    usuarioSair.addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                await signOut(auth);
+
+
+                window.location.href =
+                    caminhoHome();
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro ao sair da conta:",
+                    erro
+                );
+            }
+        }
+    );
+
+
+    /* =====================================
+       FECHA CLICANDO FORA
+    ===================================== */
+
+    document.addEventListener(
+        "click",
+        (event) => {
+
+            if (
+                !usuarioArea.contains(
+                    event.target
+                )
+            ) {
+
+                usuarioArea.classList.remove(
+                    "aberto"
+                );
+
+
+                usuarioBtn.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+            }
+        }
+    );
 }
 
+
+/* =====================================
+   MOSTRAR BOTÃO ENTRAR
+===================================== */
 
 function mostrarBotaoLogin() {
 
@@ -254,7 +399,9 @@ function mostrarBotaoLogin() {
 
 
     const usuarioArea =
-        document.querySelector(".usuario-area");
+        document.querySelector(
+            ".usuario-area"
+        );
 
 
     if (usuarioArea) {
@@ -262,7 +409,8 @@ function mostrarBotaoLogin() {
     }
 
 
-    botaoLogin.style.display = "";
+    botaoLogin.style.display =
+        "";
 
 
     botaoLogin.textContent =
@@ -271,17 +419,16 @@ function mostrarBotaoLogin() {
 
     botaoLogin.href =
         caminhoLogin();
-
 }
 
 
-/*
-    FIREBASE OBSERVA O LOGIN
-*/
+/* =====================================
+   FIREBASE OBSERVA LOGIN
+===================================== */
 
 onAuthStateChanged(
     auth,
-    (user) => {
+    async (user) => {
 
         if (user) {
 
@@ -292,7 +439,9 @@ onAuthStateChanged(
             );
 
 
-            criarMenuUsuario(user);
+            await criarMenuUsuario(
+                user
+            );
 
         } else {
 
@@ -302,8 +451,6 @@ onAuthStateChanged(
 
 
             mostrarBotaoLogin();
-
         }
-
     }
 );

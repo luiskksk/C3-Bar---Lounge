@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin | C3 Bar & Lounge</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+</head>
+
+<body>
+
+    <header class="header">
+
+        <a
+            href="../index.html"
+            class="logo-link"
+        >
+            <img
+                src="../assets/imgs/Logos/logo-c3.png"
+                alt="C3 Bar & Lounge"
+                class="logo"
+            >
+        </a>
+
+        <nav class="nav">
+
+            <a href="../index.html">
+                Voltar ao site
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <main class="admin-page">
+
+
+        <!-- CARREGAMENTO -->
+
+        <section
+            class="admin-loading"
+            id="admin-loading"
+        >
+
+            <span class="admin-loading-logo">
+                C3
+            </span>
+
+            <p>
+                Verificando acesso...
+            </p>
+
+        </section>
+
+
+        <!-- ACESSO NEGADO -->
+
+        <section
+            class="admin-negado"
+            id="admin-negado"
+            hidden
+        >
+
+            <span>
+                ACESSO RESTRITO
+            </span>
+
+            <h1>
+                VOCÊ NÃO POSSUI
+                <strong>ACESSO.</strong>
+            </h1>
+
+            <p>
+                Esta área é exclusiva para
+                administradores do C3.
+            </p>
+
+            <a
+                href="../index.html"
+                class="botao botao-roxo"
+            >
+                Voltar ao site
+            </a>
+
+        </section>
+
+
+        <!-- PAINEL -->
+
+        <div
+            class="admin-conteudo"
+            id="admin-conteudo"
+            hidden
+        >
+
+
+            <!-- HERO -->
+
+            <section class="admin-hero">
+
+                <div>
+
+                    <p class="tag">
+                        C3 ADMIN
+                    </p>
+
+                    <h1>
+                        PAINEL DE
+                        <span>CONTROLE.</span>
+                    </h1>
+
+                    <p>
+                        Gerencie as reservas
+                        realizadas pelos clientes
+                        do C3 Bar & Lounge.
+                    </p>
+
+                </div>
+
+                <div class="admin-identidade">
+
+                    <span>
+                        ADMINISTRADOR
+                    </span>
+
+                    <strong id="admin-nome">
+                        C3
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- ESTATÍSTICAS -->
+
+            <section class="admin-estatisticas">
+
+                <article class="admin-stat">
+
+                    <span>
+                        01
+                    </span>
+
+                    <strong id="admin-total">
+                        0
+                    </strong>
+
+                    <p>
+                        Reservas
+                    </p>
+
+                </article>
+
+
+                <article class="admin-stat">
+
+                    <span>
+                        02
+                    </span>
+
+                    <strong id="admin-pendentes">
+                        0
+                    </strong>
+
+                    <p>
+                        Pendentes
+                    </p>
+
+                </article>
+
+
+                <article class="admin-stat">
+
+                    <span>
+                        03
+                    </span>
+
+                    <strong id="admin-confirmadas">
+                        0
+                    </strong>
+
+                    <p>
+                        Confirmadas
+                    </p>
+
+                </article>
+
+
+                <article class="admin-stat">
+
+                    <span>
+                        04
+                    </span>
+
+                    <strong id="admin-canceladas">
+                        0
+                    </strong>
+
+                    <p>
+                        Canceladas
+                    </p>
+
+                </article>
+
+            </section>
+
+
+            <!-- RESERVAS -->
+
+            <section class="admin-section">
+
+                <div class="admin-section-header">
+
+                    <div>
+
+                        <p class="tag">
+                            GERENCIAMENTO
+                        </p>
+
+                        <h2>
+                            TODAS AS
+                            <span>RESERVAS.</span>
+                        </h2>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="admin-reservas"
+                    id="admin-reservas"
+                >
+
+                    <div class="admin-reservas-loading">
+                        Carregando reservas...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- SAIR -->
+
+            <section class="admin-sair-area">
+
+                <button
+                    type="button"
+                    class="botao botao-outline"
+                    id="admin-sair"
+                >
+                    Sair da conta
+                </button>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script
+        type="module"
+        src="../js/admin.js"
+    ></script>
+
+</body>
+
+</html>
