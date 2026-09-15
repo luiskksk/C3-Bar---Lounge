@@ -9,7 +9,9 @@ import {
 
 import {
     doc,
-    getDoc
+    getDoc,
+    collection,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
@@ -123,6 +125,144 @@ async function verificarSeAdmin(user) {
 
 
 /* =====================================
+   CONVERTER TIMESTAMP
+===================================== */
+
+function timestampParaNumeroAdmin(
+    timestamp
+) {
+
+    if (!timestamp) {
+        return 0;
+    }
+
+
+    if (
+        typeof timestamp.toMillis ===
+        "function"
+    ) {
+        return timestamp.toMillis();
+    }
+
+
+    if (
+        typeof timestamp.seconds ===
+        "number"
+    ) {
+        return (
+            timestamp.seconds *
+            1000
+        );
+    }
+
+
+    return 0;
+}
+
+
+/* =====================================
+   CONTAR NOTIFICAÇÕES
+===================================== */
+
+async function contarNotificacoesAdmin() {
+
+    try {
+
+        const ultimaVisualizacao =
+            Number(
+                localStorage.getItem(
+                    "c3_admin_ultima_visualizacao"
+                ) || 0
+            );
+
+
+        const [
+            reservasSnapshot,
+            mensagensSnapshot
+        ] =
+            await Promise.all([
+
+                getDocs(
+                    collection(
+                        db,
+                        "reservas"
+                    )
+                ),
+
+                getDocs(
+                    collection(
+                        db,
+                        "mensagens"
+                    )
+                )
+
+            ]);
+
+
+        let quantidade = 0;
+
+
+        reservasSnapshot.forEach(
+            (documento) => {
+
+                const dados =
+                    documento.data();
+
+
+                const criadoEm =
+                    timestampParaNumeroAdmin(
+                        dados.criadoEm
+                    );
+
+
+                if (
+                    criadoEm >
+                    ultimaVisualizacao
+                ) {
+                    quantidade++;
+                }
+            }
+        );
+
+
+        mensagensSnapshot.forEach(
+            (documento) => {
+
+                const dados =
+                    documento.data();
+
+
+                const criadoEm =
+                    timestampParaNumeroAdmin(
+                        dados.criadoEm
+                    );
+
+
+                if (
+                    criadoEm >
+                    ultimaVisualizacao
+                ) {
+                    quantidade++;
+                }
+            }
+        );
+
+
+        return quantidade;
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao verificar notificações:",
+            erro
+        );
+
+        return 0;
+    }
+}
+
+
+/* =====================================
    CRIAR MENU DO USUÁRIO
 ===================================== */
 
@@ -143,23 +283,23 @@ async function criarMenuUsuario(user) {
         nomeUsuario.split(" ")[0];
 
 
-    /* VERIFICA ADMIN */
-
     const usuarioAdmin =
         await verificarSeAdmin(user);
 
 
-    /*
-        Remove botão Entrar
-    */
+    let quantidadeNotificacoes = 0;
+
+
+    if (usuarioAdmin) {
+
+        quantidadeNotificacoes =
+            await contarNotificacoesAdmin();
+    }
+
 
     botaoLogin.style.display =
         "none";
 
-
-    /*
-        Evita criar duas vezes
-    */
 
     const menuExistente =
         document.querySelector(
@@ -171,10 +311,6 @@ async function criarMenuUsuario(user) {
         menuExistente.remove();
     }
 
-
-    /*
-        Cria área do usuário
-    */
 
     const usuarioArea =
         document.createElement("div");
@@ -194,13 +330,39 @@ async function criarMenuUsuario(user) {
             aria-expanded="false"
         >
 
-            <span class="usuario-avatar">
-                ${primeiroNome.charAt(0).toUpperCase()}
+            <span class="usuario-avatar-wrapper">
+
+                <span class="usuario-avatar">
+                    ${primeiroNome.charAt(0).toUpperCase()}
+                </span>
+
+                ${
+                    usuarioAdmin &&
+                    quantidadeNotificacoes > 0
+
+                        ? `
+                            <span
+                                class="usuario-notificacao"
+                                title="${quantidadeNotificacoes} nova(s) notificação(ões)"
+                            >
+                                ${
+                                    quantidadeNotificacoes > 9
+                                        ? "9+"
+                                        : quantidadeNotificacoes
+                                }
+                            </span>
+                        `
+
+                        : ""
+                }
+
             </span>
+
 
             <span class="usuario-nome">
                 ${primeiroNome}
             </span>
+
 
             <span class="usuario-seta">
                 ▾
@@ -234,30 +396,54 @@ async function criarMenuUsuario(user) {
                 href="${caminhoMinhaConta()}"
                 class="usuario-menu-item usuario-conta"
             >
+
                 <span class="usuario-menu-icone">
                     ◉
                 </span>
 
                 Minha conta
+
             </a>
 
 
             ${
                 usuarioAdmin
+
                     ? `
                         <a
                             href="${caminhoAdmin()}"
                             class="usuario-menu-item usuario-admin"
                         >
 
-                            <span class="usuario-menu-icone usuario-admin-icone">
+                            <span
+                                class="usuario-menu-icone usuario-admin-icone"
+                            >
                                 ◈
                             </span>
 
                             Painel Admin
 
+                            ${
+                                quantidadeNotificacoes > 0
+
+                                    ? `
+                                        <span
+                                            class="usuario-menu-notificacao"
+                                        >
+                                            ${
+                                                quantidadeNotificacoes > 9
+                                                    ? "9+"
+                                                    : quantidadeNotificacoes
+                                            }
+                                        </span>
+                                    `
+
+                                    : ""
+                            }
+
                         </a>
                     `
+
                     : ""
             }
 
@@ -284,10 +470,6 @@ async function criarMenuUsuario(user) {
     `;
 
 
-    /*
-        Coloca menu ao lado do botão Entrar
-    */
-
     botaoLogin.insertAdjacentElement(
         "afterend",
         usuarioArea
@@ -305,10 +487,6 @@ async function criarMenuUsuario(user) {
             "#usuario-sair"
         );
 
-
-    /* =====================================
-       ABRIR / FECHAR MENU
-    ===================================== */
 
     usuarioBtn.addEventListener(
         "click",
@@ -330,10 +508,6 @@ async function criarMenuUsuario(user) {
         }
     );
 
-
-    /* =====================================
-       LOGOUT
-    ===================================== */
 
     usuarioSair.addEventListener(
         "click",
@@ -357,10 +531,6 @@ async function criarMenuUsuario(user) {
         }
     );
 
-
-    /* =====================================
-       FECHA CLICANDO FORA
-    ===================================== */
 
     document.addEventListener(
         "click",

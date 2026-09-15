@@ -11446,3 +11446,432 @@ section { position:relative; isolation:isolate; }
         0 0 18px
         rgba(164, 92, 255, 0.85);
 }
+
+/* =========================================
+   ADMIN - MENSAGENS
+========================================= */
+
+.admin-mensagens-section {
+    position: relative;
+
+    margin-top: 30px;
+
+    padding-top: 80px;
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.06);
+}
+
+
+.admin-section-descricao {
+    max-width: 600px;
+
+    margin-top: 16px;
+
+    color:
+        rgba(255, 255, 255, 0.42);
+
+    line-height: 1.7;
+}
+
+
+.admin-mensagens {
+    display: grid;
+
+    gap: 18px;
+}
+
+
+.admin-mensagem-card {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 30px;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.055),
+            rgba(255, 255, 255, 0.012)
+        );
+
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease;
+}
+
+
+.admin-mensagem-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: -100px;
+    right: -100px;
+
+    width: 230px;
+    height: 230px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(164, 92, 255, 0.09);
+
+    filter: blur(60px);
+
+    pointer-events: none;
+}
+
+
+.admin-mensagem-card:hover {
+    transform:
+        translateY(-3px);
+
+    border-color:
+        rgba(164, 92, 255, 0.28);
+}
+
+
+.admin-mensagem-topo {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+}
+
+
+.admin-mensagem-topo h3 {
+    margin: 0 0 5px;
+
+    color: #ffffff;
+
+    font-size: 1.2rem;
+}
+
+
+.admin-mensagem-topo p {
+    margin: 0;
+
+    color:
+        rgba(255, 255, 255, 0.40);
+
+    font-size: 0.84rem;
+}
+
+
+.admin-mensagem-nova {
+    flex-shrink: 0;
+
+    padding:
+        7px
+        11px;
+
+    border:
+        1px solid
+        rgba(164, 92, 255, 0.30);
+
+    border-radius: 999px;
+
+    background:
+        rgba(164, 92, 255, 0.09);
+
+    color: #c9a6ff;
+
+    font-size: 0.62rem;
+    font-weight: 800;
+
+    letter-spacing: 0.10em;
+}
+
+
+.admin-mensagem-assunto {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+
+    margin-top: 25px;
+
+    padding:
+        15px
+        17px;
+
+    border-radius: 11px;
+
+    background:
+        rgba(0, 0, 0, 0.18);
+}
+
+
+.admin-mensagem-assunto span {
+    color:
+        rgba(255, 255, 255, 0.30);
+
+    font-size: 0.63rem;
+    font-weight: 800;
+
+    letter-spacing: 0.10em;
+}
+
+
+.admin-mensagem-assunto strong {
+    color: #ffffff;
+
+    font-size: 0.95rem;
+}
+
+
+.admin-mensagem-corpo {
+    position: relative;
+    z-index: 2;
+
+    margin-top: 16px;
+
+    padding:
+        18px
+        19px;
+
+    border-left:
+        2px solid
+        rgba(164, 92, 255, 0.55);
+
+    background:
+        rgba(164, 92, 255, 0.035);
+}
+
+
+.admin-mensagem-corpo p {
+    margin: 0;
+
+    color:
+        rgba(255, 255, 255, 0.62);
+
+    line-height: 1.75;
+
+    white-space: pre-wrap;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================
+   ADMIN - RESERVAS ANTIGAS
+========================================= */
+
+.admin-antigas-section {
+    margin-top: 30px;
+
+    padding-top: 80px;
+
+    border-top:
+        1px solid
+        rgba(255, 255, 255, 0.06);
+}
+
+
+.admin-antigas-section
+.admin-reserva-card {
+    opacity: 0.82;
+}
+
+
+.admin-antigas-section
+.admin-reserva-card:hover {
+    opacity: 1;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .admin-mensagem-card {
+        padding:
+            23px
+            17px;
+    }
+
+
+    .admin-mensagem-topo {
+        flex-direction: column;
+
+        gap: 13px;
+    }
+
+
+    .admin-mensagens-section,
+    .admin-antigas-section {
+        padding-top: 55px;
+    }
+
+}
+
+/* =========================================
+   NOTIFICAÇÃO DO ADMIN
+========================================= */
+
+.usuario-avatar-wrapper {
+    position: relative;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+.usuario-notificacao {
+    position: absolute;
+
+    top: -7px;
+    right: -9px;
+
+    min-width: 18px;
+    height: 18px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 5px;
+
+    border:
+        2px solid
+        #08070d;
+
+    border-radius: 999px;
+
+    background: #a45cff;
+
+    color: #ffffff;
+
+    font-size: 0.58rem;
+    font-weight: 900;
+
+    line-height: 1;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(164, 92, 255, 0.10),
+        0 0 18px
+        rgba(164, 92, 255, 0.75);
+
+    animation:
+        c3NotificacaoPulse
+        1.8s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes c3NotificacaoPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+
+        box-shadow:
+            0 0 0 3px
+            rgba(164, 92, 255, 0.10),
+            0 0 15px
+            rgba(164, 92, 255, 0.55);
+    }
+
+    50% {
+        transform: scale(1.10);
+
+        box-shadow:
+            0 0 0 5px
+            rgba(164, 92, 255, 0.06),
+            0 0 25px
+            rgba(164, 92, 255, 0.85);
+    }
+}
+
+/* =========================================
+   BOTÃO SAIR - ADMIN
+========================================= */
+
+.admin-sair-area .botao-outline {
+    color: #ffffff !important;
+
+    background: transparent;
+
+    border: 1px solid rgba(164, 92, 255, 0.45);
+
+    cursor: pointer;
+}
+
+
+.admin-sair-area .botao-outline:hover {
+    color: #ffffff !important;
+
+    background: rgba(164, 92, 255, 0.15);
+
+    border-color: #a45cff;
+
+    box-shadow:
+        0 0 25px
+        rgba(164, 92, 255, 0.20);
+}
+
+/* =========================================
+   BOTÃO APAGAR - ADMIN
+========================================= */
+
+.admin-reserva-btn.apagar {
+    background: rgba(255, 60, 100, 0.08);
+    color: #ff6685;
+
+    border: 1px solid rgba(255, 60, 100, 0.35);
+
+    padding: 10px 18px;
+    border-radius: 10px;
+
+    font-weight: 700;
+    letter-spacing: 0.5px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.admin-reserva-btn.apagar:hover {
+    background: rgba(255, 60, 100, 0.16);
+    border-color: #ff6685;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 20px rgba(255, 60, 100, 0.15);
+}
+
+.admin-reserva-btn.apagar:active {
+    transform: translateY(0);
+}

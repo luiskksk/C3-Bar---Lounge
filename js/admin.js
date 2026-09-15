@@ -1,3 +1,13 @@
+/* =========================================
+   C3 BAR & LOUNGE
+   PAINEL ADMINISTRATIVO
+========================================= */
+
+
+/* =========================================
+   IMPORTS
+========================================= */
+
 import {
     onAuthStateChanged,
     signOut
@@ -9,6 +19,7 @@ import {
     collection,
     getDocs,
     updateDoc,
+    deleteDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
@@ -18,9 +29,9 @@ import {
 } from "./firebase.js";
 
 
-/* =====================================
+/* =========================================
    ELEMENTOS
-===================================== */
+========================================= */
 
 const loading =
     document.querySelector("#admin-loading");
@@ -34,8 +45,26 @@ const conteudo =
 const nomeAdmin =
     document.querySelector("#admin-nome");
 
+
+/* RESERVAS */
+
 const listaReservas =
     document.querySelector("#admin-reservas");
+
+const listaReservasProximas =
+    document.querySelector("#admin-reservas-proximas");
+
+const listaReservasAntigas =
+    document.querySelector("#admin-reservas-antigas");
+
+
+/* MENSAGENS */
+
+const listaMensagens =
+    document.querySelector("#admin-mensagens");
+
+
+/* ESTATÍSTICAS */
 
 const totalElemento =
     document.querySelector("#admin-total");
@@ -49,13 +78,42 @@ const confirmadasElemento =
 const canceladasElemento =
     document.querySelector("#admin-canceladas");
 
+
+/* LOGOUT */
+
 const botaoSair =
     document.querySelector("#admin-sair");
 
 
-/* =====================================
-   DATA
-===================================== */
+/* =========================================
+   DATA LOCAL
+========================================= */
+
+function dataLocalISO() {
+
+    const agora =
+        new Date();
+
+    const ano =
+        agora.getFullYear();
+
+    const mes =
+        String(
+            agora.getMonth() + 1
+        ).padStart(2, "0");
+
+    const dia =
+        String(
+            agora.getDate()
+        ).padStart(2, "0");
+
+    return `${ano}-${mes}-${dia}`;
+}
+
+
+/* =========================================
+   FORMATAR DATA
+========================================= */
 
 function formatarData(data) {
 
@@ -70,13 +128,48 @@ function formatarData(data) {
         return data;
     }
 
-    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+    return (
+        `${partes[2]}/${partes[1]}/${partes[0]}`
+    );
 }
 
 
-/* =====================================
-   STATUS
-===================================== */
+/* =========================================
+   TIMESTAMP FIREBASE
+========================================= */
+
+function timestampParaNumero(
+    timestamp
+) {
+
+    if (!timestamp) {
+        return 0;
+    }
+
+    if (
+        typeof timestamp.toMillis ===
+        "function"
+    ) {
+        return timestamp.toMillis();
+    }
+
+    if (
+        typeof timestamp.seconds ===
+        "number"
+    ) {
+        return (
+            timestamp.seconds *
+            1000
+        );
+    }
+
+    return 0;
+}
+
+
+/* =========================================
+   FORMATAR STATUS
+========================================= */
 
 function formatarStatus(status) {
 
@@ -94,9 +187,44 @@ function formatarStatus(status) {
 }
 
 
-/* =====================================
+/* =========================================
+   CRIAR BOTÃO
+========================================= */
+
+function criarBotao(
+    texto,
+    classe,
+    funcao
+) {
+
+    const botao =
+        document.createElement(
+            "button"
+        );
+
+    botao.type =
+        "button";
+
+    botao.classList.add(
+        "admin-reserva-btn",
+        classe
+    );
+
+    botao.textContent =
+        texto;
+
+    botao.addEventListener(
+        "click",
+        funcao
+    );
+
+    return botao;
+}
+
+
+/* =========================================
    ALTERAR STATUS
-===================================== */
+========================================= */
 
 async function alterarStatus(
     reservaId,
@@ -136,57 +264,75 @@ async function alterarStatus(
 }
 
 
-/* =====================================
-   CRIAR BOTÃO
-===================================== */
+/* =========================================
+   APAGAR RESERVA
+========================================= */
 
-function criarBotao(
-    texto,
-    classe,
-    funcao
+async function apagarReserva(
+    reservaId
 ) {
 
-    const botao =
-        document.createElement("button");
+    const confirmou =
+        window.confirm(
+            "Tem certeza que deseja apagar esta reserva permanentemente?\n\nEssa ação não pode ser desfeita."
+        );
 
-    botao.type =
-        "button";
+    if (!confirmou) {
+        return;
+    }
 
-    botao.classList.add(
-        "admin-reserva-btn",
-        classe
-    );
+    try {
 
-    botao.textContent =
-        texto;
+        await deleteDoc(
+            doc(
+                db,
+                "reservas",
+                reservaId
+            )
+        );
 
-    botao.addEventListener(
-        "click",
-        funcao
-    );
+        await carregarReservas();
 
-    return botao;
+    } catch (erro) {
+
+        console.error(
+            "Erro ao apagar reserva:",
+            erro
+        );
+
+        alert(
+            "Não foi possível apagar a reserva."
+        );
+    }
 }
 
 
-/* =====================================
+/* =========================================
    CARD DA RESERVA
-===================================== */
+========================================= */
 
-function criarCardReserva(reserva) {
+function criarCardReserva(
+    reserva
+) {
 
     const card =
-        document.createElement("article");
+        document.createElement(
+            "article"
+        );
 
     card.classList.add(
         "admin-reserva-card"
     );
 
 
-    /* TOPO */
+    /* =====================================
+       TOPO
+    ===================================== */
 
     const topo =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     topo.classList.add(
         "admin-reserva-topo"
@@ -194,11 +340,15 @@ function criarCardReserva(reserva) {
 
 
     const cliente =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     const nome =
-        document.createElement("h3");
+        document.createElement(
+            "h3"
+        );
 
     nome.textContent =
         reserva.nome ||
@@ -206,7 +356,9 @@ function criarCardReserva(reserva) {
 
 
     const email =
-        document.createElement("p");
+        document.createElement(
+            "p"
+        );
 
     email.textContent =
         reserva.email ||
@@ -219,12 +371,17 @@ function criarCardReserva(reserva) {
     );
 
 
+    /* STATUS */
+
     const status =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
 
     status.classList.add(
         "admin-reserva-status",
-        reserva.status || "pendente"
+        reserva.status ||
+            "pendente"
     );
 
     status.textContent =
@@ -239,10 +396,14 @@ function criarCardReserva(reserva) {
     );
 
 
-    /* INFORMAÇÕES */
+    /* =====================================
+       INFORMAÇÕES
+    ===================================== */
 
     const infos =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     infos.classList.add(
         "admin-reserva-infos"
@@ -251,7 +412,9 @@ function criarCardReserva(reserva) {
 
     const dados = [
         {
-            label: "DATA",
+            label:
+                "DATA",
+
             valor:
                 formatarData(
                     reserva.data
@@ -259,17 +422,22 @@ function criarCardReserva(reserva) {
         },
 
         {
-            label: "HORÁRIO",
+            label:
+                "HORÁRIO",
+
             valor:
                 reserva.horario ||
                 "--:--"
         },
 
         {
-            label: "PESSOAS",
+            label:
+                "PESSOAS",
+
             valor:
                 String(
-                    reserva.pessoas || 0
+                    reserva.pessoas ||
+                    0
                 )
         }
     ];
@@ -279,17 +447,23 @@ function criarCardReserva(reserva) {
         (dado) => {
 
             const item =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             const label =
-                document.createElement("span");
+                document.createElement(
+                    "span"
+                );
 
             label.textContent =
                 dado.label;
 
 
             const valor =
-                document.createElement("strong");
+                document.createElement(
+                    "strong"
+                );
 
             valor.textContent =
                 dado.valor;
@@ -313,12 +487,16 @@ function criarCardReserva(reserva) {
     );
 
 
-    /* OBSERVAÇÕES */
+    /* =====================================
+       OBSERVAÇÕES
+    ===================================== */
 
     if (reserva.observacoes) {
 
         const observacoes =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         observacoes.classList.add(
             "admin-reserva-observacoes"
@@ -326,14 +504,18 @@ function criarCardReserva(reserva) {
 
 
         const titulo =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
 
         titulo.textContent =
             "OBSERVAÇÕES";
 
 
         const texto =
-            document.createElement("p");
+            document.createElement(
+                "p"
+            );
 
         texto.textContent =
             reserva.observacoes;
@@ -344,26 +526,33 @@ function criarCardReserva(reserva) {
             texto
         );
 
-
         card.appendChild(
             observacoes
         );
     }
 
 
-    /* BOTÕES */
+    /* =====================================
+       AÇÕES
+    ===================================== */
 
     const acoes =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     acoes.classList.add(
         "admin-reserva-acoes"
     );
 
 
+    /* CONFIRMAR */
+
     if (
         reserva.status !==
-        "confirmada"
+            "confirmada" &&
+        reserva.status !==
+            "cancelada"
     ) {
 
         const confirmar =
@@ -385,6 +574,8 @@ function criarCardReserva(reserva) {
     }
 
 
+    /* CANCELAR */
+
     if (
         reserva.status !==
         "cancelada"
@@ -396,12 +587,12 @@ function criarCardReserva(reserva) {
                 "cancelar",
                 async () => {
 
-                    const confirmar =
+                    const confirmou =
                         window.confirm(
                             "Deseja cancelar esta reserva?"
                         );
 
-                    if (!confirmar) {
+                    if (!confirmou) {
                         return;
                     }
 
@@ -418,18 +609,46 @@ function criarCardReserva(reserva) {
     }
 
 
-    card.appendChild(
-        acoes
+    /* =====================================
+       APAGAR
+    ===================================== */
+
+    const apagar =
+        criarBotao(
+            "Apagar",
+            "apagar",
+            async () => {
+
+                await apagarReserva(
+                    reserva.id
+                );
+            }
+        );
+
+    acoes.appendChild(
+        apagar
     );
+
+
+    /* ADICIONAR AÇÕES */
+
+    if (
+        acoes.children.length > 0
+    ) {
+
+        card.appendChild(
+            acoes
+        );
+    }
 
 
     return card;
 }
 
 
-/* =====================================
+/* =========================================
    ESTATÍSTICAS
-===================================== */
+========================================= */
 
 function atualizarEstatisticas(
     reservas
@@ -448,7 +667,7 @@ function atualizarEstatisticas(
         reservas.filter(
             (reserva) =>
                 reserva.status ===
-                "confirmada"
+                    "confirmada"
         ).length;
 
 
@@ -456,42 +675,100 @@ function atualizarEstatisticas(
         reservas.filter(
             (reserva) =>
                 reserva.status ===
-                "cancelada"
+                    "cancelada"
         ).length;
 
 
-    totalElemento.textContent =
-        reservas.length;
+    if (totalElemento) {
 
-    pendentesElemento.textContent =
-        pendentes;
+        totalElemento.textContent =
+            reservas.length;
+    }
 
-    confirmadasElemento.textContent =
-        confirmadas;
 
-    canceladasElemento.textContent =
-        canceladas;
+    if (pendentesElemento) {
+
+        pendentesElemento.textContent =
+            pendentes;
+    }
+
+
+    if (confirmadasElemento) {
+
+        confirmadasElemento.textContent =
+            confirmadas;
+    }
+
+
+    if (canceladasElemento) {
+
+        canceladasElemento.textContent =
+            canceladas;
+    }
 }
 
 
-/* =====================================
-   CARREGAR RESERVAS
-===================================== */
+/* =========================================
+   RENDERIZAR RESERVAS
+========================================= */
 
-async function carregarReservas() {
+function renderizarReservas(
+    elemento,
+    reservas,
+    textoVazio
+) {
 
-    if (!listaReservas) {
+    if (!elemento) {
         return;
     }
 
 
-    listaReservas.innerHTML =
-        `
-            <div class="admin-reservas-loading">
-                Carregando reservas...
-            </div>
-        `;
+    elemento.innerHTML =
+        "";
 
+
+    if (
+        reservas.length === 0
+    ) {
+
+        const vazio =
+            document.createElement(
+                "div"
+            );
+
+        vazio.classList.add(
+            "admin-vazio"
+        );
+
+        vazio.textContent =
+            textoVazio;
+
+        elemento.appendChild(
+            vazio
+        );
+
+        return;
+    }
+
+
+    reservas.forEach(
+        (reserva) => {
+
+            elemento.appendChild(
+                criarCardReserva(
+                    reserva
+                )
+            );
+        }
+    );
+}
+
+
+/* =========================================
+   CARREGAR RESERVAS
+========================================= */
+
+async function carregarReservas() {
 
     try {
 
@@ -504,7 +781,8 @@ async function carregarReservas() {
             );
 
 
-        const reservas = [];
+        const reservas =
+            [];
 
 
         resultado.forEach(
@@ -520,7 +798,64 @@ async function carregarReservas() {
         );
 
 
-        reservas.sort(
+        /* ESTATÍSTICAS */
+
+        atualizarEstatisticas(
+            reservas
+        );
+
+
+        const hoje =
+            dataLocalISO();
+
+
+        /* =====================================
+           RESERVAS DE HOJE
+        ===================================== */
+
+        const reservasHoje =
+            reservas.filter(
+                (reserva) =>
+                    reserva.data ===
+                    hoje
+            );
+
+
+        reservasHoje.sort(
+            (a, b) => {
+
+                const horarioA =
+                    a.horario || "";
+
+                const horarioB =
+                    b.horario || "";
+
+                return (
+                    horarioA.localeCompare(
+                        horarioB
+                    )
+                );
+            }
+        );
+
+
+        /* =====================================
+           PRÓXIMAS RESERVAS
+
+           Canceladas NÃO aparecem aqui.
+        ===================================== */
+
+        const reservasProximas =
+            reservas.filter(
+                (reserva) =>
+                    reserva.data &&
+                    reserva.data > hoje &&
+                    reserva.status !==
+                        "cancelada"
+            );
+
+
+        reservasProximas.sort(
             (a, b) => {
 
                 const reservaA =
@@ -529,54 +864,93 @@ async function carregarReservas() {
                 const reservaB =
                     `${b.data || ""} ${b.horario || ""}`;
 
-                return reservaB.localeCompare(
-                    reservaA
-                );
-            }
-        );
-
-
-        atualizarEstatisticas(
-            reservas
-        );
-
-
-        listaReservas.innerHTML =
-            "";
-
-
-        if (
-            reservas.length === 0
-        ) {
-
-            const vazio =
-                document.createElement("div");
-
-            vazio.classList.add(
-                "admin-vazio"
-            );
-
-            vazio.textContent =
-                "Nenhuma reserva encontrada.";
-
-            listaReservas.appendChild(
-                vazio
-            );
-
-            return;
-        }
-
-
-        reservas.forEach(
-            (reserva) => {
-
-                listaReservas.appendChild(
-                    criarCardReserva(
-                        reserva
+                return (
+                    reservaA.localeCompare(
+                        reservaB
                     )
                 );
             }
         );
+
+
+        /* =====================================
+           HISTÓRICO
+
+           - reservas anteriores a hoje
+           - reservas futuras canceladas
+        ===================================== */
+
+        const reservasAntigas =
+            reservas.filter(
+                (reserva) => {
+
+                    if (!reserva.data) {
+                        return false;
+                    }
+
+
+                    const passou =
+                        reserva.data <
+                        hoje;
+
+
+                    const futuraCancelada =
+                        reserva.data >
+                            hoje &&
+                        reserva.status ===
+                            "cancelada";
+
+
+                    return (
+                        passou ||
+                        futuraCancelada
+                    );
+                }
+            );
+
+
+        reservasAntigas.sort(
+            (a, b) => {
+
+                const reservaA =
+                    `${a.data || ""} ${a.horario || ""}`;
+
+                const reservaB =
+                    `${b.data || ""} ${b.horario || ""}`;
+
+                return (
+                    reservaB.localeCompare(
+                        reservaA
+                    )
+                );
+            }
+        );
+
+
+        /* =====================================
+           MOSTRAR
+        ===================================== */
+
+        renderizarReservas(
+            listaReservas,
+            reservasHoje,
+            "Nenhuma reserva para hoje."
+        );
+
+
+        renderizarReservas(
+            listaReservasProximas,
+            reservasProximas,
+            "Nenhuma reserva para os próximos dias."
+        );
+
+
+        renderizarReservas(
+            listaReservasAntigas,
+            reservasAntigas,
+            "Nenhuma reserva no histórico."
+        );
+
 
     } catch (erro) {
 
@@ -586,21 +960,345 @@ async function carregarReservas() {
         );
 
 
-        listaReservas.innerHTML =
+        if (listaReservas) {
+
+            listaReservas.innerHTML =
+                `
+                    <div class="admin-erro">
+                        Não foi possível carregar as reservas.
+                    </div>
+                `;
+        }
+
+
+        if (
+            listaReservasProximas
+        ) {
+
+            listaReservasProximas.innerHTML =
+                `
+                    <div class="admin-erro">
+                        Não foi possível carregar as próximas reservas.
+                    </div>
+                `;
+        }
+
+
+        if (
+            listaReservasAntigas
+        ) {
+
+            listaReservasAntigas.innerHTML =
+                `
+                    <div class="admin-erro">
+                        Não foi possível carregar o histórico.
+                    </div>
+                `;
+        }
+    }
+}
+
+
+/* =========================================
+   CARD DE MENSAGEM
+========================================= */
+
+function criarCardMensagem(
+    mensagem
+) {
+
+    const card =
+        document.createElement(
+            "article"
+        );
+
+    card.classList.add(
+        "admin-mensagem-card"
+    );
+
+
+    /* TOPO */
+
+    const topo =
+        document.createElement(
+            "div"
+        );
+
+    topo.classList.add(
+        "admin-mensagem-topo"
+    );
+
+
+    const usuario =
+        document.createElement(
+            "div"
+        );
+
+
+    const nome =
+        document.createElement(
+            "h3"
+        );
+
+    nome.textContent =
+        mensagem.nome ||
+        "Visitante";
+
+
+    const email =
+        document.createElement(
+            "p"
+        );
+
+    email.textContent =
+        mensagem.email ||
+        "E-mail não informado";
+
+
+    usuario.append(
+        nome,
+        email
+    );
+
+
+    const tipo =
+        document.createElement(
+            "span"
+        );
+
+    tipo.classList.add(
+        "admin-mensagem-nova"
+    );
+
+    tipo.textContent =
+        "MENSAGEM";
+
+
+    topo.append(
+        usuario,
+        tipo
+    );
+
+
+    /* ASSUNTO */
+
+    const assunto =
+        document.createElement(
+            "div"
+        );
+
+    assunto.classList.add(
+        "admin-mensagem-assunto"
+    );
+
+
+    const assuntoLabel =
+        document.createElement(
+            "span"
+        );
+
+    assuntoLabel.textContent =
+        "ASSUNTO";
+
+
+    const assuntoTexto =
+        document.createElement(
+            "strong"
+        );
+
+    assuntoTexto.textContent =
+        mensagem.assunto ||
+        "Sem assunto";
+
+
+    assunto.append(
+        assuntoLabel,
+        assuntoTexto
+    );
+
+
+    /* CORPO */
+
+    const corpo =
+        document.createElement(
+            "div"
+        );
+
+    corpo.classList.add(
+        "admin-mensagem-corpo"
+    );
+
+
+    const texto =
+        document.createElement(
+            "p"
+        );
+
+    texto.textContent =
+        mensagem.mensagem ||
+        "Mensagem vazia.";
+
+
+    corpo.appendChild(
+        texto
+    );
+
+
+    card.append(
+        topo,
+        assunto,
+        corpo
+    );
+
+
+    return card;
+}
+
+
+/* =========================================
+   CARREGAR MENSAGENS
+========================================= */
+
+async function carregarMensagens() {
+
+    if (!listaMensagens) {
+        return;
+    }
+
+
+    listaMensagens.innerHTML =
+        `
+            <div class="admin-reservas-loading">
+                Carregando mensagens...
+            </div>
+        `;
+
+
+    try {
+
+        const resultado =
+            await getDocs(
+                collection(
+                    db,
+                    "mensagens"
+                )
+            );
+
+
+        const mensagens =
+            [];
+
+
+        resultado.forEach(
+            (documento) => {
+
+                mensagens.push({
+                    id:
+                        documento.id,
+
+                    ...documento.data()
+                });
+            }
+        );
+
+
+        /* NOVAS PRIMEIRO */
+
+        mensagens.sort(
+            (a, b) => {
+
+                return (
+                    timestampParaNumero(
+                        b.criadoEm
+                    ) -
+                    timestampParaNumero(
+                        a.criadoEm
+                    )
+                );
+            }
+        );
+
+
+        listaMensagens.innerHTML =
+            "";
+
+
+        if (
+            mensagens.length === 0
+        ) {
+
+            const vazio =
+                document.createElement(
+                    "div"
+                );
+
+            vazio.classList.add(
+                "admin-vazio"
+            );
+
+            vazio.textContent =
+                "Nenhuma mensagem recebida.";
+
+            listaMensagens.appendChild(
+                vazio
+            );
+
+            return;
+        }
+
+
+        mensagens.forEach(
+            (mensagem) => {
+
+                listaMensagens.appendChild(
+                    criarCardMensagem(
+                        mensagem
+                    )
+                );
+            }
+        );
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar mensagens:",
+            erro
+        );
+
+
+        listaMensagens.innerHTML =
             `
                 <div class="admin-erro">
-                    Não foi possível carregar as reservas.
+                    Não foi possível carregar as mensagens.
                 </div>
             `;
     }
 }
 
 
-/* =====================================
-   VERIFICAR ADMIN
-===================================== */
+/* =========================================
+   REGISTRAR VISUALIZAÇÃO
+========================================= */
 
-async function verificarAdmin(user) {
+function registrarVisualizacaoAdmin() {
+
+    localStorage.setItem(
+        "c3_admin_ultima_visualizacao",
+        String(
+            Date.now()
+        )
+    );
+}
+
+
+/* =========================================
+   VERIFICAR ADMIN
+========================================= */
+
+async function verificarAdmin(
+    user
+) {
 
     try {
 
@@ -618,34 +1316,43 @@ async function verificarAdmin(user) {
             );
 
 
+        /* NÃO É ADMIN */
+
         if (
             !resultado.exists() ||
-            resultado.data().admin !== true
+            resultado.data().admin !==
+                true
         ) {
 
-            loading.hidden =
-                true;
+            if (loading) {
+                loading.hidden = true;
+            }
 
-            negado.hidden =
-                false;
+            if (negado) {
+                negado.hidden = false;
+            }
 
-            conteudo.hidden =
-                true;
+            if (conteudo) {
+                conteudo.hidden = true;
+            }
 
             return;
         }
 
 
-        /* ADMIN AUTORIZADO */
+        /* ADMIN */
 
-        loading.hidden =
-            true;
+        if (loading) {
+            loading.hidden = true;
+        }
 
-        negado.hidden =
-            true;
+        if (negado) {
+            negado.hidden = true;
+        }
 
-        conteudo.hidden =
-            false;
+        if (conteudo) {
+            conteudo.hidden = false;
+        }
 
 
         if (nomeAdmin) {
@@ -657,7 +1364,16 @@ async function verificarAdmin(user) {
         }
 
 
-        await carregarReservas();
+        /* CARREGAR DADOS */
+
+        await Promise.all([
+            carregarReservas(),
+            carregarMensagens()
+        ]);
+
+
+        registrarVisualizacaoAdmin();
+
 
     } catch (erro) {
 
@@ -667,18 +1383,24 @@ async function verificarAdmin(user) {
         );
 
 
-        loading.hidden =
-            true;
+        if (loading) {
+            loading.hidden = true;
+        }
 
-        negado.hidden =
-            false;
+        if (negado) {
+            negado.hidden = false;
+        }
+
+        if (conteudo) {
+            conteudo.hidden = true;
+        }
     }
 }
 
 
-/* =====================================
+/* =========================================
    AUTENTICAÇÃO
-===================================== */
+========================================= */
 
 onAuthStateChanged(
     auth,
@@ -701,9 +1423,9 @@ onAuthStateChanged(
 );
 
 
-/* =====================================
+/* =========================================
    LOGOUT
-===================================== */
+========================================= */
 
 if (botaoSair) {
 
@@ -717,9 +1439,11 @@ if (botaoSair) {
                     auth
                 );
 
+
                 window.location.replace(
                     "../index.html"
                 );
+
 
             } catch (erro) {
 

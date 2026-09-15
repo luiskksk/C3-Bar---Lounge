@@ -10,7 +10,9 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Admin | C3 Bar & Lounge</title>
+    <title>
+        Painel Admin | C3 Bar & Lounge
+    </title>
 
     <link
         rel="stylesheet"
@@ -21,18 +23,26 @@
 
 <body>
 
+
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+
     <header class="header">
 
         <a
             href="../index.html"
             class="logo-link"
         >
+
             <img
                 src="../assets/imgs/Logos/logo-c3.png"
                 alt="C3 Bar & Lounge"
                 class="logo"
             >
+
         </a>
+
 
         <nav class="nav">
 
@@ -44,6 +54,10 @@
 
     </header>
 
+
+    <!-- =====================================
+         ADMIN
+    ====================================== -->
 
     <main class="admin-page">
 
@@ -84,8 +98,9 @@
             </h1>
 
             <p>
-                Esta área é exclusiva para
-                administradores do C3.
+                Esta área é exclusiva
+                para administradores
+                do C3.
             </p>
 
             <a
@@ -98,7 +113,9 @@
         </section>
 
 
-        <!-- PAINEL -->
+        <!-- =====================================
+             CONTEÚDO ADMIN
+        ====================================== -->
 
         <div
             class="admin-conteudo"
@@ -123,12 +140,14 @@
                     </h1>
 
                     <p>
-                        Gerencie as reservas
-                        realizadas pelos clientes
-                        do C3 Bar & Lounge.
+                        Acompanhe reservas,
+                        mensagens e atividades
+                        dos clientes do
+                        C3 Bar & Lounge.
                     </p>
 
                 </div>
+
 
                 <div class="admin-identidade">
 
@@ -145,9 +164,12 @@
             </section>
 
 
-            <!-- ESTATÍSTICAS -->
+            <!-- =====================================
+                 ESTATÍSTICAS
+            ====================================== -->
 
             <section class="admin-estatisticas">
+
 
                 <article class="admin-stat">
 
@@ -219,7 +241,9 @@
             </section>
 
 
-            <!-- RESERVAS -->
+            <!-- =====================================
+                 RESERVAS DE HOJE
+            ====================================== -->
 
             <section class="admin-section">
 
@@ -228,13 +252,18 @@
                     <div>
 
                         <p class="tag">
-                            GERENCIAMENTO
+                            HOJE
                         </p>
 
                         <h2>
-                            TODAS AS
-                            <span>RESERVAS.</span>
+                            RESERVAS DE
+                            <span>HOJE.</span>
                         </h2>
+
+                        <p class="admin-section-descricao">
+                            Reservas marcadas para
+                            o dia de hoje.
+                        </p>
 
                     </div>
 
@@ -254,8 +283,144 @@
 
             </section>
 
+<!-- =====================================
+     PRÓXIMAS RESERVAS
+===================================== -->
 
-            <!-- SAIR -->
+<section class="admin-section admin-proximas-section">
+
+    <div class="admin-section-header">
+
+        <div>
+
+            <p class="tag">
+                AGENDA
+            </p>
+
+            <h2>
+                PRÓXIMAS
+                <span>RESERVAS.</span>
+            </h2>
+
+            <p class="admin-section-descricao">
+                Reservas marcadas para
+                os próximos dias.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="admin-reservas"
+        id="admin-reservas-proximas"
+    >
+
+        <div class="admin-reservas-loading">
+            Carregando próximas reservas...
+        </div>
+
+    </div>
+
+</section>
+
+            <!-- =====================================
+                 MENSAGENS
+            ====================================== -->
+
+            <section
+                class="admin-section admin-mensagens-section"
+            >
+
+                <div class="admin-section-header">
+
+                    <div>
+
+                        <p class="tag">
+                            CONTATO
+                        </p>
+
+                        <h2>
+                            MENSAGENS
+                            <span>RECEBIDAS.</span>
+                        </h2>
+
+                        <p class="admin-section-descricao">
+                            Leia as mensagens enviadas
+                            pelos clientes através
+                            da página de contato.
+                            As mais recentes aparecem
+                            primeiro.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="admin-mensagens"
+                    id="admin-mensagens"
+                >
+
+                    <div class="admin-reservas-loading">
+                        Carregando mensagens...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                 RESERVAS ANTIGAS
+            ====================================== -->
+
+            <section
+                class="admin-section admin-antigas-section"
+            >
+
+                <div class="admin-section-header">
+
+                    <div>
+
+                        <p class="tag">
+                            HISTÓRICO
+                        </p>
+
+                        <h2>
+                            RESERVAS
+                            <span>ANTIGAS.</span>
+                        </h2>
+
+                        <p class="admin-section-descricao">
+                            Reservas de dias anteriores
+                            ficam armazenadas nesta área.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="admin-reservas"
+                    id="admin-reservas-antigas"
+                >
+
+                    <div class="admin-reservas-loading">
+                        Carregando histórico...
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =====================================
+                 SAIR
+            ====================================== -->
 
             <section class="admin-sair-area">
 
@@ -269,10 +434,15 @@
 
             </section>
 
+
         </div>
 
     </main>
 
+
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
 
     <script
         type="module"
