@@ -12095,3 +12095,32 @@ section { position:relative; isolation:isolate; }
     }
 
 }
+
+/* BOTÃO SAIR - MINHA CONTA */
+
+#conta-sair {
+    background: rgba(255, 55, 85, 0.08);
+    color: #ff6078;
+
+    border: 1px solid rgba(255, 55, 85, 0.35);
+    border-radius: 12px;
+
+    padding: 12px 22px;
+
+    font-weight: 700;
+    letter-spacing: 0.04em;
+
+    cursor: pointer;
+
+    transition: 0.25s ease;
+}
+
+#conta-sair:hover {
+    background: rgba(255, 55, 85, 0.16);
+    border-color: #ff6078;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 0 25px rgba(255, 55, 85, 0.15);
+}
