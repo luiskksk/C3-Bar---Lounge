@@ -41,9 +41,28 @@ const botaoSair =
 const listaReservas =
     document.querySelector("#lista-reservas");
 
+const listaMensagens =
+    document.querySelector("#lista-mensagens");
+
 
 /* =====================================
-   FORMATAR DATA
+   ESCAPAR HTML
+===================================== */
+
+function escaparHTML(texto) {
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        texto ?? "";
+
+    return div.innerHTML;
+}
+
+
+/* =====================================
+   FORMATAR DATA DA RESERVA
 ===================================== */
 
 function formatarData(data) {
@@ -87,7 +106,7 @@ function formatarData(data) {
 
 
 /* =====================================
-   FORMATAR STATUS
+   FORMATAR STATUS DA RESERVA
 ===================================== */
 
 function formatarStatus(status) {
@@ -104,6 +123,41 @@ function formatarStatus(status) {
         default:
             return "Pendente";
     }
+}
+
+
+/* =====================================
+   FORMATAR DATA/HORA DA MENSAGEM
+===================================== */
+
+function formatarDataHora(timestamp) {
+
+    if (
+        !timestamp ||
+        typeof timestamp.toDate !== "function"
+    ) {
+        return "Data não disponível";
+    }
+
+    const data =
+        timestamp.toDate();
+
+    return data.toLocaleDateString(
+        "pt-BR",
+        {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }
+    ) +
+    " às " +
+    data.toLocaleTimeString(
+        "pt-BR",
+        {
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
 }
 
 
@@ -377,7 +431,7 @@ function criarCardReserva(reserva) {
 
 
 /* =====================================
-   ESTADO VAZIO
+   ESTADO VAZIO DAS RESERVAS
 ===================================== */
 
 function mostrarSemReservas() {
@@ -387,7 +441,8 @@ function mostrarSemReservas() {
     }
 
 
-    listaReservas.innerHTML = "";
+    listaReservas.innerHTML =
+        "";
 
 
     const vazio =
@@ -558,6 +613,488 @@ async function carregarReservas(uid) {
 
 
 /* =====================================
+   STATUS DA MENSAGEM
+===================================== */
+
+function obterStatusMensagem(mensagem) {
+
+    if (
+        mensagem.respondido === true ||
+        mensagem.resposta
+    ) {
+
+        return {
+            texto: "Respondida",
+            classe: "respondida"
+        };
+    }
+
+
+    if (
+        mensagem.lida === true
+    ) {
+
+        return {
+            texto: "Em atendimento",
+            classe: "atendimento"
+        };
+    }
+
+
+    return {
+        texto: "Em análise",
+        classe: "analise"
+    };
+}
+
+
+/* =====================================
+   CRIAR CARD DA MENSAGEM
+===================================== */
+
+function criarCardMensagem(mensagem) {
+
+    const card =
+        document.createElement("article");
+
+    const status =
+        obterStatusMensagem(
+            mensagem
+        );
+
+
+    card.classList.add(
+        "minha-mensagem-card",
+        status.classe
+    );
+
+
+    /* =================================
+       TOPO
+    ================================= */
+
+    const topo =
+        document.createElement("div");
+
+    topo.classList.add(
+        "minha-mensagem-topo"
+    );
+
+
+    const informacoes =
+        document.createElement("div");
+
+    informacoes.classList.add(
+        "minha-mensagem-informacoes"
+    );
+
+
+    const etiqueta =
+        document.createElement("span");
+
+    etiqueta.classList.add(
+        "minha-mensagem-etiqueta"
+    );
+
+    etiqueta.textContent =
+        "ASSUNTO";
+
+
+    const assunto =
+        document.createElement("h3");
+
+    assunto.textContent =
+        mensagem.assunto ||
+        "Sem assunto";
+
+
+    informacoes.append(
+        etiqueta,
+        assunto
+    );
+
+
+    const statusElemento =
+        document.createElement("span");
+
+    statusElemento.classList.add(
+        "minha-mensagem-status",
+        status.classe
+    );
+
+    statusElemento.textContent =
+        status.texto;
+
+
+    topo.append(
+        informacoes,
+        statusElemento
+    );
+
+
+    card.appendChild(
+        topo
+    );
+
+
+    /* =================================
+       DATA
+    ================================= */
+
+    const data =
+        document.createElement("div");
+
+    data.classList.add(
+        "minha-mensagem-data"
+    );
+
+    data.textContent =
+        `Enviada em ${formatarDataHora(
+            mensagem.criadoEm
+        )}`;
+
+
+    card.appendChild(
+        data
+    );
+
+
+    /* =================================
+       MENSAGEM ENVIADA
+    ================================= */
+
+    const mensagemBox =
+        document.createElement("div");
+
+    mensagemBox.classList.add(
+        "minha-mensagem-conteudo"
+    );
+
+
+    const mensagemLabel =
+        document.createElement("span");
+
+    mensagemLabel.classList.add(
+        "minha-mensagem-etiqueta"
+    );
+
+    mensagemLabel.textContent =
+        "SUA MENSAGEM";
+
+
+    const mensagemTexto =
+        document.createElement("p");
+
+    mensagemTexto.textContent =
+        mensagem.mensagem ||
+        "";
+
+
+    mensagemBox.append(
+        mensagemLabel,
+        mensagemTexto
+    );
+
+
+    card.appendChild(
+        mensagemBox
+    );
+
+
+    /* =================================
+       RESPOSTA DO C3
+    ================================= */
+
+    if (
+        mensagem.resposta
+    ) {
+
+        const resposta =
+            document.createElement("div");
+
+        resposta.classList.add(
+            "minha-mensagem-resposta"
+        );
+
+
+        const respostaTopo =
+            document.createElement("div");
+
+        respostaTopo.classList.add(
+            "minha-mensagem-resposta-topo"
+        );
+
+
+        const respostaTitulo =
+            document.createElement("span");
+
+        respostaTitulo.textContent =
+            "RESPOSTA DO C3";
+
+
+        const respostaData =
+            document.createElement("small");
+
+        respostaData.textContent =
+            mensagem.respondidoEm
+                ? formatarDataHora(
+                    mensagem.respondidoEm
+                )
+                : "Resposta recebida";
+
+
+        respostaTopo.append(
+            respostaTitulo,
+            respostaData
+        );
+
+
+        const respostaTexto =
+            document.createElement("p");
+
+        respostaTexto.textContent =
+            mensagem.resposta;
+
+
+        resposta.append(
+            respostaTopo,
+            respostaTexto
+        );
+
+
+        card.appendChild(
+            resposta
+        );
+
+    } else {
+
+        const aguardando =
+            document.createElement("div");
+
+        aguardando.classList.add(
+            "minha-mensagem-aguardando"
+        );
+
+
+        const aguardandoTitulo =
+            document.createElement("strong");
+
+        aguardandoTitulo.textContent =
+            mensagem.lida === true
+                ? "Sua mensagem está em atendimento."
+                : "Sua mensagem está em análise.";
+
+
+        const aguardandoTexto =
+            document.createElement("p");
+
+        aguardandoTexto.textContent =
+            mensagem.lida === true
+                ? "Nossa equipe já visualizou sua mensagem e poderá responder em breve."
+                : "Nossa equipe ainda está analisando sua mensagem.";
+
+
+        aguardando.append(
+            aguardandoTitulo,
+            aguardandoTexto
+        );
+
+
+        card.appendChild(
+            aguardando
+        );
+    }
+
+
+    return card;
+}
+
+
+/* =====================================
+   ESTADO VAZIO DAS MENSAGENS
+===================================== */
+
+function mostrarSemMensagens() {
+
+    if (!listaMensagens) {
+        return;
+    }
+
+
+    listaMensagens.innerHTML =
+        "";
+
+
+    const vazio =
+        document.createElement("div");
+
+    vazio.classList.add(
+        "mensagens-conta-vazio"
+    );
+
+
+    const simbolo =
+        document.createElement("span");
+
+    simbolo.classList.add(
+        "mensagens-conta-vazio-simbolo"
+    );
+
+    simbolo.textContent =
+        "C3";
+
+
+    const titulo =
+        document.createElement("h3");
+
+    titulo.textContent =
+        "Nenhuma mensagem ainda.";
+
+
+    const texto =
+        document.createElement("p");
+
+    texto.textContent =
+        "Quando você entrar em contato com a equipe C3, suas mensagens aparecerão aqui.";
+
+
+    vazio.append(
+        simbolo,
+        titulo,
+        texto
+    );
+
+
+    listaMensagens.appendChild(
+        vazio
+    );
+}
+
+
+/* =====================================
+   CARREGAR MENSAGENS
+===================================== */
+
+async function carregarMensagens(uid) {
+
+    if (!listaMensagens) {
+        return;
+    }
+
+
+    listaMensagens.innerHTML =
+        `
+            <div class="mensagens-conta-loading">
+                Carregando suas mensagens...
+            </div>
+        `;
+
+
+    try {
+
+        const consulta =
+            query(
+                collection(
+                    db,
+                    "mensagens"
+                ),
+                where(
+                    "uid",
+                    "==",
+                    uid
+                )
+            );
+
+
+        const resultado =
+            await getDocs(
+                consulta
+            );
+
+
+        const mensagens = [];
+
+
+        resultado.forEach(
+            (documento) => {
+
+                mensagens.push({
+                    id:
+                        documento.id,
+
+                    ...documento.data()
+                });
+
+            }
+        );
+
+
+        /* MAIS RECENTES PRIMEIRO */
+
+        mensagens.sort(
+            (a, b) => {
+
+                const dataA =
+                    a.criadoEm?.toMillis?.() ||
+                    0;
+
+                const dataB =
+                    b.criadoEm?.toMillis?.() ||
+                    0;
+
+                return dataB - dataA;
+            }
+        );
+
+
+        listaMensagens.innerHTML =
+            "";
+
+
+        if (
+            mensagens.length === 0
+        ) {
+
+            mostrarSemMensagens();
+
+            return;
+        }
+
+
+        mensagens.forEach(
+            (mensagem) => {
+
+                const card =
+                    criarCardMensagem(
+                        mensagem
+                    );
+
+                listaMensagens.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar mensagens:",
+            erro
+        );
+
+
+        listaMensagens.innerHTML =
+            `
+                <div class="mensagens-conta-erro">
+                    Não foi possível carregar suas mensagens.
+                </div>
+            `;
+    }
+}
+
+
+/* =====================================
    AUTENTICAÇÃO
 ===================================== */
 
@@ -586,12 +1123,16 @@ onAuthStateChanged(
             "Não informado";
 
 
+        /* NOME */
+
         if (nomeElemento) {
 
             nomeElemento.textContent =
                 nome;
         }
 
+
+        /* E-MAIL */
 
         if (emailElemento) {
 
@@ -600,12 +1141,16 @@ onAuthStateChanged(
         }
 
 
+        /* UID */
+
         if (uidElemento) {
 
             uidElemento.textContent =
                 user.uid;
         }
 
+
+        /* AVATAR */
 
         if (avatarElemento) {
 
@@ -616,9 +1161,19 @@ onAuthStateChanged(
         }
 
 
+        /* RESERVAS */
+
         await carregarReservas(
             user.uid
         );
+
+
+        /* MENSAGENS */
+
+        await carregarMensagens(
+            user.uid
+        );
+
     }
 );
 
@@ -635,6 +1190,13 @@ if (botaoSair) {
 
             try {
 
+                botaoSair.disabled =
+                    true;
+
+                botaoSair.textContent =
+                    "Saindo...";
+
+
                 await signOut(
                     auth
                 );
@@ -650,6 +1212,13 @@ if (botaoSair) {
                     "Erro ao sair:",
                     erro
                 );
+
+
+                botaoSair.disabled =
+                    false;
+
+                botaoSair.textContent =
+                    "Sair da conta";
             }
         }
     );

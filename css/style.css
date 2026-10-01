@@ -12698,3 +12698,1040 @@ section { position:relative; isolation:isolate; }
         width: 100%;
     }
 }
+
+/* =========================================================
+   C3 - MINHA CONTA
+   BLOCO FINAL
+========================================================= */
+
+
+/* =========================================================
+   ESTRUTURA GERAL
+========================================================= */
+
+.minha-conta-page {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            circle at 15% 10%,
+            rgba(133, 53, 255, 0.08),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 35%,
+            rgba(91, 39, 166, 0.07),
+            transparent 30%
+        ),
+        #06050a;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.minha-conta-hero {
+    position: relative;
+    min-height: 620px;
+    width: min(1200px, 92%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: 60px;
+    padding: 100px 0 90px;
+}
+
+.minha-conta-hero::before {
+    content: "";
+    position: absolute;
+    width: 480px;
+    height: 480px;
+    right: -160px;
+    top: 40px;
+    border: 1px solid rgba(173, 88, 255, 0.12);
+    border-radius: 48% 52% 58% 42%;
+    transform: rotate(25deg);
+    pointer-events: none;
+}
+
+.minha-conta-hero-texto {
+    position: relative;
+    z-index: 2;
+}
+
+.minha-conta-hero-texto .tag {
+    margin-bottom: 18px;
+}
+
+.minha-conta-hero-texto h1 {
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(3rem, 7vw, 6.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+    font-weight: 900;
+}
+
+.minha-conta-hero-texto h1 span {
+    display: block;
+    color: #b967ff;
+    text-shadow:
+        0 0 25px rgba(185, 103, 255, 0.25);
+}
+
+.minha-conta-hero-texto > p:last-child {
+    max-width: 580px;
+    margin-top: 28px;
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+.minha-conta-avatar-area {
+    position: relative;
+    min-height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.minha-conta-glow {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background:
+        radial-gradient(
+            circle,
+            rgba(155, 65, 255, 0.26) 0%,
+            rgba(105, 40, 190, 0.12) 38%,
+            transparent 72%
+        );
+    filter: blur(12px);
+    animation: minhaContaGlow 5s ease-in-out infinite;
+}
+
+.minha-conta-avatar {
+    position: relative;
+    z-index: 2;
+    width: 210px;
+    height: 210px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(203, 138, 255, 0.65);
+    border-radius: 50%;
+    color: #ffffff;
+    background:
+        radial-gradient(
+            circle at 35% 30%,
+            rgba(192, 110, 255, 0.32),
+            rgba(48, 18, 75, 0.85) 48%,
+            #09060d 100%
+        );
+    box-shadow:
+        0 0 45px rgba(152, 66, 255, 0.28),
+        0 25px 70px rgba(0, 0, 0, 0.45),
+        inset 0 0 35px rgba(188, 90, 255, 0.12);
+    font-size: 5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    animation: minhaContaAvatar 6s ease-in-out infinite;
+}
+
+.minha-conta-avatar::before,
+.minha-conta-avatar::after {
+    content: "";
+    position: absolute;
+    border: 1px solid rgba(188, 92, 255, 0.2);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.minha-conta-avatar::before {
+    inset: -28px;
+}
+
+.minha-conta-avatar::after {
+    inset: -50px;
+    border-color: rgba(188, 92, 255, 0.09);
+}
+
+
+/* =========================================================
+   SEÇÕES
+========================================================= */
+
+.minha-conta-section {
+    position: relative;
+    width: min(1180px, 92%);
+    margin: 0 auto;
+    padding: 90px 0;
+}
+
+.minha-conta-header {
+    margin-bottom: 38px;
+}
+
+.minha-conta-header .tag {
+    margin-bottom: 12px;
+}
+
+.minha-conta-header h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(2rem, 4vw, 4rem);
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+}
+
+.minha-conta-header h2 span {
+    color: #b866ff;
+}
+
+.minha-conta-header > p:last-child {
+    max-width: 650px;
+    margin-top: 18px;
+    color: rgba(255, 255, 255, 0.54);
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   DADOS DA CONTA
+========================================================= */
+
+.minha-conta-dados {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.minha-conta-card {
+    position: relative;
+    min-height: 190px;
+    padding: 28px;
+    overflow: hidden;
+    border: 1px solid rgba(177, 91, 255, 0.15);
+    border-radius: 20px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25, 16, 39, 0.95),
+            rgba(8, 7, 12, 0.98)
+        );
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.22);
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.minha-conta-card::after {
+    content: "";
+    position: absolute;
+    width: 130px;
+    height: 130px;
+    right: -65px;
+    bottom: -65px;
+    border: 1px solid rgba(180, 91, 255, 0.1);
+    border-radius: 50%;
+}
+
+.minha-conta-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(185, 102, 255, 0.34);
+    box-shadow:
+        0 25px 55px rgba(0, 0, 0, 0.35),
+        0 0 30px rgba(135, 54, 255, 0.07);
+}
+
+.minha-conta-numero {
+    display: block;
+    margin-bottom: 30px;
+    color: rgba(190, 108, 255, 0.55);
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+}
+
+.minha-conta-card p {
+    margin: 0 0 7px;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+.minha-conta-card strong {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   RESERVAS
+========================================================= */
+
+.minha-conta-reservas {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.reserva-conta-card {
+    position: relative;
+    padding: 26px;
+    overflow: hidden;
+    border: 1px solid rgba(170, 95, 255, 0.16);
+    border-radius: 20px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(24, 15, 38, 0.97),
+            rgba(8, 7, 13, 0.98)
+        );
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.25);
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease;
+}
+
+.reserva-conta-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        #c36cff,
+        #7028c9
+    );
+}
+
+.reserva-conta-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(184, 99, 255, 0.3);
+}
+
+.reserva-conta-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.reserva-conta-data {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-transform: capitalize;
+}
+
+.reserva-status {
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.reserva-status.pendente {
+    color: #ffd76a;
+    border: 1px solid rgba(255, 215, 106, 0.24);
+    background: rgba(255, 215, 106, 0.07);
+}
+
+.reserva-status.confirmada {
+    color: #72ffad;
+    border: 1px solid rgba(114, 255, 173, 0.24);
+    background: rgba(114, 255, 173, 0.07);
+}
+
+.reserva-status.cancelada {
+    color: #ff7777;
+    border: 1px solid rgba(255, 119, 119, 0.24);
+    background: rgba(255, 119, 119, 0.07);
+}
+
+.reserva-conta-detalhes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.reserva-conta-detalhes > div {
+    padding: 17px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.reserva-conta-detalhes span,
+.reserva-conta-observacoes span {
+    display: block;
+    margin-bottom: 7px;
+    color: rgba(255, 255, 255, 0.38);
+    font-size: 0.64rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+
+.reserva-conta-detalhes strong {
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.reserva-conta-observacoes {
+    margin-top: 15px;
+    padding: 18px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.reserva-conta-observacoes p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.66);
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.reserva-conta-acoes {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 18px;
+}
+
+.reserva-cancelar {
+    padding: 10px 16px;
+    border: 1px solid rgba(255, 90, 90, 0.25);
+    border-radius: 10px;
+    color: #ff8585;
+    background: rgba(255, 70, 70, 0.05);
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition:
+        background 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
+}
+
+.reserva-cancelar:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 100, 100, 0.5);
+    background: rgba(255, 70, 70, 0.1);
+}
+
+.reserva-cancelar:disabled {
+    opacity: 0.5;
+    cursor: wait;
+    transform: none;
+}
+
+.reservas-conta-loading,
+.reservas-conta-erro {
+    padding: 45px 25px;
+    border: 1px dashed rgba(174, 89, 255, 0.18);
+    border-radius: 18px;
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+}
+
+.reservas-conta-erro {
+    color: #ff8b8b;
+    border-color: rgba(255, 90, 90, 0.18);
+}
+
+
+/* =========================================================
+   RESERVAS - VAZIO
+========================================================= */
+
+.reservas-conta-vazio {
+    padding: 60px 30px;
+    text-align: center;
+    border: 1px solid rgba(174, 89, 255, 0.13);
+    border-radius: 20px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(22, 14, 35, 0.7),
+            rgba(8, 7, 12, 0.8)
+        );
+}
+
+.reservas-conta-vazio-numero {
+    display: flex;
+    width: 65px;
+    height: 65px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    border: 1px solid rgba(187, 101, 255, 0.3);
+    border-radius: 50%;
+    color: #c17aff;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+}
+
+.reservas-conta-vazio h3 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1.2rem;
+}
+
+.reservas-conta-vazio p {
+    max-width: 420px;
+    margin: 10px auto 0;
+    color: rgba(255, 255, 255, 0.48);
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.minha-conta-acoes {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 28px;
+}
+
+.minha-conta-sair-section {
+    width: min(1180px, 92%);
+    padding-top: 20px;
+    padding-bottom: 100px;
+    justify-content: flex-start;
+}
+
+.minha-conta-sair-section .botao {
+    min-width: 170px;
+}
+
+
+/* =========================================================
+   MENSAGENS
+========================================================= */
+
+.minha-conta-mensagens-section {
+    padding-top: 100px;
+}
+
+.lista-mensagens {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.minha-mensagem-card {
+    position: relative;
+    padding: 27px;
+    overflow: hidden;
+    border: 1px solid rgba(174, 89, 255, 0.17);
+    border-radius: 20px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(25, 16, 40, 0.97),
+            rgba(8, 7, 13, 0.99)
+        );
+    box-shadow:
+        0 18px 48px rgba(0, 0, 0, 0.25);
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.minha-mensagem-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: #9a5cff;
+}
+
+.minha-mensagem-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(183, 101, 255, 0.32);
+    box-shadow:
+        0 22px 55px rgba(0, 0, 0, 0.32),
+        0 0 25px rgba(145, 65, 255, 0.05);
+}
+
+.minha-mensagem-card.analise::before {
+    background: #ffd76a;
+}
+
+.minha-mensagem-card.atendimento::before {
+    background: #6fbfff;
+}
+
+.minha-mensagem-card.respondida::before {
+    background: #70ffac;
+}
+
+.minha-mensagem-topo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.minha-mensagem-informacoes {
+    min-width: 0;
+}
+
+.minha-mensagem-etiqueta {
+    display: block;
+    margin-bottom: 7px;
+    color: rgba(255, 255, 255, 0.38);
+    font-size: 0.64rem;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+}
+
+.minha-mensagem-informacoes h3 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1.15rem;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.minha-mensagem-status {
+    flex-shrink: 0;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-size: 0.63rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.minha-mensagem-status.analise {
+    color: #ffd76a;
+    border: 1px solid rgba(255, 215, 106, 0.25);
+    background: rgba(255, 215, 106, 0.07);
+}
+
+.minha-mensagem-status.atendimento {
+    color: #73c1ff;
+    border: 1px solid rgba(115, 193, 255, 0.25);
+    background: rgba(115, 193, 255, 0.07);
+}
+
+.minha-mensagem-status.respondida {
+    color: #75ffb0;
+    border: 1px solid rgba(117, 255, 176, 0.25);
+    background: rgba(117, 255, 176, 0.07);
+}
+
+.minha-mensagem-data {
+    margin-top: 12px;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.72rem;
+}
+
+.minha-mensagem-conteudo {
+    margin-top: 24px;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.035);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.minha-mensagem-conteudo p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   RESPOSTA DO C3
+========================================================= */
+
+.minha-mensagem-resposta {
+    margin-top: 17px;
+    padding: 20px;
+    border: 1px solid rgba(113, 255, 173, 0.16);
+    border-radius: 15px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(56, 155, 101, 0.055),
+            rgba(255, 255, 255, 0.018)
+        );
+}
+
+.minha-mensagem-resposta-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 13px;
+}
+
+.minha-mensagem-resposta-topo span {
+    color: #75ffb0;
+    font-size: 0.67rem;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+}
+
+.minha-mensagem-resposta-topo small {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.68rem;
+}
+
+.minha-mensagem-resposta p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   MENSAGEM EM PROCESSO
+========================================================= */
+
+.minha-mensagem-aguardando {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 17px;
+    padding: 17px 19px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.minha-mensagem-aguardando strong {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.minha-mensagem-aguardando p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.42);
+    font-size: 0.77rem;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   ESTADOS VAZIOS / LOADING
+========================================================= */
+
+.mensagens-conta-loading,
+.mensagens-conta-erro {
+    padding: 48px 25px;
+    border: 1px dashed rgba(174, 89, 255, 0.18);
+    border-radius: 18px;
+    color: rgba(255, 255, 255, 0.48);
+    text-align: center;
+}
+
+.mensagens-conta-erro {
+    color: #ff8b8b;
+    border-color: rgba(255, 90, 90, 0.18);
+}
+
+.mensagens-conta-vazio {
+    padding: 60px 30px;
+    text-align: center;
+    border: 1px solid rgba(174, 89, 255, 0.13);
+    border-radius: 20px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(22, 14, 35, 0.7),
+            rgba(8, 7, 12, 0.85)
+        );
+}
+
+.mensagens-conta-vazio-simbolo {
+    display: flex;
+    width: 65px;
+    height: 65px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    border: 1px solid rgba(187, 101, 255, 0.3);
+    border-radius: 50%;
+    color: #c17aff;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    box-shadow:
+        0 0 25px rgba(153, 69, 255, 0.08);
+}
+
+.mensagens-conta-vazio h3 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1.2rem;
+}
+
+.mensagens-conta-vazio p {
+    max-width: 500px;
+    margin: 10px auto 0;
+    color: rgba(255, 255, 255, 0.46);
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   BOTÃO NOVA MENSAGEM
+========================================================= */
+
+.minha-conta-mensagem-acao {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 28px;
+}
+
+
+/* =========================================================
+   ANIMAÇÕES
+========================================================= */
+
+@keyframes minhaContaGlow {
+
+    0%,
+    100% {
+        transform: scale(0.95);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1.08);
+        opacity: 1;
+    }
+}
+
+@keyframes minhaContaAvatar {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .minha-conta-hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding: 90px 0 70px;
+        text-align: center;
+    }
+
+    .minha-conta-hero-texto > p:last-child {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .minha-conta-avatar-area {
+        min-height: 320px;
+    }
+
+    .minha-conta-dados {
+        grid-template-columns: 1fr;
+    }
+
+    .minha-conta-card {
+        min-height: 150px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .minha-conta-hero {
+        width: 90%;
+        padding: 75px 0 55px;
+    }
+
+    .minha-conta-hero-texto h1 {
+        font-size: clamp(3rem, 16vw, 5rem);
+    }
+
+    .minha-conta-hero-texto > p:last-child {
+        font-size: 0.9rem;
+        line-height: 1.65;
+    }
+
+    .minha-conta-avatar-area {
+        min-height: 260px;
+    }
+
+    .minha-conta-avatar {
+        width: 155px;
+        height: 155px;
+        font-size: 3.7rem;
+    }
+
+    .minha-conta-glow {
+        width: 230px;
+        height: 230px;
+    }
+
+    .minha-conta-avatar::before {
+        inset: -20px;
+    }
+
+    .minha-conta-avatar::after {
+        inset: -35px;
+    }
+
+    .minha-conta-section {
+        width: 90%;
+        padding: 65px 0;
+    }
+
+    .minha-conta-header h2 {
+        font-size: clamp(2rem, 11vw, 3rem);
+    }
+
+    .minha-conta-card {
+        padding: 23px;
+    }
+
+    .minha-conta-numero {
+        margin-bottom: 23px;
+    }
+
+    .reserva-conta-card {
+        padding: 22px;
+    }
+
+    .reserva-conta-topo {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .reserva-conta-data {
+        font-size: 1.05rem;
+    }
+
+    .reserva-conta-detalhes {
+        grid-template-columns: 1fr;
+    }
+
+    .reserva-conta-acoes {
+        justify-content: stretch;
+    }
+
+    .reserva-cancelar {
+        width: 100%;
+    }
+
+    .minha-mensagem-card {
+        padding: 22px;
+    }
+
+    .minha-mensagem-topo {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .minha-mensagem-status {
+        align-self: flex-start;
+    }
+
+    .minha-mensagem-resposta-topo {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .minha-conta-mensagem-acao {
+        width: 100%;
+    }
+
+    .minha-conta-mensagem-acao .botao {
+        width: 100%;
+        text-align: center;
+    }
+
+    .minha-conta-sair-section {
+        padding-top: 10px;
+        padding-bottom: 75px;
+    }
+
+    .minha-conta-sair-section .botao {
+        width: 100%;
+    }
+
+}
+
+
+/* =========================================================
+   CELULARES PEQUENOS
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .minha-conta-hero-texto h1 {
+        font-size: 2.8rem;
+    }
+
+    .minha-conta-avatar {
+        width: 135px;
+        height: 135px;
+        font-size: 3.2rem;
+    }
+
+    .minha-conta-card,
+    .reserva-conta-card,
+    .minha-mensagem-card {
+        padding: 19px;
+    }
+
+    .minha-mensagem-resposta,
+    .minha-mensagem-conteudo {
+        padding: 15px;
+    }
+
+}
