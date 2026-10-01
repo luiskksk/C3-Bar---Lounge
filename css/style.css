@@ -12124,3 +12124,577 @@ section { position:relative; isolation:isolate; }
     box-shadow:
         0 0 25px rgba(255, 55, 85, 0.15);
 }
+
+/* =====================================
+   ADMIN - MENSAGENS
+===================================== */
+
+.admin-mensagem-card {
+    position: relative;
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
+}
+
+
+/* =====================================
+   MENSAGEM NÃO LIDA
+===================================== */
+
+.admin-mensagem-card.mensagem-nao-lida {
+    border-color:
+        rgba(171, 91, 255, 0.55);
+
+    box-shadow:
+        0 0 25px rgba(151, 67, 255, 0.10);
+}
+
+
+.admin-mensagem-card.mensagem-nao-lida::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 3px;
+
+    background: #a855f7;
+
+    box-shadow:
+        0 0 18px rgba(168, 85, 247, 0.75);
+
+    pointer-events: none;
+}
+
+
+/* =====================================
+   MENSAGEM LIDA
+===================================== */
+
+.admin-mensagem-card.mensagem-lida {
+    opacity: 0.78;
+}
+
+
+/* =====================================
+   MENSAGEM RESPONDIDA
+===================================== */
+
+.admin-mensagem-card.mensagem-respondida {
+    border-color:
+        rgba(168, 85, 247, 0.38);
+
+    box-shadow:
+        0 0 25px rgba(168, 85, 247, 0.08);
+}
+
+
+.admin-mensagem-card.mensagem-respondida::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 3px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #a855f7,
+            #7c3aed
+        );
+
+    box-shadow:
+        0 0 18px rgba(168, 85, 247, 0.65);
+
+    pointer-events: none;
+}
+
+
+/* =====================================
+   STATUS
+===================================== */
+
+.admin-mensagem-status {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    font-size: 0.65rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+
+    white-space: nowrap;
+}
+
+
+/* =====================================
+   STATUS - NOVA
+===================================== */
+
+.admin-mensagem-status.nova {
+    color: #ffffff;
+
+    background:
+        rgba(168, 85, 247, 0.18);
+
+    border:
+        1px solid rgba(168, 85, 247, 0.55);
+
+    box-shadow:
+        0 0 15px rgba(168, 85, 247, 0.15);
+}
+
+
+/* =====================================
+   STATUS - LIDA
+===================================== */
+
+.admin-mensagem-status.lida {
+    color:
+        rgba(255, 255, 255, 0.55);
+
+    background:
+        rgba(255, 255, 255, 0.05);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.10);
+}
+
+
+/* =====================================
+   STATUS - RESPONDIDA
+===================================== */
+
+.admin-mensagem-status.respondida {
+    color: #ffffff;
+
+    background:
+        rgba(168, 85, 247, 0.20);
+
+    border:
+        1px solid rgba(168, 85, 247, 0.58);
+
+    box-shadow:
+        0 0 16px rgba(168, 85, 247, 0.14);
+}
+
+
+/* =====================================
+   ÁREA DE RESPOSTA
+===================================== */
+
+.admin-resposta-area {
+    margin-top: 22px;
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(168, 85, 247, 0.08),
+            rgba(255, 255, 255, 0.025)
+        );
+
+    border:
+        1px solid rgba(168, 85, 247, 0.16);
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+/* =====================================
+   TÍTULO DA RESPOSTA
+===================================== */
+
+.admin-resposta-titulo {
+    display: block;
+
+    color:
+        rgba(201, 148, 255, 0.95);
+
+    font-size: 0.65rem;
+
+    font-weight: 900;
+
+    letter-spacing: 0.14em;
+
+    text-transform: uppercase;
+}
+
+
+/* =====================================
+   CAMPO DE RESPOSTA
+===================================== */
+
+.admin-resposta-input {
+    width: 100%;
+
+    min-height: 110px;
+
+    padding: 13px 14px;
+
+    resize: vertical;
+
+    border-radius: 10px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.10);
+
+    outline: none;
+
+    background:
+        rgba(5, 3, 10, 0.72);
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 0.82rem;
+
+    line-height: 1.6;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.admin-resposta-input::placeholder {
+    color:
+        rgba(255, 255, 255, 0.35);
+}
+
+
+.admin-resposta-input:focus {
+    border-color:
+        rgba(168, 85, 247, 0.65);
+
+    background:
+        rgba(8, 5, 15, 0.92);
+
+    box-shadow:
+        0 0 0 3px rgba(168, 85, 247, 0.08),
+        0 0 22px rgba(168, 85, 247, 0.08);
+}
+
+
+.admin-resposta-input:disabled {
+    opacity: 0.55;
+
+    cursor: wait;
+}
+
+
+/* =====================================
+   CONTADOR DA RESPOSTA
+===================================== */
+
+.admin-resposta-contador {
+    align-self: flex-end;
+
+    margin-top: -4px;
+
+    color:
+        rgba(255, 255, 255, 0.32);
+
+    font-size: 0.65rem;
+}
+
+
+/* =====================================
+   BOTÃO ENVIAR RESPOSTA
+===================================== */
+
+.admin-botao-responder {
+    width: fit-content;
+
+    min-height: 40px;
+
+    padding: 10px 17px;
+
+    border-radius: 9px;
+
+    border:
+        1px solid rgba(168, 85, 247, 0.48);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(168, 85, 247, 0.22),
+            rgba(124, 58, 237, 0.16)
+        );
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 0.72rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.04em;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.admin-botao-responder:hover {
+    transform: translateY(-2px);
+
+    border-color:
+        rgba(190, 125, 255, 0.75);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(168, 85, 247, 0.32),
+            rgba(124, 58, 237, 0.24)
+        );
+
+    box-shadow:
+        0 8px 25px rgba(168, 85, 247, 0.14);
+}
+
+
+.admin-botao-responder:disabled {
+    opacity: 0.5;
+
+    cursor: wait;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+/* =====================================
+   RESPOSTA JÁ ENVIADA
+===================================== */
+
+.admin-resposta-existente {
+    padding: 14px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(168, 85, 247, 0.07);
+
+    border:
+        1px solid rgba(168, 85, 247, 0.16);
+
+    color:
+        rgba(255, 255, 255, 0.84);
+
+    font-size: 0.82rem;
+
+    line-height: 1.65;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+}
+
+
+.admin-resposta-area > small {
+    color:
+        rgba(255, 255, 255, 0.35);
+
+    font-size: 0.64rem;
+}
+
+
+/* =====================================
+   AÇÕES DAS MENSAGENS
+===================================== */
+
+.admin-mensagem-acoes {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 22px;
+
+    padding-top: 18px;
+
+    border-top:
+        1px solid rgba(255, 255, 255, 0.07);
+}
+
+
+.admin-mensagem-btn {
+    min-height: 38px;
+
+    padding: 9px 15px;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+
+    font-size: 0.72rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.04em;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.admin-mensagem-btn:hover {
+    transform: translateY(-2px);
+}
+
+
+.admin-mensagem-btn:disabled {
+    opacity: 0.5;
+
+    cursor: wait;
+
+    transform: none;
+}
+
+
+/* =====================================
+   MARCAR COMO LIDA
+===================================== */
+
+.admin-mensagem-btn.marcar-lida {
+    color: #ffffff;
+
+    background:
+        rgba(168, 85, 247, 0.12);
+
+    border:
+        1px solid rgba(168, 85, 247, 0.38);
+}
+
+
+.admin-mensagem-btn.marcar-lida:hover {
+    background:
+        rgba(168, 85, 247, 0.22);
+
+    border-color:
+        rgba(168, 85, 247, 0.65);
+}
+
+
+/* =====================================
+   APAGAR
+===================================== */
+
+.admin-mensagem-btn.apagar-mensagem {
+    color:
+        rgba(255, 255, 255, 0.7);
+
+    background:
+        rgba(255, 255, 255, 0.035);
+
+    border:
+        1px solid rgba(255, 255, 255, 0.10);
+}
+
+
+.admin-mensagem-btn.apagar-mensagem:hover {
+    color: #ffffff;
+
+    background:
+        rgba(255, 70, 110, 0.10);
+
+    border-color:
+        rgba(255, 70, 110, 0.35);
+}
+
+
+/* =====================================
+   RESPONSIVO
+===================================== */
+
+@media (max-width: 600px) {
+
+    .admin-mensagem-topo {
+        gap: 12px;
+    }
+
+
+    .admin-mensagem-status {
+        flex-shrink: 0;
+
+        font-size: 0.58rem;
+
+        padding:
+            5px 8px;
+    }
+
+
+    .admin-resposta-area {
+        padding: 14px;
+
+        border-radius: 12px;
+    }
+
+
+    .admin-resposta-input {
+        min-height: 125px;
+
+        font-size: 0.8rem;
+    }
+
+
+    .admin-botao-responder {
+        width: 100%;
+    }
+
+
+    .admin-mensagem-acoes {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+
+    .admin-mensagem-btn {
+        width: 100%;
+    }
+}

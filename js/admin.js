@@ -46,7 +46,9 @@ const nomeAdmin =
     document.querySelector("#admin-nome");
 
 
-/* RESERVAS */
+/* =========================================
+   RESERVAS
+========================================= */
 
 const listaReservas =
     document.querySelector("#admin-reservas");
@@ -58,13 +60,17 @@ const listaReservasAntigas =
     document.querySelector("#admin-reservas-antigas");
 
 
-/* MENSAGENS */
+/* =========================================
+   MENSAGENS
+========================================= */
 
 const listaMensagens =
     document.querySelector("#admin-mensagens");
 
 
-/* ESTATÍSTICAS */
+/* =========================================
+   ESTATÍSTICAS
+========================================= */
 
 const totalElemento =
     document.querySelector("#admin-total");
@@ -79,7 +85,9 @@ const canceladasElemento =
     document.querySelector("#admin-canceladas");
 
 
-/* LOGOUT */
+/* =========================================
+   LOGOUT
+========================================= */
 
 const botaoSair =
     document.querySelector("#admin-sair");
@@ -91,8 +99,7 @@ const botaoSair =
 
 function dataLocalISO() {
 
-    const agora =
-        new Date();
+    const agora = new Date();
 
     const ano =
         agora.getFullYear();
@@ -128,9 +135,7 @@ function formatarData(data) {
         return data;
     }
 
-    return (
-        `${partes[2]}/${partes[1]}/${partes[0]}`
-    );
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
 
 
@@ -138,9 +143,7 @@ function formatarData(data) {
    TIMESTAMP FIREBASE
 ========================================= */
 
-function timestampParaNumero(
-    timestamp
-) {
+function timestampParaNumero(timestamp) {
 
     if (!timestamp) {
         return 0;
@@ -157,13 +160,36 @@ function timestampParaNumero(
         typeof timestamp.seconds ===
         "number"
     ) {
-        return (
-            timestamp.seconds *
-            1000
-        );
+        return timestamp.seconds * 1000;
     }
 
     return 0;
+}
+
+
+/* =========================================
+   FORMATAR DATA + HORA
+========================================= */
+
+function formatarTimestamp(timestamp) {
+
+    const numero =
+        timestampParaNumero(timestamp);
+
+    if (!numero) {
+        return "";
+    }
+
+    const data =
+        new Date(numero);
+
+    return data.toLocaleString(
+        "pt-BR",
+        {
+            dateStyle: "short",
+            timeStyle: "short"
+        }
+    );
 }
 
 
@@ -198,9 +224,7 @@ function criarBotao(
 ) {
 
     const botao =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     botao.type =
         "button";
@@ -223,7 +247,7 @@ function criarBotao(
 
 
 /* =========================================
-   ALTERAR STATUS
+   ALTERAR STATUS DA RESERVA
 ========================================= */
 
 async function alterarStatus(
@@ -240,9 +264,7 @@ async function alterarStatus(
                 reservaId
             ),
             {
-                status:
-                    novoStatus,
-
+                status: novoStatus,
                 atualizadoEm:
                     serverTimestamp()
             }
@@ -308,17 +330,13 @@ async function apagarReserva(
 
 
 /* =========================================
-   CARD DA RESERVA
+   CRIAR CARD DE RESERVA
 ========================================= */
 
-function criarCardReserva(
-    reserva
-) {
+function criarCardReserva(reserva) {
 
     const card =
-        document.createElement(
-            "article"
-        );
+        document.createElement("article");
 
     card.classList.add(
         "admin-reserva-card"
@@ -327,12 +345,10 @@ function criarCardReserva(
 
     /* =====================================
        TOPO
-    ===================================== */
+    ====================================== */
 
     const topo =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     topo.classList.add(
         "admin-reserva-topo"
@@ -340,25 +356,23 @@ function criarCardReserva(
 
 
     const cliente =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
+
+    cliente.classList.add(
+        "admin-reserva-cliente"
+    );
 
 
     const nome =
-        document.createElement(
-            "h3"
-        );
+        document.createElement("h3");
 
     nome.textContent =
         reserva.nome ||
-        "Cliente C3";
+        "Cliente";
 
 
     const email =
-        document.createElement(
-            "p"
-        );
+        document.createElement("p");
 
     email.textContent =
         reserva.email ||
@@ -371,18 +385,22 @@ function criarCardReserva(
     );
 
 
-    /* STATUS */
-
     const status =
-        document.createElement(
-            "span"
-        );
+        document.createElement("span");
 
     status.classList.add(
-        "admin-reserva-status",
-        reserva.status ||
-            "pendente"
+        "admin-reserva-status"
     );
+
+
+    status.classList.add(
+        reserva.status === "confirmada"
+            ? "confirmada"
+            : reserva.status === "cancelada"
+                ? "cancelada"
+                : "pendente"
+    );
+
 
     status.textContent =
         formatarStatus(
@@ -398,12 +416,10 @@ function criarCardReserva(
 
     /* =====================================
        INFORMAÇÕES
-    ===================================== */
+    ====================================== */
 
     const infos =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     infos.classList.add(
         "admin-reserva-infos"
@@ -411,10 +427,9 @@ function criarCardReserva(
 
 
     const dados = [
-        {
-            label:
-                "DATA",
 
+        {
+            label: "DATA",
             valor:
                 formatarData(
                     reserva.data
@@ -422,24 +437,21 @@ function criarCardReserva(
         },
 
         {
-            label:
-                "HORÁRIO",
-
+            label: "HORÁRIO",
             valor:
                 reserva.horario ||
                 "--:--"
         },
 
         {
-            label:
-                "PESSOAS",
-
+            label: "PESSOAS",
             valor:
                 String(
                     reserva.pessoas ||
                     0
                 )
         }
+
     ];
 
 
@@ -447,23 +459,18 @@ function criarCardReserva(
         (dado) => {
 
             const item =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
+
 
             const label =
-                document.createElement(
-                    "span"
-                );
+                document.createElement("span");
 
             label.textContent =
                 dado.label;
 
 
             const valor =
-                document.createElement(
-                    "strong"
-                );
+                document.createElement("strong");
 
             valor.textContent =
                 dado.valor;
@@ -474,6 +481,7 @@ function criarCardReserva(
                 valor
             );
 
+
             infos.appendChild(
                 item
             );
@@ -481,22 +489,14 @@ function criarCardReserva(
     );
 
 
-    card.append(
-        topo,
-        infos
-    );
-
-
     /* =====================================
        OBSERVAÇÕES
-    ===================================== */
+    ====================================== */
 
     if (reserva.observacoes) {
 
         const observacoes =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         observacoes.classList.add(
             "admin-reserva-observacoes"
@@ -504,18 +504,14 @@ function criarCardReserva(
 
 
         const titulo =
-            document.createElement(
-                "span"
-            );
+            document.createElement("span");
 
         titulo.textContent =
             "OBSERVAÇÕES";
 
 
         const texto =
-            document.createElement(
-                "p"
-            );
+            document.createElement("p");
 
         texto.textContent =
             reserva.observacoes;
@@ -526,6 +522,7 @@ function criarCardReserva(
             texto
         );
 
+
         card.appendChild(
             observacoes
         );
@@ -534,12 +531,10 @@ function criarCardReserva(
 
     /* =====================================
        AÇÕES
-    ===================================== */
+    ====================================== */
 
     const acoes =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     acoes.classList.add(
         "admin-reserva-acoes"
@@ -549,10 +544,8 @@ function criarCardReserva(
     /* CONFIRMAR */
 
     if (
-        reserva.status !==
-            "confirmada" &&
-        reserva.status !==
-            "cancelada"
+        reserva.status !== "confirmada" &&
+        reserva.status !== "cancelada"
     ) {
 
         const confirmar =
@@ -577,8 +570,7 @@ function criarCardReserva(
     /* CANCELAR */
 
     if (
-        reserva.status !==
-        "cancelada"
+        reserva.status !== "cancelada"
     ) {
 
         const cancelar =
@@ -609,9 +601,7 @@ function criarCardReserva(
     }
 
 
-    /* =====================================
-       APAGAR
-    ===================================== */
+    /* APAGAR */
 
     const apagar =
         criarBotao(
@@ -625,21 +615,17 @@ function criarCardReserva(
             }
         );
 
+
     acoes.appendChild(
         apagar
     );
 
 
-    /* ADICIONAR AÇÕES */
-
-    if (
-        acoes.children.length > 0
-    ) {
-
-        card.appendChild(
-            acoes
-        );
-    }
+    card.append(
+        topo,
+        infos,
+        acoes
+    );
 
 
     return card;
@@ -658,24 +644,21 @@ function atualizarEstatisticas(
         reservas.filter(
             (reserva) =>
                 !reserva.status ||
-                reserva.status ===
-                    "pendente"
+                reserva.status === "pendente"
         ).length;
 
 
     const confirmadas =
         reservas.filter(
             (reserva) =>
-                reserva.status ===
-                    "confirmada"
+                reserva.status === "confirmada"
         ).length;
 
 
     const canceladas =
         reservas.filter(
             (reserva) =>
-                reserva.status ===
-                    "cancelada"
+                reserva.status === "cancelada"
         ).length;
 
 
@@ -727,14 +710,10 @@ function renderizarReservas(
         "";
 
 
-    if (
-        reservas.length === 0
-    ) {
+    if (reservas.length === 0) {
 
         const vazio =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         vazio.classList.add(
             "admin-vazio"
@@ -781,24 +760,22 @@ async function carregarReservas() {
             );
 
 
-        const reservas =
-            [];
+        const reservas = [];
 
 
         resultado.forEach(
             (documento) => {
 
                 reservas.push({
-                    id:
-                        documento.id,
+
+                    id: documento.id,
 
                     ...documento.data()
+
                 });
             }
         );
 
-
-        /* ESTATÍSTICAS */
 
         atualizarEstatisticas(
             reservas
@@ -811,39 +788,28 @@ async function carregarReservas() {
 
         /* =====================================
            RESERVAS DE HOJE
-        ===================================== */
+        ====================================== */
 
         const reservasHoje =
             reservas.filter(
                 (reserva) =>
-                    reserva.data ===
-                    hoje
+                    reserva.data === hoje
             );
 
 
         reservasHoje.sort(
-            (a, b) => {
-
-                const horarioA =
-                    a.horario || "";
-
-                const horarioB =
-                    b.horario || "";
-
-                return (
-                    horarioA.localeCompare(
-                        horarioB
-                    )
-                );
-            }
+            (a, b) =>
+                (
+                    a.horario || ""
+                ).localeCompare(
+                    b.horario || ""
+                )
         );
 
 
         /* =====================================
            PRÓXIMAS RESERVAS
-
-           Canceladas NÃO aparecem aqui.
-        ===================================== */
+        ====================================== */
 
         const reservasProximas =
             reservas.filter(
@@ -864,10 +830,8 @@ async function carregarReservas() {
                 const reservaB =
                     `${b.data || ""} ${b.horario || ""}`;
 
-                return (
-                    reservaA.localeCompare(
-                        reservaB
-                    )
+                return reservaA.localeCompare(
+                    reservaB
                 );
             }
         );
@@ -875,10 +839,7 @@ async function carregarReservas() {
 
         /* =====================================
            HISTÓRICO
-
-           - reservas anteriores a hoje
-           - reservas futuras canceladas
-        ===================================== */
+        ====================================== */
 
         const reservasAntigas =
             reservas.filter(
@@ -890,13 +851,11 @@ async function carregarReservas() {
 
 
                     const passou =
-                        reserva.data <
-                        hoje;
+                        reserva.data < hoje;
 
 
                     const futuraCancelada =
-                        reserva.data >
-                            hoje &&
+                        reserva.data > hoje &&
                         reserva.status ===
                             "cancelada";
 
@@ -918,18 +877,16 @@ async function carregarReservas() {
                 const reservaB =
                     `${b.data || ""} ${b.horario || ""}`;
 
-                return (
-                    reservaB.localeCompare(
-                        reservaA
-                    )
+                return reservaB.localeCompare(
+                    reservaA
                 );
             }
         );
 
 
         /* =====================================
-           MOSTRAR
-        ===================================== */
+           RENDERIZAR
+        ====================================== */
 
         renderizarReservas(
             listaReservas,
@@ -962,67 +919,80 @@ async function carregarReservas() {
 
         if (listaReservas) {
 
-            listaReservas.innerHTML =
-                `
-                    <div class="admin-erro">
-                        Não foi possível carregar as reservas.
-                    </div>
-                `;
+            listaReservas.innerHTML = `
+                <div class="admin-erro">
+                    Não foi possível carregar as reservas.
+                </div>
+            `;
         }
 
 
-        if (
-            listaReservasProximas
-        ) {
+        if (listaReservasProximas) {
 
-            listaReservasProximas.innerHTML =
-                `
-                    <div class="admin-erro">
-                        Não foi possível carregar as próximas reservas.
-                    </div>
-                `;
+            listaReservasProximas.innerHTML = `
+                <div class="admin-erro">
+                    Não foi possível carregar as próximas reservas.
+                </div>
+            `;
         }
 
 
-        if (
-            listaReservasAntigas
-        ) {
+        if (listaReservasAntigas) {
 
-            listaReservasAntigas.innerHTML =
-                `
-                    <div class="admin-erro">
-                        Não foi possível carregar o histórico.
-                    </div>
-                `;
+            listaReservasAntigas.innerHTML = `
+                <div class="admin-erro">
+                    Não foi possível carregar o histórico.
+                </div>
+            `;
         }
     }
 }
 
 
 /* =========================================
-   CARD DE MENSAGEM
+   CRIAR CARD DE MENSAGEM
 ========================================= */
 
-function criarCardMensagem(
-    mensagem
-) {
+function criarCardMensagem(mensagem) {
 
     const card =
-        document.createElement(
-            "article"
-        );
+        document.createElement("article");
 
     card.classList.add(
         "admin-mensagem-card"
     );
 
 
-    /* TOPO */
+    /* =====================================
+       STATUS VISUAL DO CARD
+    ====================================== */
+
+    if (mensagem.resposta) {
+
+        card.classList.add(
+            "mensagem-respondida"
+        );
+
+    } else if (mensagem.lida === true) {
+
+        card.classList.add(
+            "mensagem-lida"
+        );
+
+    } else {
+
+        card.classList.add(
+            "mensagem-nao-lida"
+        );
+    }
+
+
+    /* =====================================
+       TOPO
+    ====================================== */
 
     const topo =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     topo.classList.add(
         "admin-mensagem-topo"
@@ -1030,15 +1000,11 @@ function criarCardMensagem(
 
 
     const usuario =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
 
     const nome =
-        document.createElement(
-            "h3"
-        );
+        document.createElement("h3");
 
     nome.textContent =
         mensagem.nome ||
@@ -1046,9 +1012,7 @@ function criarCardMensagem(
 
 
     const email =
-        document.createElement(
-            "p"
-        );
+        document.createElement("p");
 
     email.textContent =
         mensagem.email ||
@@ -1061,31 +1025,55 @@ function criarCardMensagem(
     );
 
 
-    const tipo =
-        document.createElement(
-            "span"
-        );
+    const status =
+        document.createElement("span");
 
-    tipo.classList.add(
-        "admin-mensagem-nova"
+    status.classList.add(
+        "admin-mensagem-status"
     );
 
-    tipo.textContent =
-        "MENSAGEM";
+
+    if (mensagem.resposta) {
+
+        status.classList.add(
+            "respondida"
+        );
+
+        status.textContent =
+            "RESPONDIDA";
+
+    } else if (mensagem.lida === true) {
+
+        status.classList.add(
+            "lida"
+        );
+
+        status.textContent =
+            "LIDA";
+
+    } else {
+
+        status.classList.add(
+            "nova"
+        );
+
+        status.textContent =
+            "NOVA";
+    }
 
 
     topo.append(
         usuario,
-        tipo
+        status
     );
 
 
-    /* ASSUNTO */
+    /* =====================================
+       ASSUNTO
+    ====================================== */
 
     const assunto =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     assunto.classList.add(
         "admin-mensagem-assunto"
@@ -1093,18 +1081,14 @@ function criarCardMensagem(
 
 
     const assuntoLabel =
-        document.createElement(
-            "span"
-        );
+        document.createElement("span");
 
     assuntoLabel.textContent =
         "ASSUNTO";
 
 
     const assuntoTexto =
-        document.createElement(
-            "strong"
-        );
+        document.createElement("strong");
 
     assuntoTexto.textContent =
         mensagem.assunto ||
@@ -1117,12 +1101,12 @@ function criarCardMensagem(
     );
 
 
-    /* CORPO */
+    /* =====================================
+       CORPO DA MENSAGEM
+    ====================================== */
 
     const corpo =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     corpo.classList.add(
         "admin-mensagem-corpo"
@@ -1130,9 +1114,7 @@ function criarCardMensagem(
 
 
     const texto =
-        document.createElement(
-            "p"
-        );
+        document.createElement("p");
 
     texto.textContent =
         mensagem.mensagem ||
@@ -1144,10 +1126,577 @@ function criarCardMensagem(
     );
 
 
+    /* =====================================
+       ÁREA DE RESPOSTA
+    ====================================== */
+
+    const respostaArea =
+        document.createElement("div");
+
+    respostaArea.classList.add(
+        "admin-resposta-area"
+    );
+
+
+    const respostaTitulo =
+        document.createElement("span");
+
+    respostaTitulo.classList.add(
+        "admin-resposta-titulo"
+    );
+
+
+    respostaArea.appendChild(
+        respostaTitulo
+    );
+
+
+    /* =====================================
+       MENSAGEM JÁ RESPONDIDA
+    ====================================== */
+
+    if (mensagem.resposta) {
+
+        respostaTitulo.textContent =
+            "RESPOSTA ENVIADA";
+
+
+        const respostaExistente =
+            document.createElement("div");
+
+        respostaExistente.classList.add(
+            "admin-resposta-existente"
+        );
+
+
+        respostaExistente.textContent =
+            mensagem.resposta;
+
+
+        respostaArea.appendChild(
+            respostaExistente
+        );
+
+
+        const dataResposta =
+            document.createElement("small");
+
+
+        const dataFormatada =
+            formatarTimestamp(
+                mensagem.respondidoEm
+            );
+
+
+        if (dataFormatada) {
+
+            dataResposta.textContent =
+                `Respondida em ${dataFormatada}`;
+
+        } else {
+
+            dataResposta.textContent =
+                "Resposta enviada";
+        }
+
+
+        respostaArea.appendChild(
+            dataResposta
+        );
+
+
+    } else {
+
+        /* =====================================
+           CAMPO PARA NOVA RESPOSTA
+        ====================================== */
+
+        respostaTitulo.textContent =
+            "RESPONDER MENSAGEM";
+
+
+        const textarea =
+            document.createElement("textarea");
+
+
+        textarea.classList.add(
+            "admin-resposta-input"
+        );
+
+
+        textarea.placeholder =
+            "Digite a resposta que o cliente verá na Minha Conta...";
+
+
+        textarea.maxLength =
+            1000;
+
+
+        const contador =
+            document.createElement("small");
+
+        contador.classList.add(
+            "admin-resposta-contador"
+        );
+
+        contador.textContent =
+            "0 / 1000";
+
+
+        textarea.addEventListener(
+            "input",
+            () => {
+
+                contador.textContent =
+                    `${textarea.value.length} / 1000`;
+            }
+        );
+
+
+        const botaoResponder =
+            document.createElement("button");
+
+
+        botaoResponder.type =
+            "button";
+
+
+        botaoResponder.classList.add(
+            "admin-botao-responder"
+        );
+
+
+        botaoResponder.textContent =
+            "Enviar resposta";
+
+
+        botaoResponder.addEventListener(
+            "click",
+            async () => {
+
+                const resposta =
+                    textarea.value.trim();
+
+
+                if (!resposta) {
+
+                    alert(
+                        "Digite uma resposta antes de enviar."
+                    );
+
+                    textarea.focus();
+
+                    return;
+                }
+
+
+                botaoResponder.disabled =
+                    true;
+
+                textarea.disabled =
+                    true;
+
+                botaoResponder.textContent =
+                    "Enviando...";
+
+
+                try {
+
+                    await updateDoc(
+
+                        doc(
+                            db,
+                            "mensagens",
+                            mensagem.id
+                        ),
+
+                        {
+                            resposta:
+                                resposta,
+
+                            respondido:
+                                true,
+
+                            respondidoEm:
+                                serverTimestamp(),
+
+                            respondidoPor:
+                                auth.currentUser?.email ||
+                                "Administrador",
+
+                            lida:
+                                true,
+
+                            lidaEm:
+                                serverTimestamp()
+                        }
+                    );
+
+
+                    /* =================================
+                       ATUALIZAR CARD SEM RECARREGAR
+                    ================================== */
+
+                    mensagem.resposta =
+                        resposta;
+
+                    mensagem.respondido =
+                        true;
+
+                    mensagem.lida =
+                        true;
+
+
+                    card.classList.remove(
+                        "mensagem-nao-lida"
+                    );
+
+                    card.classList.remove(
+                        "mensagem-lida"
+                    );
+
+                    card.classList.add(
+                        "mensagem-respondida"
+                    );
+
+
+                    status.className =
+                        "admin-mensagem-status respondida";
+
+                    status.textContent =
+                        "RESPONDIDA";
+
+
+                    respostaArea.innerHTML =
+                        "";
+
+
+                    respostaArea.appendChild(
+                        respostaTitulo
+                    );
+
+
+                    respostaTitulo.textContent =
+                        "RESPOSTA ENVIADA";
+
+
+                    const respostaExistente =
+                        document.createElement("div");
+
+
+                    respostaExistente.classList.add(
+                        "admin-resposta-existente"
+                    );
+
+
+                    respostaExistente.textContent =
+                        resposta;
+
+
+                    respostaArea.appendChild(
+                        respostaExistente
+                    );
+
+
+                    const confirmacao =
+                        document.createElement("small");
+
+
+                    confirmacao.textContent =
+                        "Resposta salva com sucesso.";
+
+
+                    respostaArea.appendChild(
+                        confirmacao
+                    );
+
+
+                    /* =============================
+                       REMOVE BOTÃO DE LER
+                    ============================== */
+
+                    const botaoMarcarLida =
+                        acoes.querySelector(
+                            ".marcar-lida"
+                        );
+
+
+                    if (botaoMarcarLida) {
+
+                        botaoMarcarLida.remove();
+                    }
+
+
+                } catch (erro) {
+
+                    console.error(
+                        "Erro ao responder mensagem:",
+                        erro
+                    );
+
+
+                    alert(
+                        "Não foi possível enviar a resposta."
+                    );
+
+
+                    botaoResponder.disabled =
+                        false;
+
+                    textarea.disabled =
+                        false;
+
+                    botaoResponder.textContent =
+                        "Enviar resposta";
+                }
+            }
+        );
+
+
+        respostaArea.appendChild(
+            textarea
+        );
+
+
+        respostaArea.appendChild(
+            contador
+        );
+
+
+        respostaArea.appendChild(
+            botaoResponder
+        );
+    }
+
+
+    /* =====================================
+       AÇÕES
+    ====================================== */
+
+    const acoes =
+        document.createElement("div");
+
+    acoes.classList.add(
+        "admin-mensagem-acoes"
+    );
+
+
+    /* =====================================
+       MARCAR COMO LIDA
+    ====================================== */
+
+    if (
+        mensagem.lida !== true
+    ) {
+
+        const marcarLida =
+            document.createElement("button");
+
+
+        marcarLida.type =
+            "button";
+
+
+        marcarLida.classList.add(
+            "admin-mensagem-btn",
+            "marcar-lida"
+        );
+
+
+        marcarLida.textContent =
+            "Marcar como lida";
+
+
+        marcarLida.addEventListener(
+            "click",
+            async () => {
+
+                marcarLida.disabled =
+                    true;
+
+                marcarLida.textContent =
+                    "Salvando...";
+
+
+                try {
+
+                    await updateDoc(
+
+                        doc(
+                            db,
+                            "mensagens",
+                            mensagem.id
+                        ),
+
+                        {
+                            lida: true,
+
+                            lidaEm:
+                                serverTimestamp()
+                        }
+                    );
+
+
+                    mensagem.lida =
+                        true;
+
+
+                    card.classList.remove(
+                        "mensagem-nao-lida"
+                    );
+
+
+                    card.classList.add(
+                        "mensagem-lida"
+                    );
+
+
+                    status.classList.remove(
+                        "nova"
+                    );
+
+
+                    status.classList.add(
+                        "lida"
+                    );
+
+
+                    status.textContent =
+                        "LIDA";
+
+
+                    marcarLida.remove();
+
+
+                } catch (erro) {
+
+                    console.error(
+                        "Erro ao marcar mensagem:",
+                        erro
+                    );
+
+
+                    marcarLida.disabled =
+                        false;
+
+
+                    marcarLida.textContent =
+                        "Marcar como lida";
+
+
+                    alert(
+                        "Não foi possível marcar a mensagem como lida."
+                    );
+                }
+            }
+        );
+
+
+        acoes.appendChild(
+            marcarLida
+        );
+    }
+
+
+    /* =====================================
+       APAGAR MENSAGEM
+    ====================================== */
+
+    const apagar =
+        document.createElement("button");
+
+
+    apagar.type =
+        "button";
+
+
+    apagar.classList.add(
+        "admin-mensagem-btn",
+        "apagar-mensagem"
+    );
+
+
+    apagar.textContent =
+        "Apagar";
+
+
+    apagar.addEventListener(
+        "click",
+        async () => {
+
+            const confirmou =
+                window.confirm(
+                    "Deseja apagar esta mensagem permanentemente?"
+                );
+
+
+            if (!confirmou) {
+                return;
+            }
+
+
+            apagar.disabled =
+                true;
+
+
+            apagar.textContent =
+                "Apagando...";
+
+
+            try {
+
+                await deleteDoc(
+
+                    doc(
+                        db,
+                        "mensagens",
+                        mensagem.id
+                    )
+                );
+
+
+                card.remove();
+
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro ao apagar mensagem:",
+                    erro
+                );
+
+
+                apagar.disabled =
+                    false;
+
+
+                apagar.textContent =
+                    "Apagar";
+
+
+                alert(
+                    "Não foi possível apagar a mensagem."
+                );
+            }
+        }
+    );
+
+
+    acoes.appendChild(
+        apagar
+    );
+
+
+    /* =====================================
+       MONTAR CARD
+    ====================================== */
+
     card.append(
         topo,
         assunto,
-        corpo
+        corpo,
+        respostaArea,
+        acoes
     );
 
 
@@ -1162,16 +1711,8 @@ function criarCardMensagem(
 async function carregarMensagens() {
 
     if (!listaMensagens) {
-        return;
+        return [];
     }
-
-
-    listaMensagens.innerHTML =
-        `
-            <div class="admin-reservas-loading">
-                Carregando mensagens...
-            </div>
-        `;
 
 
     try {
@@ -1185,37 +1726,31 @@ async function carregarMensagens() {
             );
 
 
-        const mensagens =
-            [];
+        const mensagens = [];
 
 
         resultado.forEach(
             (documento) => {
 
                 mensagens.push({
-                    id:
-                        documento.id,
+
+                    id: documento.id,
 
                     ...documento.data()
+
                 });
             }
         );
 
 
-        /* NOVAS PRIMEIRO */
-
         mensagens.sort(
-            (a, b) => {
-
-                return (
-                    timestampParaNumero(
-                        b.criadoEm
-                    ) -
-                    timestampParaNumero(
-                        a.criadoEm
-                    )
-                );
-            }
+            (a, b) =>
+                timestampParaNumero(
+                    b.criadoEm
+                ) -
+                timestampParaNumero(
+                    a.criadoEm
+                )
         );
 
 
@@ -1223,14 +1758,10 @@ async function carregarMensagens() {
             "";
 
 
-        if (
-            mensagens.length === 0
-        ) {
+        if (mensagens.length === 0) {
 
             const vazio =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
             vazio.classList.add(
                 "admin-vazio"
@@ -1239,11 +1770,13 @@ async function carregarMensagens() {
             vazio.textContent =
                 "Nenhuma mensagem recebida.";
 
+
             listaMensagens.appendChild(
                 vazio
             );
 
-            return;
+
+            return mensagens;
         }
 
 
@@ -1259,6 +1792,9 @@ async function carregarMensagens() {
         );
 
 
+        return mensagens;
+
+
     } catch (erro) {
 
         console.error(
@@ -1267,38 +1803,53 @@ async function carregarMensagens() {
         );
 
 
-        listaMensagens.innerHTML =
-            `
-                <div class="admin-erro">
-                    Não foi possível carregar as mensagens.
-                </div>
-            `;
+        listaMensagens.innerHTML = `
+            <div class="admin-erro">
+                Não foi possível carregar as mensagens.
+            </div>
+        `;
+
+
+        return [];
     }
 }
 
 
 /* =========================================
-   REGISTRAR VISUALIZAÇÃO
+   REGISTRAR VISUALIZAÇÃO ADMIN
 ========================================= */
 
 function registrarVisualizacaoAdmin() {
 
-    localStorage.setItem(
-        "c3_admin_ultima_visualizacao",
-        String(
-            Date.now()
-        )
-    );
+    try {
+
+        localStorage.setItem(
+            "c3_admin_ultima_visualizacao",
+            String(Date.now())
+        );
+
+    } catch (erro) {
+
+        console.warn(
+            "Não foi possível registrar a visualização:",
+            erro
+        );
+    }
 }
 
 
 /* =========================================
-   VERIFICAR ADMIN
+   VERIFICAR ADMINISTRADOR
 ========================================= */
 
-async function verificarAdmin(
+async function verificarAdministrador(
     user
 ) {
+
+    if (!user) {
+        return false;
+    }
+
 
     try {
 
@@ -1316,63 +1867,16 @@ async function verificarAdmin(
             );
 
 
-        /* NÃO É ADMIN */
-
-        if (
-            !resultado.exists() ||
-            resultado.data().admin !==
-                true
-        ) {
-
-            if (loading) {
-                loading.hidden = true;
-            }
-
-            if (negado) {
-                negado.hidden = false;
-            }
-
-            if (conteudo) {
-                conteudo.hidden = true;
-            }
-
-            return;
+        if (!resultado.exists()) {
+            return false;
         }
 
 
-        /* ADMIN */
-
-        if (loading) {
-            loading.hidden = true;
-        }
-
-        if (negado) {
-            negado.hidden = true;
-        }
-
-        if (conteudo) {
-            conteudo.hidden = false;
-        }
+        const dados =
+            resultado.data();
 
 
-        if (nomeAdmin) {
-
-            nomeAdmin.textContent =
-                user.displayName ||
-                user.email ||
-                "Administrador";
-        }
-
-
-        /* CARREGAR DADOS */
-
-        await Promise.all([
-            carregarReservas(),
-            carregarMensagens()
-        ]);
-
-
-        registrarVisualizacaoAdmin();
+        return dados.admin === true;
 
 
     } catch (erro) {
@@ -1383,23 +1887,99 @@ async function verificarAdmin(
         );
 
 
-        if (loading) {
-            loading.hidden = true;
+        return false;
+    }
+}
+
+
+/* =========================================
+   MOSTRAR PAINEL
+========================================= */
+
+async function carregarPainel(
+    user
+) {
+
+    try {
+
+        if (nomeAdmin) {
+
+            nomeAdmin.textContent =
+                user.displayName ||
+                user.email ||
+                "Administrador";
         }
+
+
+        await carregarReservas();
+
+        await carregarMensagens();
+
+        registrarVisualizacaoAdmin();
+
+
+        /* =================================
+           MOSTRAR PAINEL
+        ================================== */
+
+        if (loading) {
+
+            loading.hidden =
+                true;
+        }
+
 
         if (negado) {
-            negado.hidden = false;
+
+            negado.hidden =
+                true;
         }
 
+
         if (conteudo) {
-            conteudo.hidden = true;
+
+            conteudo.hidden =
+                false;
+        }
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar painel:",
+            erro
+        );
+
+
+        /* =================================
+           MOSTRAR ACESSO NEGADO
+        ================================== */
+
+        if (loading) {
+
+            loading.hidden =
+                true;
+        }
+
+
+        if (conteudo) {
+
+            conteudo.hidden =
+                true;
+        }
+
+
+        if (negado) {
+
+            negado.hidden =
+                false;
         }
     }
 }
 
 
 /* =========================================
-   AUTENTICAÇÃO
+   ACESSO AO PAINEL
 ========================================= */
 
 onAuthStateChanged(
@@ -1416,7 +1996,40 @@ onAuthStateChanged(
         }
 
 
-        await verificarAdmin(
+        const ehAdministrador =
+            await verificarAdministrador(
+                user
+            );
+
+
+        if (!ehAdministrador) {
+
+            if (loading) {
+
+                loading.hidden =
+                    true;
+            }
+
+
+            if (conteudo) {
+
+                conteudo.hidden =
+                    true;
+            }
+
+
+            if (negado) {
+
+                negado.hidden =
+                    false;
+            }
+
+
+            return;
+        }
+
+
+        await carregarPainel(
             user
         );
     }
@@ -1441,7 +2054,7 @@ if (botaoSair) {
 
 
                 window.location.replace(
-                    "../index.html"
+                    "./login.html"
                 );
 
 
@@ -1450,6 +2063,11 @@ if (botaoSair) {
                 console.error(
                     "Erro ao sair:",
                     erro
+                );
+
+
+                alert(
+                    "Não foi possível sair da conta."
                 );
             }
         }
