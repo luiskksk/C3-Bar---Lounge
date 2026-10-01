@@ -34,47 +34,52 @@ let usuarioLogado = null;
 
 
 /* =====================================
-   VERIFICA USUÁRIO LOGADO
+   AUTENTICAÇÃO
 ===================================== */
 
 onAuthStateChanged(
     auth,
     (user) => {
 
-        usuarioLogado = user;
+        usuarioLogado =
+            user;
 
-        if (user) {
 
-            if (nomeInput) {
-                nomeInput.value =
-                    user.displayName || "";
-            }
+        if (!user) {
 
             if (emailInput) {
-                emailInput.value =
-                    user.email || "";
-
-                emailInput.readOnly = true;
+                emailInput.readOnly =
+                    false;
             }
 
-            console.log(
-                "Contato identificado:",
-                user.email
-            );
+            return;
+        }
 
-        } else {
 
-            if (emailInput) {
-                emailInput.readOnly = false;
-            }
+        if (nomeInput) {
 
+            nomeInput.value =
+                user.displayName ||
+                user.email?.split("@")[0] ||
+                "";
+        }
+
+
+        if (emailInput) {
+
+            emailInput.value =
+                user.email ||
+                "";
+
+            emailInput.readOnly =
+                true;
         }
     }
 );
 
 
 /* =====================================
-   ENVIO DO FORMULÁRIO
+   FORMULÁRIO
 ===================================== */
 
 if (formContato) {
@@ -87,16 +92,20 @@ if (formContato) {
 
 
             const nome =
-                nomeInput.value.trim();
+                nomeInput?.value.trim() ||
+                "";
 
             const email =
-                emailInput.value.trim();
+                emailInput?.value.trim() ||
+                "";
 
             const assunto =
-                assuntoInput.value.trim();
+                assuntoInput?.value.trim() ||
+                "";
 
             const mensagem =
-                mensagemInput.value.trim();
+                mensagemInput?.value.trim() ||
+                "";
 
 
             if (
@@ -124,16 +133,13 @@ if (formContato) {
 
                 if (botao) {
 
-                    botao.disabled = true;
+                    botao.disabled =
+                        true;
 
                     botao.textContent =
                         "Enviando...";
                 }
 
-
-                /* =====================================
-                   DADOS SALVOS NO FIREBASE
-                ===================================== */
 
                 await addDoc(
                     collection(
@@ -142,16 +148,17 @@ if (formContato) {
                     ),
                     {
 
-                        nome: nome,
+                        nome:
+                            nome,
 
-                        email: email,
+                        email:
+                            email,
 
-                        assunto: assunto,
+                        assunto:
+                            assunto,
 
-                        mensagem: mensagem,
-
-
-                        /* CONTA FIREBASE */
+                        mensagem:
+                            mensagem,
 
                         uid:
                             usuarioLogado
@@ -159,13 +166,18 @@ if (formContato) {
                                 : null,
 
                         usuarioLogado:
-                            usuarioLogado
-                                ? true
-                                : false,
-
+                            Boolean(
+                                usuarioLogado
+                            ),
 
                         criadoEm:
-                            serverTimestamp()
+                            serverTimestamp(),
+
+                        lida:
+                            false,
+
+                        respondido:
+                            false
                     }
                 );
 
@@ -175,27 +187,20 @@ if (formContato) {
                 );
 
 
-                /* =====================================
-                   LIMPA FORMULÁRIO
-                ===================================== */
-
                 formContato.reset();
 
-
-                /*
-                    Se estiver logado,
-                    coloca nome/e-mail novamente
-                */
 
                 if (usuarioLogado) {
 
                     nomeInput.value =
-                        usuarioLogado.displayName || "";
+                        usuarioLogado.displayName ||
+                        usuarioLogado.email?.split("@")[0] ||
+                        "";
 
                     emailInput.value =
-                        usuarioLogado.email || "";
+                        usuarioLogado.email ||
+                        "";
                 }
-
 
             } catch (erro) {
 
@@ -213,7 +218,8 @@ if (formContato) {
 
                 if (botao) {
 
-                    botao.disabled = false;
+                    botao.disabled =
+                        false;
 
                     botao.textContent =
                         "Enviar mensagem";

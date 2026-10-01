@@ -1,19 +1,14 @@
-console.log("C3 Bar & Lounge carregado com sucesso!");
-
-
 import {
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
-
 import {
     doc,
     getDoc,
     collection,
-    getDocs
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
 
 import {
     auth,
@@ -22,95 +17,125 @@ import {
 
 
 /* =====================================
-   ELEMENTOS
-===================================== */
-
-const botaoLogin =
-    document.querySelector(".btn-login");
-
-
-/* =====================================
    CAMINHOS
 ===================================== */
 
-function estaNaPastaPages() {
-
-    return window.location.pathname.includes(
-        "/pages/"
-    );
-}
-
-
 function caminhoLogin() {
-
-    if (estaNaPastaPages()) {
-        return "./login.html";
-    }
-
-    return "./pages/login.html";
+    return window.location.pathname.includes("/pages/")
+        ? "./login.html"
+        : "./pages/login.html";
 }
 
 
 function caminhoHome() {
-
-    if (estaNaPastaPages()) {
-        return "../index.html";
-    }
-
-    return "./index.html";
+    return window.location.pathname.includes("/pages/")
+        ? "../index.html"
+        : "./index.html";
 }
 
 
 function caminhoMinhaConta() {
-
-    if (estaNaPastaPages()) {
-        return "./minha-conta.html";
-    }
-
-    return "./pages/minha-conta.html";
+    return window.location.pathname.includes("/pages/")
+        ? "./minha-conta.html"
+        : "./pages/minha-conta.html";
 }
 
 
 function caminhoAdmin() {
-
-    if (estaNaPastaPages()) {
-        return "./admin.html";
-    }
-
-    return "./pages/admin.html";
+    return window.location.pathname.includes("/pages/")
+        ? "./admin.html"
+        : "./pages/admin.html";
 }
 
 
 /* =====================================
-   VERIFICAR SE É ADMIN
+   ELEMENTOS
+===================================== */
+
+const navegacao =
+    document.querySelector("#menu-navegacao");
+
+
+/* =====================================
+   ESTADO
+===================================== */
+
+let usuarioAtual = null;
+
+let adminListenerReservas = null;
+
+let adminListenerMensagens = null;
+
+let adminEstaAtivo = false;
+
+
+/* =====================================
+   TIMESTAMP
+===================================== */
+
+function timestampParaNumeroAdmin(timestamp) {
+
+    if (!timestamp) {
+        return 0;
+    }
+
+    if (
+        typeof timestamp.toMillis === "function"
+    ) {
+        return timestamp.toMillis();
+    }
+
+    if (
+        typeof timestamp.toDate === "function"
+    ) {
+        return timestamp.toDate().getTime();
+    }
+
+    if (
+        timestamp instanceof Date
+    ) {
+        return timestamp.getTime();
+    }
+
+    if (
+        typeof timestamp === "number"
+    ) {
+        return timestamp;
+    }
+
+    return 0;
+}
+
+
+/* =====================================
+   VERIFICAR ADMIN
 ===================================== */
 
 async function verificarSeAdmin(user) {
 
+    if (!user) {
+        return false;
+    }
+
     try {
 
-        const referenciaUsuario =
+        const referencia =
             doc(
                 db,
                 "usuarios",
                 user.uid
             );
 
-
-        const usuarioSnap =
+        const resultado =
             await getDoc(
-                referenciaUsuario
+                referencia
             );
 
-
-        if (!usuarioSnap.exists()) {
+        if (!resultado.exists()) {
             return false;
         }
 
-
-        return (
-            usuarioSnap.data().admin === true
-        );
+        return resultado.data().admin === true;
 
     } catch (erro) {
 
@@ -125,141 +150,379 @@ async function verificarSeAdmin(user) {
 
 
 /* =====================================
-   CONVERTER TIMESTAMP
+   PARAR NOTIFICAÇÕES
 ===================================== */
 
-function timestampParaNumeroAdmin(
-    timestamp
-) {
+function pararListenersAdmin() {
 
-    if (!timestamp) {
-        return 0;
+    if (adminListenerReservas) {
+
+        adminListenerReservas();
+
+        adminListenerReservas =
+            null;
     }
 
 
-    if (
-        typeof timestamp.toMillis ===
-        "function"
-    ) {
-        return timestamp.toMillis();
+    if (adminListenerMensagens) {
+
+        adminListenerMensagens();
+
+        adminListenerMensagens =
+            null;
     }
 
 
-    if (
-        typeof timestamp.seconds ===
-        "number"
-    ) {
-        return (
-            timestamp.seconds *
-            1000
-        );
-    }
-
-
-    return 0;
+    adminEstaAtivo = false;
 }
 
 
 /* =====================================
-   CONTAR NOTIFICAÇÕES
+   ATUALIZAR BADGES
 ===================================== */
 
-async function contarNotificacoesAdmin() {
+function atualizarNotificacoesAdmin(
+    reservas,
+    mensagens
+) {
 
-    try {
-
-        const ultimaVisualizacao =
-            Number(
-                localStorage.getItem(
-                    "c3_admin_ultima_visualizacao"
-                ) || 0
-            );
+    if (!adminEstaAtivo) {
+        return;
+    }
 
 
-        const [
-            reservasSnapshot,
-            mensagensSnapshot
-        ] =
-            await Promise.all([
+    const ultimaVisualizacao =
+        Number(
+            localStorage.getItem(
+                "c3_admin_ultima_visualizacao"
+            ) || 0
+        );
 
-                getDocs(
+
+    let quantidade =
+        0;
+
+
+    /* RESERVAS NOVAS */
+
+    reservas.forEach(
+        (reserva) => {
+
+            const criadoEm =
+                timestampParaNumeroAdmin(
+                    reserva.criadoEm
+                );
+
+            if (
+                criadoEm > ultimaVisualizacao
+            ) {
+                quantidade++;
+            }
+        }
+    );
+
+
+    /* MENSAGENS NOVAS */
+
+    mensagens.forEach(
+        (mensagem) => {
+
+            const criadoEm =
+                timestampParaNumeroAdmin(
+                    mensagem.criadoEm
+                );
+
+            if (
+                criadoEm > ultimaVisualizacao
+            ) {
+                quantidade++;
+            }
+        }
+    );
+
+
+    const badges =
+        document.querySelectorAll(
+            ".usuario-notificacao"
+        );
+
+
+    badges.forEach(
+        (badge) => {
+
+            if (quantidade > 0) {
+
+                badge.textContent =
+                    quantidade > 99
+                        ? "99+"
+                        : quantidade;
+
+                badge.hidden =
+                    false;
+
+            } else {
+
+                badge.textContent =
+                    "0";
+
+                badge.hidden =
+                    true;
+            }
+        }
+    );
+
+
+    const badgesMenu =
+        document.querySelectorAll(
+            ".usuario-menu-notificacao"
+        );
+
+
+    badgesMenu.forEach(
+        (badge) => {
+
+            if (quantidade > 0) {
+
+                badge.textContent =
+                    quantidade > 99
+                        ? "99+"
+                        : quantidade;
+
+                badge.hidden =
+                    false;
+
+            } else {
+
+                badge.textContent =
+                    "0";
+
+                badge.hidden =
+                    true;
+            }
+        }
+    );
+}
+
+
+function iniciarListenersAdmin() {
+
+    pararListenersAdmin();
+
+    if (!usuarioAtual) {
+        return;
+    }
+
+    adminEstaAtivo = true;
+
+    let reservasAtuais = [];
+    let mensagensAtuais = [];
+
+
+    adminListenerReservas =
+        onSnapshot(
+            collection(
+                db,
+                "reservas"
+            ),
+
+            (snapshot) => {
+
+                reservasAtuais = [];
+
+                snapshot.forEach(
+                    (documento) => {
+
+                        reservasAtuais.push({
+                            id: documento.id,
+                            ...documento.data()
+                        });
+
+                    }
+                );
+
+                atualizarNotificacoesAdmin(
+                    reservasAtuais,
+                    mensagensAtuais
+                );
+            },
+
+            (erro) => {
+
+                console.error(
+                    "Erro no listener de reservas do menu:",
+                    erro
+                );
+            }
+        );
+
+
+    adminListenerMensagens =
+        onSnapshot(
+            collection(
+                db,
+                "mensagens"
+            ),
+
+            (snapshot) => {
+
+                mensagensAtuais = [];
+
+                snapshot.forEach(
+                    (documento) => {
+
+                        mensagensAtuais.push({
+                            id: documento.id,
+                            ...documento.data()
+                        });
+
+                    }
+                );
+
+                atualizarNotificacoesAdmin(
+                    reservasAtuais,
+                    mensagensAtuais
+                );
+            },
+
+            (erro) => {
+
+                console.error(
+                    "Erro no listener de mensagens do menu:",
+                    erro
+                );
+            }
+        );
+}
+
+
+    /* =================================
+       RESERVAS
+    ================================= */
+
+    adminListenerReservas =
+        onSnapshot(
+            collection(
+                db,
+                "reservas"
+            ),
+
+            (snapshot) => {
+
+                const reservas = [];
+
+                snapshot.forEach(
+                    (documento) => {
+
+                        reservas.push({
+                            id:
+                                documento.id,
+
+                            ...documento.data()
+                        });
+
+                    }
+                );
+
+
+                atualizarNotificacoesAdmin(
+                    reservas,
+                    []
+                );
+
+            },
+
+            (erro) => {
+
+                console.error(
+                    "Erro no listener de reservas do menu:",
+                    erro
+                );
+            }
+        );
+
+
+    /* =================================
+       MENSAGENS
+    ================================= */
+
+    adminListenerMensagens =
+        onSnapshot(
+            collection(
+                db,
+                "mensagens"
+            ),
+
+            (snapshot) => {
+
+                const mensagens = [];
+
+                snapshot.forEach(
+                    (documento) => {
+
+                        mensagens.push({
+                            id:
+                                documento.id,
+
+                            ...documento.data()
+                        });
+
+                    }
+                );
+
+
+                /* PEGAR RESERVAS ATUAIS
+                   PARA MANTER O CONTADOR */
+
+                onSnapshot(
                     collection(
                         db,
                         "reservas"
-                    )
-                ),
+                    ),
 
-                getDocs(
-                    collection(
-                        db,
-                        "mensagens"
-                    )
-                )
+                    (reservasSnapshot) => {
 
-            ]);
+                        const reservas = [];
 
+                        reservasSnapshot.forEach(
+                            (documento) => {
 
-        let quantidade = 0;
+                                reservas.push({
+                                    id:
+                                        documento.id,
 
+                                    ...documento.data()
+                                });
 
-        reservasSnapshot.forEach(
-            (documento) => {
-
-                const dados =
-                    documento.data();
+                            }
+                        );
 
 
-                const criadoEm =
-                    timestampParaNumeroAdmin(
-                        dados.criadoEm
-                    );
+                        atualizarNotificacoesAdmin(
+                            reservas,
+                            mensagens
+                        );
+                    },
 
+                    (erro) => {
 
-                if (
-                    criadoEm >
-                    ultimaVisualizacao
-                ) {
-                    quantidade++;
-                }
+                        console.error(
+                            "Erro ao sincronizar reservas:",
+                            erro
+                        );
+                    }
+                );
+
+            },
+
+            (erro) => {
+
+                console.error(
+                    "Erro no listener de mensagens do menu:",
+                    erro
+                );
             }
         );
 
-
-        mensagensSnapshot.forEach(
-            (documento) => {
-
-                const dados =
-                    documento.data();
-
-
-                const criadoEm =
-                    timestampParaNumeroAdmin(
-                        dados.criadoEm
-                    );
-
-
-                if (
-                    criadoEm >
-                    ultimaVisualizacao
-                ) {
-                    quantidade++;
-                }
-            }
-        );
-
-
-        return quantidade;
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao verificar notificações:",
-            erro
-        );
-
-        return 0;
-    }
-}
 
 
 /* =====================================
@@ -268,359 +531,332 @@ async function contarNotificacoesAdmin() {
 
 async function criarMenuUsuario(user) {
 
-    if (!botaoLogin) {
+    if (!navegacao) {
         return;
     }
 
 
-    const nomeUsuario =
+    usuarioAtual =
+        user;
+
+
+    const ehAdmin =
+        await verificarSeAdmin(
+            user
+        );
+
+
+    const nome =
         user.displayName ||
         user.email?.split("@")[0] ||
-        "Usuário";
+        "Usuário C3";
 
 
-    const primeiroNome =
-        nomeUsuario.split(" ")[0];
+    const inicial =
+        nome
+            .charAt(0)
+            .toUpperCase();
 
 
-    const usuarioAdmin =
-        await verificarSeAdmin(user);
+    const caminhoConta =
+        caminhoMinhaConta();
 
 
-    let quantidadeNotificacoes = 0;
+    const caminhoPainel =
+        caminhoAdmin();
 
 
-    if (usuarioAdmin) {
+    navegacao.innerHTML =
+        `
+            <div class="usuario-menu">
 
-        quantidadeNotificacoes =
-            await contarNotificacoesAdmin();
-    }
+                <button
+                    type="button"
+                    class="usuario-menu-botao"
+                    id="usuario-menu-botao"
+                    aria-expanded="false"
+                >
 
+                    <span class="usuario-avatar-wrapper">
 
-    botaoLogin.style.display =
-        "none";
+                        <span class="usuario-avatar">
+                            ${inicial}
+                        </span>
 
+                        <span
+                            class="usuario-notificacao"
+                            hidden
+                        >
+                            0
+                        </span>
 
-    const menuExistente =
-        document.querySelector(
-            ".usuario-area"
-        );
+                    </span>
 
+                    <span class="usuario-nome">
+                        ${nome}
+                    </span>
 
-    if (menuExistente) {
-        menuExistente.remove();
-    }
+                    <span class="usuario-seta">
+                        ▾
+                    </span>
 
-
-    const usuarioArea =
-        document.createElement("div");
-
-
-    usuarioArea.classList.add(
-        "usuario-area"
-    );
-
-
-    usuarioArea.innerHTML = `
-
-        <button
-            class="usuario-btn"
-            id="usuario-btn"
-            type="button"
-            aria-expanded="false"
-        >
-
-            <span class="usuario-avatar-wrapper">
-
-                <span class="usuario-avatar">
-                    ${primeiroNome.charAt(0).toUpperCase()}
-                </span>
-
-                ${
-                    usuarioAdmin &&
-                    quantidadeNotificacoes > 0
-
-                        ? `
-                            <span
-                                class="usuario-notificacao"
-                                title="${quantidadeNotificacoes} nova(s) notificação(ões)"
-                            >
-                                ${
-                                    quantidadeNotificacoes > 9
-                                        ? "9+"
-                                        : quantidadeNotificacoes
-                                }
-                            </span>
-                        `
-
-                        : ""
-                }
-
-            </span>
+                </button>
 
 
-            <span class="usuario-nome">
-                ${primeiroNome}
-            </span>
+                <div
+                    class="usuario-dropdown"
+                    id="usuario-dropdown"
+                    hidden
+                >
+
+                    <div class="usuario-dropdown-topo">
+
+                        <strong>
+                            ${nome}
+                        </strong>
+
+                        <span>
+                            ${user.email || ""}
+                        </span>
+
+                    </div>
 
 
-            <span class="usuario-seta">
-                ▾
-            </span>
+                    <a
+                        href="${caminhoConta}"
+                        class="usuario-menu-link"
+                    >
+                        Minha conta
+                    </a>
 
-        </button>
+
+                    ${
+                        ehAdmin
+                            ? `
+                                <a
+                                    href="${caminhoPainel}"
+                                    class="usuario-menu-link usuario-menu-admin"
+                                >
+                                    Painel administrativo
+
+                                    <span
+                                        class="usuario-menu-notificacao"
+                                        hidden
+                                    >
+                                        0
+                                    </span>
+
+                                </a>
+                            `
+                            : ""
+                    }
 
 
-        <div
-            class="usuario-menu"
-            id="usuario-menu"
-        >
+                    <button
+                        type="button"
+                        class="usuario-menu-sair"
+                        id="usuario-menu-sair"
+                    >
+                        Sair da conta
+                    </button>
 
-            <div class="usuario-menu-info">
-
-                <strong>
-                    ${nomeUsuario}
-                </strong>
-
-                <span>
-                    ${user.email || ""}
-                </span>
+                </div>
 
             </div>
+        `;
 
 
-            <div class="usuario-menu-linha"></div>
+    const botaoMenu =
+        document.querySelector(
+            "#usuario-menu-botao"
+        );
 
+    const dropdown =
+        document.querySelector(
+            "#usuario-dropdown"
+        );
 
-            <a
-                href="${caminhoMinhaConta()}"
-                class="usuario-menu-item usuario-conta"
-            >
-
-                <span class="usuario-menu-icone">
-                    ◉
-                </span>
-
-                Minha conta
-
-            </a>
-
-
-            ${
-                usuarioAdmin
-
-                    ? `
-                        <a
-                            href="${caminhoAdmin()}"
-                            class="usuario-menu-item usuario-admin"
-                        >
-
-                            <span
-                                class="usuario-menu-icone usuario-admin-icone"
-                            >
-                                ◈
-                            </span>
-
-                            Painel Admin
-
-                            ${
-                                quantidadeNotificacoes > 0
-
-                                    ? `
-                                        <span
-                                            class="usuario-menu-notificacao"
-                                        >
-                                            ${
-                                                quantidadeNotificacoes > 9
-                                                    ? "9+"
-                                                    : quantidadeNotificacoes
-                                            }
-                                        </span>
-                                    `
-
-                                    : ""
-                            }
-
-                        </a>
-                    `
-
-                    : ""
-            }
-
-
-            <div class="usuario-menu-linha"></div>
-
-
-            <button
-                type="button"
-                class="usuario-menu-item usuario-sair"
-                id="usuario-sair"
-            >
-
-                <span class="usuario-menu-icone">
-                    ↪
-                </span>
-
-                Sair da conta
-
-            </button>
-
-        </div>
-
-    `;
-
-
-    botaoLogin.insertAdjacentElement(
-        "afterend",
-        usuarioArea
-    );
-
-
-    const usuarioBtn =
-        usuarioArea.querySelector(
-            "#usuario-btn"
+    const botaoSair =
+        document.querySelector(
+            "#usuario-menu-sair"
         );
 
 
-    const usuarioSair =
-        usuarioArea.querySelector(
-            "#usuario-sair"
-        );
+    if (botaoMenu && dropdown) {
 
+        botaoMenu.addEventListener(
+            "click",
+            () => {
 
-    usuarioBtn.addEventListener(
-        "click",
-        (event) => {
+                const aberto =
+                    !dropdown.hidden;
 
-            event.stopPropagation();
+                dropdown.hidden =
+                    aberto;
 
-
-            const aberto =
-                usuarioArea.classList.toggle(
-                    "aberto"
-                );
-
-
-            usuarioBtn.setAttribute(
-                "aria-expanded",
-                String(aberto)
-            );
-        }
-    );
-
-
-    usuarioSair.addEventListener(
-        "click",
-        async () => {
-
-            try {
-
-                await signOut(auth);
-
-
-                window.location.href =
-                    caminhoHome();
-
-            } catch (erro) {
-
-                console.error(
-                    "Erro ao sair da conta:",
-                    erro
-                );
-            }
-        }
-    );
-
-
-    document.addEventListener(
-        "click",
-        (event) => {
-
-            if (
-                !usuarioArea.contains(
-                    event.target
-                )
-            ) {
-
-                usuarioArea.classList.remove(
-                    "aberto"
-                );
-
-
-                usuarioBtn.setAttribute(
+                botaoMenu.setAttribute(
                     "aria-expanded",
-                    "false"
+                    String(!aberto)
                 );
             }
-        }
-    );
+        );
+    }
+
+
+    if (botaoSair) {
+
+        botaoSair.addEventListener(
+            "click",
+            async () => {
+
+                try {
+
+                    botaoSair.disabled =
+                        true;
+
+                    botaoSair.textContent =
+                        "Saindo...";
+
+
+                    pararListenersAdmin();
+
+
+                    await signOut(
+                        auth
+                    );
+
+
+                    window.location.replace(
+                        caminhoHome()
+                    );
+
+                } catch (erro) {
+
+                    console.error(
+                        "Erro ao sair:",
+                        erro
+                    );
+
+                    botaoSair.disabled =
+                        false;
+
+                    botaoSair.textContent =
+                        "Sair da conta";
+                }
+            }
+        );
+    }
+
+
+    if (ehAdmin) {
+
+        iniciarListenersAdmin();
+
+    } else {
+
+        pararListenersAdmin();
+    }
 }
 
 
 /* =====================================
-   MOSTRAR BOTÃO ENTRAR
+   BOTÃO LOGIN
 ===================================== */
 
 function mostrarBotaoLogin() {
 
-    if (!botaoLogin) {
+    if (!navegacao) {
         return;
     }
 
 
-    const usuarioArea =
-        document.querySelector(
-            ".usuario-area"
-        );
+    pararListenersAdmin();
+
+    usuarioAtual = null;
 
 
-    if (usuarioArea) {
-        usuarioArea.remove();
-    }
-
-
-    botaoLogin.style.display =
-        "";
-
-
-    botaoLogin.textContent =
-        "Entrar";
-
-
-    botaoLogin.href =
-        caminhoLogin();
+    navegacao.innerHTML =
+        `
+            <a
+                href="${caminhoLogin()}"
+                class="nav-login"
+            >
+                Entrar
+            </a>
+        `;
 }
 
 
 /* =====================================
-   FIREBASE OBSERVA LOGIN
+   AUTENTICAÇÃO
 ===================================== */
 
 onAuthStateChanged(
     auth,
     async (user) => {
 
-        if (user) {
-
-            console.log(
-                "Usuário logado:",
-                user.displayName,
-                user.email
-            );
-
-
-            await criarMenuUsuario(
-                user
-            );
-
-        } else {
-
-            console.log(
-                "Nenhum usuário logado."
-            );
-
+        if (!user) {
 
             mostrarBotaoLogin();
+
+            return;
+        }
+
+
+        await criarMenuUsuario(
+            user
+        );
+    }
+);
+
+
+/* =====================================
+   CLICAR FORA DO MENU
+===================================== */
+
+document.addEventListener(
+    "click",
+    (event) => {
+
+        const menu =
+            document.querySelector(
+                ".usuario-menu"
+            );
+
+        const dropdown =
+            document.querySelector(
+                "#usuario-dropdown"
+            );
+
+        if (
+            !menu ||
+            !dropdown
+        ) {
+            return;
+        }
+
+
+        if (
+            !menu.contains(
+                event.target
+            )
+        ) {
+
+            dropdown.hidden =
+                true;
+
+            const botao =
+                document.querySelector(
+                    "#usuario-menu-botao"
+                );
+
+            if (botao) {
+
+                botao.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+            }
         }
     }
 );

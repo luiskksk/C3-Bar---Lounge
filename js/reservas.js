@@ -61,8 +61,10 @@ function mostrarMensagem(
         return;
     }
 
+
     mensagemElemento.textContent =
         texto;
+
 
     mensagemElemento.className =
         `reservas-mensagem ${tipo}`;
@@ -79,11 +81,14 @@ function configurarDataMinima() {
         return;
     }
 
+
     const hoje =
         new Date();
 
+
     const ano =
         hoje.getFullYear();
+
 
     const mes =
         String(
@@ -93,6 +98,7 @@ function configurarDataMinima() {
             "0"
         );
 
+
     const dia =
         String(
             hoje.getDate()
@@ -100,6 +106,7 @@ function configurarDataMinima() {
             2,
             "0"
         );
+
 
     dataInput.min =
         `${ano}-${mes}-${dia}`;
@@ -110,7 +117,7 @@ configurarDataMinima();
 
 
 /* =====================================
-   VERIFICA LOGIN
+   LOGIN
 ===================================== */
 
 onAuthStateChanged(
@@ -119,15 +126,21 @@ onAuthStateChanged(
 
         if (!user) {
 
-            usuarioLogado = null;
+            usuarioLogado =
+                null;
+
 
             if (areaSemLogin) {
-                areaSemLogin.hidden = false;
+                areaSemLogin.hidden =
+                    false;
             }
 
+
             if (areaLogada) {
-                areaLogada.hidden = true;
+                areaLogada.hidden =
+                    true;
             }
+
 
             return;
         }
@@ -138,11 +151,14 @@ onAuthStateChanged(
 
 
         if (areaSemLogin) {
-            areaSemLogin.hidden = true;
+            areaSemLogin.hidden =
+                true;
         }
 
+
         if (areaLogada) {
-            areaLogada.hidden = false;
+            areaLogada.hidden =
+                false;
         }
 
 
@@ -153,22 +169,27 @@ onAuthStateChanged(
 
 
         if (nomeInput) {
+
             nomeInput.value =
                 nome;
         }
 
 
         if (emailInput) {
-            emailInput.value =
-                user.email || "";
-        }
 
+            emailInput.value =
+                user.email ||
+                "";
+
+            emailInput.readOnly =
+                true;
+        }
     }
 );
 
 
 /* =====================================
-   SALVAR RESERVA
+   ENVIO
 ===================================== */
 
 if (form) {
@@ -192,18 +213,22 @@ if (form) {
 
 
             const data =
-                dataInput.value;
+                dataInput?.value ||
+                "";
 
             const horario =
-                horarioInput.value;
+                horarioInput?.value ||
+                "";
 
             const pessoas =
                 Number(
-                    pessoasInput.value
+                    pessoasInput?.value
                 );
 
+
             const observacoes =
-                observacoesInput.value.trim();
+                observacoesInput?.value.trim() ||
+                "";
 
 
             if (
@@ -228,6 +253,33 @@ if (form) {
 
                 mostrarMensagem(
                     "Selecione uma quantidade válida de pessoas.",
+                    "erro"
+                );
+
+                return;
+            }
+
+
+            /*
+               Impede reservar uma data
+               que já passou.
+            */
+
+            const hoje =
+                new Date();
+
+            const hojeISO =
+                `${hoje.getFullYear()}-${String(
+                    hoje.getMonth() + 1
+                ).padStart(2, "0")}-${String(
+                    hoje.getDate()
+                ).padStart(2, "0")}`;
+
+
+            if (data < hojeISO) {
+
+                mostrarMensagem(
+                    "Escolha uma data válida.",
                     "erro"
                 );
 
@@ -270,10 +322,13 @@ if (form) {
                             usuarioLogado.uid,
 
                         nome:
-                            nomeInput.value,
+                            nomeInput?.value ||
+                            usuarioLogado.displayName ||
+                            "Usuário C3",
 
                         email:
-                            usuarioLogado.email || "",
+                            usuarioLogado.email ||
+                            "",
 
                         data:
                             data,
@@ -302,18 +357,25 @@ if (form) {
                 );
 
 
-                dataInput.value =
-                    "";
+                if (dataInput) {
+                    dataInput.value =
+                        "";
+                }
 
-                horarioInput.value =
-                    "";
+                if (horarioInput) {
+                    horarioInput.value =
+                        "";
+                }
 
-                pessoasInput.value =
-                    "";
+                if (pessoasInput) {
+                    pessoasInput.value =
+                        "";
+                }
 
-                observacoesInput.value =
-                    "";
-
+                if (observacoesInput) {
+                    observacoesInput.value =
+                        "";
+                }
 
             } catch (erro) {
 
@@ -327,7 +389,6 @@ if (form) {
                     "Não foi possível realizar a reserva.",
                     "erro"
                 );
-
 
             } finally {
 

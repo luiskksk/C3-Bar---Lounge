@@ -7,7 +7,7 @@ import {
     collection,
     query,
     where,
-    getDocs,
+    onSnapshot,
     doc,
     updateDoc,
     serverTimestamp
@@ -20,7 +20,7 @@ import {
 
 
 /* =====================================
-   ELEMENTOS DA CONTA
+   ELEMENTOS
 ===================================== */
 
 const nomeElemento =
@@ -46,6 +46,15 @@ const listaMensagens =
 
 
 /* =====================================
+   LISTENERS
+===================================== */
+
+let pararReservas = null;
+
+let pararMensagens = null;
+
+
+/* =====================================
    ESCAPAR HTML
 ===================================== */
 
@@ -62,7 +71,7 @@ function escaparHTML(texto) {
 
 
 /* =====================================
-   FORMATAR DATA DA RESERVA
+   FORMATAR DATA
 ===================================== */
 
 function formatarData(data) {
@@ -87,14 +96,11 @@ function formatarData(data) {
     const dia =
         Number(partes[2]);
 
-    const dataFormatada =
-        new Date(
-            ano,
-            mes - 1,
-            dia
-        );
-
-    return dataFormatada.toLocaleDateString(
+    return new Date(
+        ano,
+        mes - 1,
+        dia
+    ).toLocaleDateString(
         "pt-BR",
         {
             day: "2-digit",
@@ -106,7 +112,7 @@ function formatarData(data) {
 
 
 /* =====================================
-   FORMATAR STATUS DA RESERVA
+   STATUS RESERVA
 ===================================== */
 
 function formatarStatus(status) {
@@ -127,7 +133,7 @@ function formatarStatus(status) {
 
 
 /* =====================================
-   FORMATAR DATA/HORA DA MENSAGEM
+   DATA/HORA
 ===================================== */
 
 function formatarDataHora(timestamp) {
@@ -136,36 +142,45 @@ function formatarDataHora(timestamp) {
         !timestamp ||
         typeof timestamp.toDate !== "function"
     ) {
+
         return "Data não disponível";
     }
+
 
     const data =
         timestamp.toDate();
 
-    return data.toLocaleDateString(
-        "pt-BR",
-        {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        }
-    ) +
-    " às " +
-    data.toLocaleTimeString(
-        "pt-BR",
-        {
-            hour: "2-digit",
-            minute: "2-digit"
-        }
+
+    return (
+        data.toLocaleDateString(
+            "pt-BR",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        )
+        +
+        " às "
+        +
+        data.toLocaleTimeString(
+            "pt-BR",
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        )
     );
 }
 
 
 /* =====================================
-   CRIAR CARD DA RESERVA
+   CARD RESERVA
 ===================================== */
 
-function criarCardReserva(reserva) {
+function criarCardReserva(
+    reserva
+) {
 
     const card =
         document.createElement("article");
@@ -174,8 +189,6 @@ function criarCardReserva(reserva) {
         "reserva-conta-card"
     );
 
-
-    /* TOPO */
 
     const topo =
         document.createElement("div");
@@ -218,8 +231,6 @@ function criarCardReserva(reserva) {
     );
 
 
-    /* DETALHES */
-
     const detalhes =
         document.createElement("div");
 
@@ -231,17 +242,20 @@ function criarCardReserva(reserva) {
     const horario =
         document.createElement("div");
 
+
     const horarioLabel =
         document.createElement("span");
 
     horarioLabel.textContent =
         "HORÁRIO";
 
+
     const horarioValor =
         document.createElement("strong");
 
     horarioValor.textContent =
         reserva.horario || "--:--";
+
 
     horario.append(
         horarioLabel,
@@ -252,11 +266,13 @@ function criarCardReserva(reserva) {
     const pessoas =
         document.createElement("div");
 
+
     const pessoasLabel =
         document.createElement("span");
 
     pessoasLabel.textContent =
         "PESSOAS";
+
 
     const pessoasValor =
         document.createElement("strong");
@@ -267,6 +283,7 @@ function criarCardReserva(reserva) {
                 ? "pessoa"
                 : "pessoas"
         }`;
+
 
     pessoas.append(
         pessoasLabel,
@@ -285,8 +302,6 @@ function criarCardReserva(reserva) {
         detalhes
     );
 
-
-    /* OBSERVAÇÕES */
 
     if (reserva.observacoes) {
 
@@ -317,13 +332,12 @@ function criarCardReserva(reserva) {
             texto
         );
 
+
         card.appendChild(
             observacoes
         );
     }
 
-
-    /* CANCELAR */
 
     if (
         reserva.status !== "cancelada"
@@ -381,6 +395,7 @@ function criarCardReserva(reserva) {
                             reserva.id
                         ),
                         {
+
                             status:
                                 "cancelada",
 
@@ -389,10 +404,11 @@ function criarCardReserva(reserva) {
                         }
                     );
 
-
-                    await carregarReservas(
-                        auth.currentUser.uid
-                    );
+                    /*
+                       NÃO precisa recarregar.
+                       O onSnapshot vai atualizar
+                       automaticamente.
+                    */
 
                 } catch (erro) {
 
@@ -400,6 +416,7 @@ function criarCardReserva(reserva) {
                         "Erro ao cancelar reserva:",
                         erro
                     );
+
 
                     alert(
                         "Não foi possível cancelar a reserva."
@@ -431,7 +448,7 @@ function criarCardReserva(reserva) {
 
 
 /* =====================================
-   ESTADO VAZIO DAS RESERVAS
+   SEM RESERVAS
 ===================================== */
 
 function mostrarSemReservas() {
@@ -492,13 +509,20 @@ function mostrarSemReservas() {
 
 
 /* =====================================
-   CARREGAR RESERVAS
+   LISTENER RESERVAS
 ===================================== */
 
-async function carregarReservas(uid) {
+function iniciarListenerReservas(
+    uid
+) {
 
     if (!listaReservas) {
         return;
+    }
+
+
+    if (pararReservas) {
+        pararReservas();
     }
 
 
@@ -510,113 +534,113 @@ async function carregarReservas(uid) {
         `;
 
 
-    try {
-
-        const consulta =
-            query(
-                collection(
-                    db,
-                    "reservas"
-                ),
-                where(
-                    "uid",
-                    "==",
-                    uid
-                )
-            );
-
-
-        const resultado =
-            await getDocs(
-                consulta
-            );
-
-
-        const reservas = [];
-
-
-        resultado.forEach(
-            (documento) => {
-
-                reservas.push({
-                    id:
-                        documento.id,
-
-                    ...documento.data()
-                });
-            }
+    const consulta =
+        query(
+            collection(
+                db,
+                "reservas"
+            ),
+            where(
+                "uid",
+                "==",
+                uid
+            )
         );
 
 
-        /* ORDENA SEM PRECISAR DE ÍNDICE FIREBASE */
+    pararReservas =
+        onSnapshot(
+            consulta,
 
-        reservas.sort(
-            (a, b) => {
+            (snapshot) => {
 
-                const dataA =
-                    `${a.data || ""} ${a.horario || ""}`;
+                const reservas = [];
 
-                const dataB =
-                    `${b.data || ""} ${b.horario || ""}`;
 
-                return dataB.localeCompare(
-                    dataA
+                snapshot.forEach(
+                    (documento) => {
+
+                        reservas.push({
+                            id:
+                                documento.id,
+
+                            ...documento.data()
+                        });
+
+                    }
                 );
-            }
-        );
 
 
-        listaReservas.innerHTML =
-            "";
+                reservas.sort(
+                    (a, b) => {
 
+                        const dataA =
+                            `${a.data || ""} ${a.horario || ""}`;
 
-        if (
-            reservas.length === 0
-        ) {
+                        const dataB =
+                            `${b.data || ""} ${b.horario || ""}`;
 
-            mostrarSemReservas();
-
-            return;
-        }
-
-
-        reservas.forEach(
-            (reserva) => {
-
-                const card =
-                    criarCardReserva(
-                        reserva
-                    );
-
-                listaReservas.appendChild(
-                    card
+                        return dataB.localeCompare(
+                            dataA
+                        );
+                    }
                 );
+
+
+                listaReservas.innerHTML =
+                    "";
+
+
+                if (
+                    reservas.length === 0
+                ) {
+
+                    mostrarSemReservas();
+
+                    return;
+                }
+
+
+                reservas.forEach(
+                    (reserva) => {
+
+                        listaReservas.appendChild(
+                            criarCardReserva(
+                                reserva
+                            )
+                        );
+
+                    }
+                );
+
+            },
+
+            (erro) => {
+
+                console.error(
+                    "Erro ao sincronizar reservas:",
+                    erro
+                );
+
+
+                listaReservas.innerHTML =
+                    `
+                        <div class="reservas-conta-erro">
+                            Não foi possível carregar suas reservas.
+                        </div>
+                    `;
             }
         );
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao carregar reservas:",
-            erro
-        );
-
-
-        listaReservas.innerHTML =
-            `
-                <div class="reservas-conta-erro">
-                    Não foi possível carregar suas reservas.
-                </div>
-            `;
-    }
 }
 
 
 /* =====================================
-   STATUS DA MENSAGEM
+   STATUS MENSAGEM
 ===================================== */
 
-function obterStatusMensagem(mensagem) {
+function obterStatusMensagem(
+    mensagem
+) {
 
     if (
         mensagem.respondido === true ||
@@ -649,13 +673,16 @@ function obterStatusMensagem(mensagem) {
 
 
 /* =====================================
-   CRIAR CARD DA MENSAGEM
+   CARD MENSAGEM
 ===================================== */
 
-function criarCardMensagem(mensagem) {
+function criarCardMensagem(
+    mensagem
+) {
 
     const card =
         document.createElement("article");
+
 
     const status =
         obterStatusMensagem(
@@ -668,10 +695,6 @@ function criarCardMensagem(mensagem) {
         status.classe
     );
 
-
-    /* =================================
-       TOPO
-    ================================= */
 
     const topo =
         document.createElement("div");
@@ -737,10 +760,6 @@ function criarCardMensagem(mensagem) {
     );
 
 
-    /* =================================
-       DATA
-    ================================= */
-
     const data =
         document.createElement("div");
 
@@ -758,10 +777,6 @@ function criarCardMensagem(mensagem) {
         data
     );
 
-
-    /* =================================
-       MENSAGEM ENVIADA
-    ================================= */
 
     const mensagemBox =
         document.createElement("div");
@@ -801,13 +816,7 @@ function criarCardMensagem(mensagem) {
     );
 
 
-    /* =================================
-       RESPOSTA DO C3
-    ================================= */
-
-    if (
-        mensagem.resposta
-    ) {
+    if (mensagem.resposta) {
 
         const resposta =
             document.createElement("div");
@@ -911,7 +920,7 @@ function criarCardMensagem(mensagem) {
 
 
 /* =====================================
-   ESTADO VAZIO DAS MENSAGENS
+   SEM MENSAGENS
 ===================================== */
 
 function mostrarSemMensagens() {
@@ -972,13 +981,20 @@ function mostrarSemMensagens() {
 
 
 /* =====================================
-   CARREGAR MENSAGENS
+   LISTENER MENSAGENS
 ===================================== */
 
-async function carregarMensagens(uid) {
+function iniciarListenerMensagens(
+    uid
+) {
 
     if (!listaMensagens) {
         return;
+    }
+
+
+    if (pararMensagens) {
+        pararMensagens();
     }
 
 
@@ -990,107 +1006,103 @@ async function carregarMensagens(uid) {
         `;
 
 
-    try {
-
-        const consulta =
-            query(
-                collection(
-                    db,
-                    "mensagens"
-                ),
-                where(
-                    "uid",
-                    "==",
-                    uid
-                )
-            );
-
-
-        const resultado =
-            await getDocs(
-                consulta
-            );
-
-
-        const mensagens = [];
-
-
-        resultado.forEach(
-            (documento) => {
-
-                mensagens.push({
-                    id:
-                        documento.id,
-
-                    ...documento.data()
-                });
-
-            }
+    const consulta =
+        query(
+            collection(
+                db,
+                "mensagens"
+            ),
+            where(
+                "uid",
+                "==",
+                uid
+            )
         );
 
 
-        /* MAIS RECENTES PRIMEIRO */
+    pararMensagens =
+        onSnapshot(
+            consulta,
 
-        mensagens.sort(
-            (a, b) => {
+            (snapshot) => {
 
-                const dataA =
-                    a.criadoEm?.toMillis?.() ||
-                    0;
-
-                const dataB =
-                    b.criadoEm?.toMillis?.() ||
-                    0;
-
-                return dataB - dataA;
-            }
-        );
+                const mensagens = [];
 
 
-        listaMensagens.innerHTML =
-            "";
+                snapshot.forEach(
+                    (documento) => {
 
+                        mensagens.push({
+                            id:
+                                documento.id,
 
-        if (
-            mensagens.length === 0
-        ) {
+                            ...documento.data()
+                        });
 
-            mostrarSemMensagens();
-
-            return;
-        }
-
-
-        mensagens.forEach(
-            (mensagem) => {
-
-                const card =
-                    criarCardMensagem(
-                        mensagem
-                    );
-
-                listaMensagens.appendChild(
-                    card
+                    }
                 );
 
+
+                mensagens.sort(
+                    (a, b) => {
+
+                        const dataA =
+                            a.criadoEm?.toMillis?.() ||
+                            0;
+
+                        const dataB =
+                            b.criadoEm?.toMillis?.() ||
+                            0;
+
+                        return dataB - dataA;
+                    }
+                );
+
+
+                listaMensagens.innerHTML =
+                    "";
+
+
+                if (
+                    mensagens.length === 0
+                ) {
+
+                    mostrarSemMensagens();
+
+                    return;
+                }
+
+
+                mensagens.forEach(
+                    (mensagem) => {
+
+                        listaMensagens.appendChild(
+                            criarCardMensagem(
+                                mensagem
+                            )
+                        );
+
+                    }
+                );
+
+            },
+
+            (erro) => {
+
+                console.error(
+                    "Erro ao sincronizar mensagens:",
+                    erro
+                );
+
+
+                listaMensagens.innerHTML =
+                    `
+                        <div class="mensagens-conta-erro">
+                            Não foi possível carregar suas mensagens.
+                        </div>
+                    `;
             }
         );
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao carregar mensagens:",
-            erro
-        );
-
-
-        listaMensagens.innerHTML =
-            `
-                <div class="mensagens-conta-erro">
-                    Não foi possível carregar suas mensagens.
-                </div>
-            `;
-    }
 }
 
 
@@ -1103,6 +1115,17 @@ onAuthStateChanged(
     async (user) => {
 
         if (!user) {
+
+            if (pararReservas) {
+                pararReservas();
+                pararReservas = null;
+            }
+
+            if (pararMensagens) {
+                pararMensagens();
+                pararMensagens = null;
+            }
+
 
             window.location.replace(
                 "./login.html"
@@ -1123,34 +1146,23 @@ onAuthStateChanged(
             "Não informado";
 
 
-        /* NOME */
-
         if (nomeElemento) {
-
             nomeElemento.textContent =
                 nome;
         }
 
 
-        /* E-MAIL */
-
         if (emailElemento) {
-
             emailElemento.textContent =
                 email;
         }
 
 
-        /* UID */
-
         if (uidElemento) {
-
             uidElemento.textContent =
                 user.uid;
         }
 
-
-        /* AVATAR */
 
         if (avatarElemento) {
 
@@ -1161,25 +1173,20 @@ onAuthStateChanged(
         }
 
 
-        /* RESERVAS */
-
-        await carregarReservas(
+        iniciarListenerReservas(
             user.uid
         );
 
 
-        /* MENSAGENS */
-
-        await carregarMensagens(
+        iniciarListenerMensagens(
             user.uid
         );
-
     }
 );
 
 
 /* =====================================
-   SAIR DA CONTA
+   SAIR
 ===================================== */
 
 if (botaoSair) {
@@ -1195,6 +1202,15 @@ if (botaoSair) {
 
                 botaoSair.textContent =
                     "Saindo...";
+
+
+                if (pararReservas) {
+                    pararReservas();
+                }
+
+                if (pararMensagens) {
+                    pararMensagens();
+                }
 
 
                 await signOut(
