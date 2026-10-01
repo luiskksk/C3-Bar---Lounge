@@ -15,10 +15,10 @@
     </title>
 
     <link
-    rel="icon"
-    type="image/png"
-    href="../assets/imgs/Logos/logo-c3.png"
->
+        rel="icon"
+        type="image/png"
+        href="../assets/imgs/Logos/logo-c3.png"
+    >
 
     <link
         rel="stylesheet"
@@ -26,6 +26,7 @@
     >
 
 </head>
+
 
 <body>
 
@@ -61,14 +62,17 @@
     </header>
 
 
+
     <!-- =====================================
-         ADMIN
+         PAINEL ADMINISTRATIVO
     ====================================== -->
 
     <main class="admin-page">
 
 
-        <!-- CARREGAMENTO -->
+        <!-- =====================================
+             CARREGAMENTO
+        ====================================== -->
 
         <section
             class="admin-loading"
@@ -86,7 +90,10 @@
         </section>
 
 
-        <!-- ACESSO NEGADO -->
+
+        <!-- =====================================
+             ACESSO NEGADO
+        ====================================== -->
 
         <section
             class="admin-negado"
@@ -99,28 +106,38 @@
             </span>
 
             <h1>
+
                 VOCÊ NÃO POSSUI
-                <strong>ACESSO.</strong>
+
+                <strong>
+                    ACESSO.
+                </strong>
+
             </h1>
 
             <p>
+
                 Esta área é exclusiva
                 para administradores
                 do C3.
+
             </p>
 
             <a
                 href="../index.html"
                 class="botao botao-roxo"
             >
+
                 Voltar ao site
+
             </a>
 
         </section>
 
 
+
         <!-- =====================================
-             CONTEÚDO ADMIN
+             CONTEÚDO DO ADMIN
         ====================================== -->
 
         <div
@@ -130,9 +147,12 @@
         >
 
 
-            <!-- HERO -->
+            <!-- =====================================
+                 HERO
+            ====================================== -->
 
             <section class="admin-hero">
+
 
                 <div>
 
@@ -140,50 +160,65 @@
                         C3 ADMIN
                     </p>
 
+
                     <h1>
+
                         PAINEL DE
-                        <span>CONTROLE.</span>
+
+                        <span>
+                            CONTROLE.
+                        </span>
+
                     </h1>
 
+
                     <p>
+
                         Acompanhe reservas,
                         mensagens e atividades
                         dos clientes do
                         C3 Bar & Lounge.
+
                     </p>
 
                 </div>
 
 
+
+                <!-- IDENTIDADE DO ADMIN -->
+
                 <div class="admin-identidade">
 
-    <img
-        src="../assets/imgs/Admin/admin-c3.png"
-        alt=""
-        class="admin-identidade-fundo"
-    >
+                    <img
+                        src="../assets/imgs/Admin/admin-c3.png"
+                        alt=""
+                        class="admin-identidade-fundo"
+                    >
 
-    <div class="admin-identidade-overlay"></div>
+                    <div class="admin-identidade-overlay"></div>
 
-    <div class="admin-identidade-conteudo">
 
-        <span>
-            ADMINISTRADOR
-        </span>
+                    <div class="admin-identidade-conteudo">
 
-        <strong id="admin-nome">
-            C3
-        </strong>
+                        <span>
+                            ADMINISTRADOR
+                        </span>
 
-        <small>
-            C3 Bar & Lounge
-        </small>
+                        <strong id="admin-nome">
+                            C3
+                        </strong>
 
-    </div>
+                        <small>
+                            C3 Bar & Lounge
+                        </small>
 
-</div>
+                    </div>
+
+                </div>
+
 
             </section>
+
 
 
             <!-- =====================================
@@ -192,6 +227,8 @@
 
             <section class="admin-estatisticas">
 
+
+                <!-- TOTAL -->
 
                 <article class="admin-stat">
 
@@ -210,6 +247,8 @@
                 </article>
 
 
+                <!-- PENDENTES -->
+
                 <article class="admin-stat">
 
                     <span>
@@ -226,6 +265,8 @@
 
                 </article>
 
+
+                <!-- CONFIRMADAS -->
 
                 <article class="admin-stat">
 
@@ -244,6 +285,8 @@
                 </article>
 
 
+                <!-- CANCELADAS -->
+
                 <article class="admin-stat">
 
                     <span>
@@ -260,7 +303,9 @@
 
                 </article>
 
+
             </section>
+
 
 
             <!-- =====================================
@@ -268,6 +313,7 @@
             ====================================== -->
 
             <section class="admin-section">
+
 
                 <div class="admin-section-header">
 
@@ -277,19 +323,29 @@
                             HOJE
                         </p>
 
+
                         <h2>
+
                             RESERVAS DE
-                            <span>HOJE.</span>
+
+                            <span>
+                                HOJE.
+                            </span>
+
                         </h2>
 
+
                         <p class="admin-section-descricao">
+
                             Reservas marcadas para
                             o dia de hoje.
+
                         </p>
 
                     </div>
 
                 </div>
+
 
 
                 <div
@@ -298,54 +354,77 @@
                 >
 
                     <div class="admin-reservas-loading">
+
                         Carregando reservas...
+
                     </div>
 
                 </div>
 
+
             </section>
 
-<!-- =====================================
-     PRÓXIMAS RESERVAS
-===================================== -->
-
-<section class="admin-section admin-proximas-section">
-
-    <div class="admin-section-header">
-
-        <div>
-
-            <p class="tag">
-                AGENDA
-            </p>
-
-            <h2>
-                PRÓXIMAS
-                <span>RESERVAS.</span>
-            </h2>
-
-            <p class="admin-section-descricao">
-                Reservas marcadas para
-                os próximos dias.
-            </p>
-
-        </div>
-
-    </div>
 
 
-    <div
-        class="admin-reservas"
-        id="admin-reservas-proximas"
-    >
+            <!-- =====================================
+                 PRÓXIMAS RESERVAS
+            ====================================== -->
 
-        <div class="admin-reservas-loading">
-            Carregando próximas reservas...
-        </div>
+            <section
+                class="admin-section admin-proximas-section"
+            >
 
-    </div>
 
-</section>
+                <div class="admin-section-header">
+
+                    <div>
+
+                        <p class="tag">
+                            AGENDA
+                        </p>
+
+
+                        <h2>
+
+                            PRÓXIMAS
+
+                            <span>
+                                RESERVAS.
+                            </span>
+
+                        </h2>
+
+
+                        <p class="admin-section-descricao">
+
+                            Reservas marcadas para
+                            os próximos dias.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <div
+                    class="admin-reservas"
+                    id="admin-reservas-proximas"
+                >
+
+                    <div class="admin-reservas-loading">
+
+                        Carregando próximas reservas...
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
 
             <!-- =====================================
                  MENSAGENS
@@ -355,6 +434,7 @@
                 class="admin-section admin-mensagens-section"
             >
 
+
                 <div class="admin-section-header">
 
                     <div>
@@ -363,22 +443,32 @@
                             CONTATO
                         </p>
 
+
                         <h2>
+
                             MENSAGENS
-                            <span>RECEBIDAS.</span>
+
+                            <span>
+                                RECEBIDAS.
+                            </span>
+
                         </h2>
 
+
                         <p class="admin-section-descricao">
+
                             Leia as mensagens enviadas
                             pelos clientes através
                             da página de contato.
                             As mais recentes aparecem
                             primeiro.
+
                         </p>
 
                     </div>
 
                 </div>
+
 
 
                 <div
@@ -387,12 +477,16 @@
                 >
 
                     <div class="admin-reservas-loading">
+
                         Carregando mensagens...
+
                     </div>
 
                 </div>
 
+
             </section>
+
 
 
             <!-- =====================================
@@ -403,6 +497,7 @@
                 class="admin-section admin-antigas-section"
             >
 
+
                 <div class="admin-section-header">
 
                     <div>
@@ -411,19 +506,29 @@
                             HISTÓRICO
                         </p>
 
+
                         <h2>
+
                             RESERVAS
-                            <span>ANTIGAS.</span>
+
+                            <span>
+                                ANTIGAS.
+                            </span>
+
                         </h2>
 
+
                         <p class="admin-section-descricao">
+
                             Reservas de dias anteriores
                             ficam armazenadas nesta área.
+
                         </p>
 
                     </div>
 
                 </div>
+
 
 
                 <div
@@ -432,12 +537,16 @@
                 >
 
                     <div class="admin-reservas-loading">
+
                         Carregando histórico...
+
                     </div>
 
                 </div>
 
+
             </section>
+
 
 
             <!-- =====================================
@@ -451,7 +560,9 @@
                     class="botao botao-outline"
                     id="admin-sair"
                 >
+
                     Sair da conta
+
                 </button>
 
             </section>
@@ -462,6 +573,7 @@
     </main>
 
 
+
     <!-- =====================================
          JAVASCRIPT
     ====================================== -->
@@ -470,6 +582,7 @@
         type="module"
         src="../js/admin.js"
     ></script>
+
 
 </body>
 

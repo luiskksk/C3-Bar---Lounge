@@ -7858,6 +7858,14 @@ section { position:relative; isolation:isolate; }
 
 @media (max-width: 600px) {
 
+    /* Mantém o perfil compacto sem empurrar
+       o menu mobile para fora da tela. */
+
+    .usuario-area {
+        max-width: 48vw;
+        flex-shrink: 1;
+    }
+
     .usuario-btn {
         min-height: 38px;
 
@@ -11432,6 +11440,87 @@ section { position:relative; isolation:isolate; }
 }
 
 
+/* =====================================
+   NOTIFICAÇÃO DENTRO DO MENU DO ADMIN
+
+   O contador fica no fluxo normal do item
+   "Painel Admin", evitando que ele saia
+   para fora do menu ou altere o posicionamento
+   do botão do perfil.
+===================================== */
+
+.usuario-notificacao-menu {
+    position: static;
+
+    flex-shrink: 0;
+
+    min-width: 18px;
+    height: 18px;
+
+    margin-left: auto;
+    margin-right: 0;
+
+    padding: 0 5px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border:
+        2px solid
+        #08070d;
+
+    border-radius: 999px;
+
+    background: #a45cff;
+
+    color: #ffffff;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    line-height: 1;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(164, 92, 255, 0.08),
+        0 0 15px
+        rgba(164, 92, 255, 0.55);
+
+    pointer-events: none;
+
+    animation:
+        c3NotificacaoPulse
+        1.8s
+        ease-in-out
+        infinite;
+}
+
+
+.usuario-notificacao-menu[hidden] {
+    display: none !important;
+}
+
+
+/* Espaçamento correto entre o ícone,
+   o texto e o contador. */
+
+.usuario-admin {
+    gap: 0;
+}
+
+
+.usuario-admin .usuario-admin-icone {
+    margin-right: 8px;
+}
+
+
 .usuario-admin:hover {
     color: #ffffff;
 
@@ -13798,4 +13887,506 @@ section { position:relative; isolation:isolate; }
     50% {
         transform: scale(1.12);
     }
+}
+/* =========================================================
+   C3 BAR & LOUNGE
+   AJUSTE FINAL — MENSAGENS DO ADMIN
+   MAIS ESPAÇO / MAIS LEGIBILIDADE
+========================================================= */
+
+
+/* =========================================================
+   CARD DA MENSAGEM
+========================================================= */
+
+.admin-mensagem-card {
+
+    padding: 30px 32px !important;
+
+    margin-bottom: 24px;
+
+}
+
+
+/* =========================================================
+   TOPO
+========================================================= */
+
+.admin-mensagem-topo {
+
+    gap: 22px !important;
+
+    margin-bottom: 24px !important;
+
+}
+
+
+.admin-mensagem-topo h3 {
+
+    margin: 0 0 7px 0 !important;
+
+    font-size: 1.08rem !important;
+
+    line-height: 1.4 !important;
+
+}
+
+
+.admin-mensagem-topo p {
+
+    margin: 0 !important;
+
+    font-size: 0.82rem !important;
+
+    line-height: 1.5 !important;
+
+    color:
+        rgba(255, 255, 255, 0.48) !important;
+
+}
+
+
+/* =========================================================
+   MARCADOR "MENSAGEM"
+========================================================= */
+
+.admin-mensagem-nova {
+
+    flex-shrink: 0;
+
+    padding:
+        7px
+        12px !important;
+
+    font-size: 0.65rem !important;
+
+    letter-spacing: 0.09em !important;
+
+}
+
+
+/* =========================================================
+   ASSUNTO
+========================================================= */
+
+.admin-mensagem-assunto {
+
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    gap: 8px !important;
+
+    margin-top: 0 !important;
+
+    margin-bottom: 22px !important;
+
+    padding:
+        17px
+        20px !important;
+
+    border-radius: 12px !important;
+
+}
+
+
+.admin-mensagem-assunto span {
+
+    font-size: 0.68rem !important;
+
+    letter-spacing: 0.11em !important;
+
+}
+
+
+.admin-mensagem-assunto strong {
+
+    font-size: 1rem !important;
+
+    line-height: 1.5 !important;
+
+}
+
+
+/* =========================================================
+   TEXTO DA MENSAGEM
+========================================================= */
+
+.admin-mensagem-corpo {
+
+    margin-top: 0 !important;
+
+    padding:
+        21px
+        22px !important;
+
+    border-radius: 0 12px 12px 0 !important;
+
+}
+
+
+.admin-mensagem-corpo p {
+
+    font-size: 0.92rem !important;
+
+    line-height: 1.85 !important;
+
+    color:
+        rgba(255, 255, 255, 0.70) !important;
+
+}
+
+
+/* =========================================================
+   ÁREA DE RESPOSTA
+========================================================= */
+
+.admin-resposta-area {
+
+    margin-top: 24px !important;
+
+    padding: 20px !important;
+
+    border-radius: 13px !important;
+
+}
+
+
+.admin-resposta-input {
+
+    width: 100%;
+
+    min-height: 145px !important;
+
+    padding:
+        16px
+        17px !important;
+
+    font-size: 0.88rem !important;
+
+    line-height: 1.7 !important;
+
+}
+
+
+.admin-resposta-contador {
+
+    margin-top: 8px !important;
+
+    font-size: 0.68rem !important;
+
+}
+
+
+.admin-resposta-acoes {
+
+    margin-top: 14px !important;
+
+    gap: 12px !important;
+
+}
+
+
+/* =========================================================
+   BOTÃO RESPONDER
+========================================================= */
+
+.admin-botao-responder {
+
+    min-height: 44px !important;
+
+    padding:
+        11px
+        18px !important;
+
+    font-size: 0.76rem !important;
+
+}
+
+
+/* =========================================================
+   AÇÕES
+========================================================= */
+
+.admin-mensagem-acoes {
+
+    width: 100% !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: flex-end !important;
+
+    gap: 12px !important;
+
+    margin-top: 25px !important;
+
+    padding-top: 20px !important;
+
+}
+
+
+/* =========================================================
+   BOTÕES — REGRA GERAL
+========================================================= */
+
+.admin-mensagem-acoes button,
+.admin-mensagem-btn {
+
+    min-height: 44px !important;
+
+    padding:
+        11px
+        18px !important;
+
+    border-radius: 10px !important;
+
+    font-family: inherit;
+
+    font-size: 0.76rem !important;
+
+    font-weight: 800 !important;
+
+    letter-spacing: 0.035em !important;
+
+    line-height: 1.2 !important;
+
+}
+
+
+/* =========================================================
+   MARCAR COMO LIDA
+   SUPORTA OS DOIS NOMES DE CLASSE
+========================================================= */
+
+.admin-marcar-lida,
+.admin-mensagem-btn.marcar-lida {
+
+    color: #ffffff !important;
+
+    background:
+        rgba(168, 85, 247, 0.12) !important;
+
+    border:
+        1px solid
+        rgba(168, 85, 247, 0.40) !important;
+
+}
+
+
+.admin-marcar-lida:hover,
+.admin-mensagem-btn.marcar-lida:hover {
+
+    color: #ffffff !important;
+
+    background:
+        rgba(168, 85, 247, 0.22) !important;
+
+    border-color:
+        rgba(168, 85, 247, 0.70) !important;
+
+    box-shadow:
+        0 8px 25px
+        rgba(168, 85, 247, 0.14);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* =========================================================
+   APAGAR
+========================================================= */
+
+.admin-apagar-mensagem,
+.admin-mensagem-btn.apagar-mensagem {
+
+    color:
+        rgba(255, 255, 255, 0.72) !important;
+
+    background:
+        rgba(255, 255, 255, 0.035) !important;
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.12) !important;
+
+}
+
+
+.admin-apagar-mensagem:hover,
+.admin-mensagem-btn.apagar-mensagem:hover {
+
+    color: #ffffff !important;
+
+    background:
+        rgba(255, 70, 110, 0.10) !important;
+
+    border-color:
+        rgba(255, 70, 110, 0.40) !important;
+
+    box-shadow:
+        0 8px 22px
+        rgba(255, 70, 110, 0.10);
+
+    transform:
+        translateY(-2px);
+
+}
+
+
+/* =========================================================
+   RESPOSTA JÁ ENVIADA
+========================================================= */
+
+.admin-resposta-existente {
+
+    margin-top: 22px !important;
+
+    padding:
+        18px
+        20px !important;
+
+    border-radius: 12px !important;
+
+    font-size: 0.88rem !important;
+
+    line-height: 1.75 !important;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .admin-mensagem-card {
+
+        padding:
+            25px
+            18px !important;
+
+        margin-bottom: 20px;
+
+    }
+
+
+    .admin-mensagem-topo {
+
+        gap: 15px !important;
+
+        margin-bottom: 20px !important;
+
+    }
+
+
+    .admin-mensagem-topo h3 {
+
+        font-size: 1rem !important;
+
+    }
+
+
+    .admin-mensagem-topo p {
+
+        font-size: 0.78rem !important;
+
+        overflow-wrap: anywhere;
+
+    }
+
+
+    .admin-mensagem-assunto {
+
+        margin-bottom: 18px !important;
+
+        padding:
+            15px
+            17px !important;
+
+    }
+
+
+    .admin-mensagem-assunto strong {
+
+        font-size: 0.92rem !important;
+
+    }
+
+
+    .admin-mensagem-corpo {
+
+        padding:
+            18px !important;
+
+    }
+
+
+    .admin-mensagem-corpo p {
+
+        font-size: 0.87rem !important;
+
+        line-height: 1.75 !important;
+
+    }
+
+
+    .admin-mensagem-acoes {
+
+        flex-direction: column !important;
+
+        align-items: stretch !important;
+
+        gap: 10px !important;
+
+    }
+
+
+    .admin-mensagem-acoes button,
+    .admin-mensagem-btn {
+
+        width: 100% !important;
+
+        min-height: 46px !important;
+
+        font-size: 0.74rem !important;
+
+    }
+
+}
+
+
+/* =========================================================
+   CELULARES PEQUENOS
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .admin-mensagem-card {
+
+        padding:
+            21px
+            15px !important;
+
+    }
+
+
+    .admin-mensagem-corpo {
+
+        padding:
+            16px !important;
+
+    }
+
+
+    .admin-mensagem-corpo p {
+
+        font-size: 0.84rem !important;
+
+    }
+
 }

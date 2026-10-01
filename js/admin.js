@@ -1,7 +1,22 @@
+/* =========================================
+   C3 BAR & LOUNGE
+   PAINEL ADMINISTRATIVO
+========================================= */
+
+
+/* =========================================
+   FIREBASE AUTH
+========================================= */
+
 import {
     onAuthStateChanged,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+
+/* =========================================
+   FIREBASE FIRESTORE
+========================================= */
 
 import {
     doc,
@@ -13,189 +28,262 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
+
+/* =========================================
+   FIREBASE DO PROJETO
+========================================= */
+
 import {
     auth,
     db
 } from "./firebase.js";
 
 
-/* =====================================
-   ELEMENTOS
-===================================== */
+
+/* =========================================
+   ELEMENTOS PRINCIPAIS
+========================================= */
 
 const loading =
     document.querySelector("#admin-loading");
 
+
 const negado =
     document.querySelector("#admin-negado");
+
 
 const conteudo =
     document.querySelector("#admin-conteudo");
 
+
 const nomeAdmin =
     document.querySelector("#admin-nome");
 
-const reservasHoje =
+
+
+/* =========================================
+   RESERVAS
+========================================= */
+
+const listaReservas =
     document.querySelector("#admin-reservas");
 
-const reservasProximas =
-    document.querySelector("#admin-reservas-proximas");
 
-const reservasAntigas =
-    document.querySelector("#admin-reservas-antigas");
+const listaReservasProximas =
+    document.querySelector(
+        "#admin-reservas-proximas"
+    );
+
+
+const listaReservasAntigas =
+    document.querySelector(
+        "#admin-reservas-antigas"
+    );
+
+
+
+/* =========================================
+   MENSAGENS
+========================================= */
 
 const listaMensagens =
     document.querySelector("#admin-mensagens");
 
+
+
+/* =========================================
+   ESTATÍSTICAS
+========================================= */
+
 const totalElemento =
     document.querySelector("#admin-total");
+
 
 const pendentesElemento =
     document.querySelector("#admin-pendentes");
 
+
 const confirmadasElemento =
-    document.querySelector("#admin-confirmadas");
+    document.querySelector(
+        "#admin-confirmadas"
+    );
+
 
 const canceladasElemento =
-    document.querySelector("#admin-canceladas");
+    document.querySelector(
+        "#admin-canceladas"
+    );
+
+
+
+/* =========================================
+   BOTÃO SAIR
+========================================= */
 
 const botaoSair =
     document.querySelector("#admin-sair");
 
 
-/* =====================================
-   LISTENERS
-===================================== */
+
+/* =========================================
+   CONTROLE DOS LISTENERS
+========================================= */
 
 let pararReservas = null;
+
 let pararMensagens = null;
 
 
-/* =====================================
-   DATA
-===================================== */
+
+/* =========================================
+   DATA LOCAL
+========================================= */
 
 function dataLocalISO() {
 
-    const agora = new Date();
+    const agora =
+        new Date();
+
 
     const ano =
         agora.getFullYear();
 
+
     const mes =
         String(
             agora.getMonth() + 1
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
+
 
     const dia =
         String(
             agora.getDate()
-        ).padStart(2, "0");
+        ).padStart(
+            2,
+            "0"
+        );
 
-    return `${ano}-${mes}-${dia}`;
-}
 
-
-/* =====================================
-   FORMATAR DATA
-===================================== */
-
-function formatarData(data) {
-
-    if (!data) {
-        return "Data não informada";
-    }
-
-    const partes =
-        data.split("-");
-
-    if (partes.length !== 3) {
-        return data;
-    }
-
-    const ano =
-        Number(partes[0]);
-
-    const mes =
-        Number(partes[1]);
-
-    const dia =
-        Number(partes[2]);
-
-    return new Date(
-        ano,
-        mes - 1,
-        dia
-    ).toLocaleDateString(
-        "pt-BR",
-        {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        }
+    return (
+        `${ano}-${mes}-${dia}`
     );
 }
 
 
-/* =====================================
-   TIMESTAMP
-===================================== */
 
-function timestampParaNumero(timestamp) {
+/* =========================================
+   FORMATAR DATA
+========================================= */
+
+function formatarData(
+    data
+) {
+
+    if (!data) {
+
+        return (
+            "Data não informada"
+        );
+    }
+
+
+    const partes =
+        data.split("-");
+
+
+    if (
+        partes.length !== 3
+    ) {
+
+        return data;
+    }
+
+
+    return (
+        `${partes[2]}/${partes[1]}/${partes[0]}`
+    );
+}
+
+
+
+/* =========================================
+   TIMESTAMP FIREBASE
+========================================= */
+
+function timestampParaNumero(
+    timestamp
+) {
 
     if (!timestamp) {
+
         return 0;
     }
 
+
     if (
-        typeof timestamp.toMillis === "function"
+        typeof timestamp.toMillis ===
+        "function"
     ) {
+
         return timestamp.toMillis();
     }
 
+
     if (
-        typeof timestamp.toDate === "function"
+        typeof timestamp.seconds ===
+        "number"
     ) {
-        return timestamp.toDate().getTime();
+
+        return (
+            timestamp.seconds *
+            1000
+        );
     }
 
-    if (timestamp instanceof Date) {
-        return timestamp.getTime();
-    }
-
-    if (typeof timestamp === "number") {
-        return timestamp;
-    }
 
     return 0;
 }
 
 
-function formatarTimestamp(timestamp) {
+
+/* =========================================
+   FORMATAR TIMESTAMP
+========================================= */
+
+function formatarTimestamp(
+    timestamp
+) {
 
     const numero =
-        timestampParaNumero(timestamp);
+        timestampParaNumero(
+            timestamp
+        );
+
 
     if (!numero) {
-        return "Data não disponível";
+
+        return (
+            "Agora"
+        );
     }
 
+
     const data =
-        new Date(numero);
+        new Date(
+            numero
+        );
+
 
     return (
-        data.toLocaleDateString(
+        data.toLocaleString(
             "pt-BR",
             {
                 day: "2-digit",
                 month: "2-digit",
-                year: "numeric"
-            }
-        ) +
-        " às " +
-        data.toLocaleTimeString(
-            "pt-BR",
-            {
+                year: "numeric",
                 hour: "2-digit",
                 minute: "2-digit"
             }
@@ -204,96 +292,85 @@ function formatarTimestamp(timestamp) {
 }
 
 
-/* =====================================
-   STATUS
-===================================== */
 
-function formatarStatus(status) {
+/* =========================================
+   FORMATAR STATUS DA RESERVA
+========================================= */
 
-    if (status === "confirmada") {
-        return "Confirmada";
+function formatarStatus(
+    status
+) {
+
+    switch (status) {
+
+        case "confirmada":
+
+            return (
+                "Confirmada"
+            );
+
+
+        case "cancelada":
+
+            return (
+                "Cancelada"
+            );
+
+
+        default:
+
+            return (
+                "Pendente"
+            );
     }
-
-    if (status === "cancelada") {
-        return "Cancelada";
-    }
-
-    return "Pendente";
 }
 
 
-/* =====================================
-   VERIFICAR ADMIN
-===================================== */
 
-async function verificarAdministrador(user) {
+/* =========================================
+   CRIAR BOTÃO DE RESERVA
+========================================= */
 
-    if (!user) {
-        return false;
-    }
+function criarBotao(
+    texto,
+    classe,
+    funcao
+) {
 
-    try {
-
-        const referencia =
-            doc(
-                db,
-                "usuarios",
-                user.uid
-            );
-
-        const resultado =
-            await getDoc(
-                referencia
-            );
-
-        if (!resultado.exists()) {
-            return false;
-        }
-
-        const dados =
-            resultado.data();
-
-        return dados.admin === true;
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao verificar administrador:",
-            erro
+    const botao =
+        document.createElement(
+            "button"
         );
 
-        return false;
-    }
+
+    botao.type =
+        "button";
+
+
+    botao.classList.add(
+        "admin-reserva-btn",
+        classe
+    );
+
+
+    botao.textContent =
+        texto;
+
+
+    botao.addEventListener(
+        "click",
+        funcao
+    );
+
+
+    return botao;
 }
 
 
-/* =====================================
-   PARAR LISTENERS
-===================================== */
 
-function pararListeners() {
-
-    if (pararReservas) {
-
-        pararReservas();
-
-        pararReservas =
-            null;
-    }
-
-    if (pararMensagens) {
-
-        pararMensagens();
-
-        pararMensagens =
-            null;
-    }
-}
-
-
-/* =====================================
+/* =========================================
    ALTERAR STATUS DA RESERVA
-===================================== */
+========================================= */
 
 async function alterarStatus(
     reservaId,
@@ -303,56 +380,70 @@ async function alterarStatus(
     try {
 
         await updateDoc(
+
             doc(
                 db,
                 "reservas",
                 reservaId
             ),
+
             {
-                status: novoStatus
+                status:
+                    novoStatus,
+
+                atualizadoEm:
+                    serverTimestamp()
             }
         );
+
 
     } catch (erro) {
 
         console.error(
-            "Erro ao alterar status:",
+            "Erro ao atualizar reserva:",
             erro
         );
 
+
         alert(
-            "Não foi possível alterar o status da reserva."
+            "Não foi possível atualizar a reserva."
         );
     }
 }
 
 
-/* =====================================
+
+/* =========================================
    APAGAR RESERVA
-===================================== */
+========================================= */
 
 async function apagarReserva(
     reservaId
 ) {
 
-    const confirmar =
+    const confirmou =
         window.confirm(
-            "Deseja realmente apagar esta reserva?"
+            "Tem certeza que deseja apagar esta reserva permanentemente?\n\nEssa ação não pode ser desfeita."
         );
 
-    if (!confirmar) {
+
+    if (!confirmou) {
+
         return;
     }
+
 
     try {
 
         await deleteDoc(
+
             doc(
                 db,
                 "reservas",
                 reservaId
             )
         );
+
 
     } catch (erro) {
 
@@ -361,6 +452,7 @@ async function apagarReserva(
             erro
         );
 
+
         alert(
             "Não foi possível apagar a reserva."
         );
@@ -368,59 +460,36 @@ async function apagarReserva(
 }
 
 
-/* =====================================
-   CRIAR BOTÃO
-===================================== */
 
-function criarBotao(
-    texto,
-    classe,
-    funcao
-) {
-
-    const botao =
-        document.createElement("button");
-
-    botao.type =
-        "button";
-
-    botao.classList.add(
-        "admin-acao",
-        classe
-    );
-
-    botao.textContent =
-        texto;
-
-    botao.addEventListener(
-        "click",
-        funcao
-    );
-
-    return botao;
-}
-
-
-/* =====================================
-   CARD DE RESERVA
-===================================== */
+/* =========================================
+   CARD DA RESERVA
+========================================= */
 
 function criarCardReserva(
     reserva
 ) {
 
     const card =
-        document.createElement("article");
+        document.createElement(
+            "article"
+        );
+
 
     card.classList.add(
         "admin-reserva-card"
     );
 
 
-    /* TOPO */
+
+    /* =====================================
+       TOPO
+    ===================================== */
 
     const topo =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     topo.classList.add(
         "admin-reserva-topo"
@@ -428,23 +497,27 @@ function criarCardReserva(
 
 
     const cliente =
-        document.createElement("div");
-
-    cliente.classList.add(
-        "admin-reserva-cliente"
-    );
+        document.createElement(
+            "div"
+        );
 
 
     const nome =
-        document.createElement("strong");
+        document.createElement(
+            "h3"
+        );
+
 
     nome.textContent =
         reserva.nome ||
-        "Cliente";
+        "Cliente C3";
 
 
     const email =
-        document.createElement("span");
+        document.createElement(
+            "p"
+        );
+
 
     email.textContent =
         reserva.email ||
@@ -457,13 +530,23 @@ function criarCardReserva(
     );
 
 
+
+    /* =====================================
+       STATUS
+    ===================================== */
+
     const status =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
+
 
     status.classList.add(
-        "reserva-status",
-        reserva.status || "pendente"
+        "admin-reserva-status",
+        reserva.status ||
+            "pendente"
     );
+
 
     status.textContent =
         formatarStatus(
@@ -477,108 +560,150 @@ function criarCardReserva(
     );
 
 
-    /* DETALHES */
 
-    const detalhes =
-        document.createElement("div");
+    /* =====================================
+       INFORMAÇÕES
+    ===================================== */
 
-    detalhes.classList.add(
-        "admin-reserva-detalhes"
-    );
-
-
-    const blocoData =
-        document.createElement("div");
-
-    const tituloData =
-        document.createElement("span");
-
-    tituloData.textContent =
-        "DATA";
-
-    const valorData =
-        document.createElement("strong");
-
-    valorData.textContent =
-        formatarData(
-            reserva.data
+    const infos =
+        document.createElement(
+            "div"
         );
 
-    blocoData.append(
-        tituloData,
-        valorData
+
+    infos.classList.add(
+        "admin-reserva-infos"
     );
 
 
-    const blocoHorario =
-        document.createElement("div");
+    const dados = [
 
-    const tituloHorario =
-        document.createElement("span");
+        {
+            label:
+                "DATA",
 
-    tituloHorario.textContent =
-        "HORÁRIO";
+            valor:
+                formatarData(
+                    reserva.data
+                )
+        },
 
-    const valorHorario =
-        document.createElement("strong");
+        {
+            label:
+                "HORÁRIO",
 
-    valorHorario.textContent =
-        reserva.horario ||
-        "--:--";
+            valor:
+                reserva.horario ||
+                "--:--"
+        },
 
-    blocoHorario.append(
-        tituloHorario,
-        valorHorario
-    );
+        {
+            label:
+                "PESSOAS",
 
+            valor:
+                String(
+                    reserva.pessoas ||
+                    0
+                )
+        }
 
-    const blocoPessoas =
-        document.createElement("div");
-
-    const tituloPessoas =
-        document.createElement("span");
-
-    tituloPessoas.textContent =
-        "PESSOAS";
-
-    const valorPessoas =
-        document.createElement("strong");
-
-    valorPessoas.textContent =
-        reserva.pessoas || 0;
-
-    blocoPessoas.append(
-        tituloPessoas,
-        valorPessoas
-    );
+    ];
 
 
-    detalhes.append(
-        blocoData,
-        blocoHorario,
-        blocoPessoas
+    dados.forEach(
+        (dado) => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            const label =
+                document.createElement(
+                    "span"
+                );
+
+
+            label.textContent =
+                dado.label;
+
+
+            const valor =
+                document.createElement(
+                    "strong"
+                );
+
+
+            valor.textContent =
+                dado.valor;
+
+
+            item.append(
+                label,
+                valor
+            );
+
+
+            infos.appendChild(
+                item
+            );
+        }
     );
 
 
     card.append(
         topo,
-        detalhes
+        infos
     );
 
 
-    /* OBSERVAÇÕES */
 
-    if (reserva.observacoes) {
+    /* =====================================
+       OBSERVAÇÕES
+    ===================================== */
+
+    if (
+        reserva.observacoes
+    ) {
 
         const observacoes =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         observacoes.classList.add(
             "admin-reserva-observacoes"
         );
 
-        observacoes.textContent =
+
+        const titulo =
+            document.createElement(
+                "span"
+            );
+
+
+        titulo.textContent =
+            "OBSERVAÇÕES";
+
+
+        const texto =
+            document.createElement(
+                "p"
+            );
+
+
+        texto.textContent =
             reserva.observacoes;
+
+
+        observacoes.append(
+            titulo,
+            texto
+        );
+
 
         card.appendChild(
             observacoes
@@ -586,131 +711,226 @@ function criarCardReserva(
     }
 
 
-    /* AÇÕES */
+
+    /* =====================================
+       AÇÕES
+    ===================================== */
 
     const acoes =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     acoes.classList.add(
         "admin-reserva-acoes"
     );
 
 
+
+    /* =====================================
+       CONFIRMAR
+    ===================================== */
+
     if (
-        reserva.status !== "confirmada"
+        reserva.status !==
+            "confirmada" &&
+
+        reserva.status !==
+            "cancelada"
     ) {
 
-        acoes.appendChild(
+        const confirmar =
             criarBotao(
+
                 "Confirmar",
-                "admin-confirmar",
-                () => {
-                    alterarStatus(
+
+                "confirmar",
+
+                async () => {
+
+                    await alterarStatus(
                         reserva.id,
                         "confirmada"
                     );
+
                 }
-            )
+            );
+
+
+        acoes.appendChild(
+            confirmar
         );
     }
 
 
+
+    /* =====================================
+       CANCELAR
+    ===================================== */
+
     if (
-        reserva.status !== "cancelada"
+        reserva.status !==
+        "cancelada"
     ) {
 
-        acoes.appendChild(
+        const cancelar =
             criarBotao(
+
                 "Cancelar",
-                "admin-cancelar",
-                () => {
-                    alterarStatus(
+
+                "cancelar",
+
+                async () => {
+
+                    const confirmou =
+                        window.confirm(
+                            "Deseja cancelar esta reserva?"
+                        );
+
+
+                    if (!confirmou) {
+
+                        return;
+                    }
+
+
+                    await alterarStatus(
                         reserva.id,
                         "cancelada"
                     );
+
                 }
-            )
+            );
+
+
+        acoes.appendChild(
+            cancelar
         );
     }
 
 
-    acoes.appendChild(
+
+    /* =====================================
+       APAGAR
+    ===================================== */
+
+    const apagar =
         criarBotao(
+
             "Apagar",
-            "admin-apagar",
-            () => {
-                apagarReserva(
+
+            "apagar",
+
+            async () => {
+
+                await apagarReserva(
                     reserva.id
                 );
+
             }
-        )
+        );
+
+
+    acoes.appendChild(
+        apagar
     );
 
 
-    card.appendChild(
-        acoes
-    );
+
+    /* =====================================
+       ADICIONAR AÇÕES
+    ===================================== */
+
+    if (
+        acoes.children.length > 0
+    ) {
+
+        card.appendChild(
+            acoes
+        );
+    }
 
 
     return card;
 }
 
 
-/* =====================================
+
+/* =========================================
    ESTATÍSTICAS
-===================================== */
+========================================= */
 
 function atualizarEstatisticas(
     reservas
 ) {
 
-    const total =
-        reservas.length;
-
     const pendentes =
         reservas.filter(
-            reserva =>
-                reserva.status === "pendente"
+            (reserva) =>
+
+                !reserva.status ||
+
+                reserva.status ===
+                    "pendente"
+
         ).length;
+
 
     const confirmadas =
         reservas.filter(
-            reserva =>
-                reserva.status === "confirmada"
+            (reserva) =>
+
+                reserva.status ===
+                    "confirmada"
+
         ).length;
+
 
     const canceladas =
         reservas.filter(
-            reserva =>
-                reserva.status === "cancelada"
+            (reserva) =>
+
+                reserva.status ===
+                    "cancelada"
+
         ).length;
 
 
+
     if (totalElemento) {
+
         totalElemento.textContent =
-            total;
+            reservas.length;
     }
 
+
     if (pendentesElemento) {
+
         pendentesElemento.textContent =
             pendentes;
     }
 
+
     if (confirmadasElemento) {
+
         confirmadasElemento.textContent =
             confirmadas;
     }
 
+
     if (canceladasElemento) {
+
         canceladasElemento.textContent =
             canceladas;
     }
 }
 
 
-/* =====================================
-   RENDERIZAR LISTA
-===================================== */
+
+/* =========================================
+   RENDERIZAR RESERVAS
+========================================= */
 
 function renderizarReservas(
     elemento,
@@ -719,35 +939,45 @@ function renderizarReservas(
 ) {
 
     if (!elemento) {
+
         return;
     }
+
 
     elemento.innerHTML =
         "";
 
 
-    if (reservas.length === 0) {
+    if (
+        reservas.length === 0
+    ) {
 
         const vazio =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         vazio.classList.add(
             "admin-vazio"
         );
 
+
         vazio.textContent =
             textoVazio;
+
 
         elemento.appendChild(
             vazio
         );
+
 
         return;
     }
 
 
     reservas.forEach(
-        reserva => {
+        (reserva) => {
 
             elemento.appendChild(
                 criarCardReserva(
@@ -760,272 +990,218 @@ function renderizarReservas(
 }
 
 
-/* =====================================
-   RENDERIZAR RESERVAS
-===================================== */
+
+/* =========================================
+   RENDERIZAR TODAS AS RESERVAS
+========================================= */
 
 function renderizarPainelReservas(
     reservas
 ) {
 
+    atualizarEstatisticas(
+        reservas
+    );
+
+
     const hoje =
         dataLocalISO();
 
 
-    const hojeLista =
+
+    /* =====================================
+       HOJE
+    ===================================== */
+
+    const reservasHoje =
         reservas.filter(
-            reserva =>
-                reserva.data === hoje &&
-                reserva.status !== "cancelada"
+            (reserva) =>
+
+                reserva.data ===
+                hoje
         );
 
 
-    const futuras =
+    reservasHoje.sort(
+        (a, b) => {
+
+            const horarioA =
+                a.horario || "";
+
+
+            const horarioB =
+                b.horario || "";
+
+
+            return (
+                horarioA.localeCompare(
+                    horarioB
+                )
+            );
+        }
+    );
+
+
+
+    /* =====================================
+       PRÓXIMAS
+    ===================================== */
+
+    const reservasProximas =
         reservas.filter(
-            reserva =>
-                reserva.data > hoje &&
-                reserva.status !== "cancelada"
+            (reserva) =>
+
+                reserva.data &&
+
+                reserva.data >
+                    hoje &&
+
+                reserva.status !==
+                    "cancelada"
         );
 
 
-    const antigas =
+    reservasProximas.sort(
+        (a, b) => {
+
+            const reservaA =
+                `${a.data || ""} ${a.horario || ""}`;
+
+
+            const reservaB =
+                `${b.data || ""} ${b.horario || ""}`;
+
+
+            return (
+                reservaA.localeCompare(
+                    reservaB
+                )
+            );
+        }
+    );
+
+
+
+    /* =====================================
+       HISTÓRICO
+    ===================================== */
+
+    const reservasAntigas =
         reservas.filter(
-            reserva =>
-                reserva.data < hoje ||
-                reserva.status === "cancelada"
+            (reserva) => {
+
+                if (
+                    !reserva.data
+                ) {
+
+                    return false;
+                }
+
+
+                const passou =
+                    reserva.data <
+                    hoje;
+
+
+                const futuraCancelada =
+                    reserva.data >
+                        hoje &&
+
+                    reserva.status ===
+                        "cancelada";
+
+
+                return (
+                    passou ||
+                    futuraCancelada
+                );
+            }
         );
 
 
-    hojeLista.sort(
-        (a, b) =>
-            `${a.data || ""} ${a.horario || ""}`
-                .localeCompare(
-                    `${b.data || ""} ${b.horario || ""}`
+    reservasAntigas.sort(
+        (a, b) => {
+
+            const reservaA =
+                `${a.data || ""} ${a.horario || ""}`;
+
+
+            const reservaB =
+                `${b.data || ""} ${b.horario || ""}`;
+
+
+            return (
+                reservaB.localeCompare(
+                    reservaA
                 )
+            );
+        }
     );
 
 
-    futuras.sort(
-        (a, b) =>
-            `${a.data || ""} ${a.horario || ""}`
-                .localeCompare(
-                    `${b.data || ""} ${b.horario || ""}`
-                )
-    );
 
-
-    antigas.sort(
-        (a, b) =>
-            `${b.data || ""} ${b.horario || ""}`
-                .localeCompare(
-                    `${a.data || ""} ${a.horario || ""}`
-                )
-    );
-
+    /* =====================================
+       MOSTRAR
+    ===================================== */
 
     renderizarReservas(
+        listaReservas,
         reservasHoje,
-        hojeLista,
         "Nenhuma reserva para hoje."
     );
 
 
     renderizarReservas(
+        listaReservasProximas,
         reservasProximas,
-        futuras,
-        "Nenhuma reserva próxima."
+        "Nenhuma reserva para os próximos dias."
     );
 
 
     renderizarReservas(
+        listaReservasAntigas,
         reservasAntigas,
-        antigas,
         "Nenhuma reserva no histórico."
     );
 }
 
 
-/* =====================================
-   RESPONDER MENSAGEM
-===================================== */
 
-async function responderMensagem(
-    mensagemId,
-    textarea,
-    botao
-) {
-
-    const resposta =
-        textarea.value.trim();
-
-
-    if (!resposta) {
-
-        alert(
-            "Digite uma resposta."
-        );
-
-        return;
-    }
-
-
-    try {
-
-        botao.disabled =
-            true;
-
-        botao.textContent =
-            "Enviando...";
-
-
-        await updateDoc(
-            doc(
-                db,
-                "mensagens",
-                mensagemId
-            ),
-            {
-                resposta:
-                    resposta,
-
-                respondido:
-                    true,
-
-                respondidoEm:
-                    serverTimestamp(),
-
-                respondidoPor:
-                    auth.currentUser?.email ||
-                    "Administrador",
-
-                lida:
-                    true,
-
-                lidaEm:
-                    serverTimestamp()
-            }
-        );
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao responder mensagem:",
-            erro
-        );
-
-        alert(
-            "Não foi possível enviar a resposta."
-        );
-
-        botao.disabled =
-            false;
-
-        botao.textContent =
-            "Enviar resposta";
-    }
-}
-
-
-/* =====================================
-   MARCAR MENSAGEM COMO LIDA
-===================================== */
-
-async function marcarMensagemComoLida(
-    mensagemId
-) {
-
-    try {
-
-        await updateDoc(
-            doc(
-                db,
-                "mensagens",
-                mensagemId
-            ),
-            {
-                lida:
-                    true,
-
-                lidaEm:
-                    serverTimestamp()
-            }
-        );
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao marcar mensagem como lida:",
-            erro
-        );
-    }
-}
-
-
-/* =====================================
-   APAGAR MENSAGEM
-===================================== */
-
-async function apagarMensagem(
-    mensagemId
-) {
-
-    const confirmar =
-        window.confirm(
-            "Deseja realmente apagar esta mensagem?"
-        );
-
-    if (!confirmar) {
-        return;
-    }
-
-
-    try {
-
-        await deleteDoc(
-            doc(
-                db,
-                "mensagens",
-                mensagemId
-            )
-        );
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao apagar mensagem:",
-            erro
-        );
-
-        alert(
-            "Não foi possível apagar a mensagem."
-        );
-    }
-}
-
-
-/* =====================================
+/* =========================================
    CARD DE MENSAGEM
-===================================== */
+========================================= */
 
 function criarCardMensagem(
     mensagem
 ) {
 
     const card =
-        document.createElement("article");
+        document.createElement(
+            "article"
+        );
+
 
     card.classList.add(
         "admin-mensagem-card"
     );
 
 
-    if (mensagem.respondido) {
+
+    /* =====================================
+       ESTADO VISUAL
+    ===================================== */
+
+    if (
+        mensagem.respondido
+    ) {
 
         card.classList.add(
             "mensagem-respondida"
         );
 
-    } else if (mensagem.lida) {
+    } else if (
+        mensagem.lida
+    ) {
 
         card.classList.add(
             "mensagem-lida"
@@ -1039,44 +1215,96 @@ function criarCardMensagem(
     }
 
 
-    /* TOPO */
+
+    /* =====================================
+       TOPO
+    ===================================== */
 
     const topo =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
+
 
     topo.classList.add(
         "admin-mensagem-topo"
     );
 
 
-    const dados =
-        document.createElement("div");
+    const usuario =
+        document.createElement(
+            "div"
+        );
 
 
     const nome =
-        document.createElement("strong");
+        document.createElement(
+            "h3"
+        );
+
 
     nome.textContent =
         mensagem.nome ||
-        "Usuário";
+        "Visitante";
 
 
     const email =
-        document.createElement("span");
+        document.createElement(
+            "p"
+        );
+
 
     email.textContent =
         mensagem.email ||
         "E-mail não informado";
 
 
-    dados.append(
+    usuario.append(
         nome,
         email
     );
 
 
+
+    /* =====================================
+       STATUS / DATA
+    ===================================== */
+
+    const lado =
+        document.createElement(
+            "div"
+        );
+
+
+    lado.classList.add(
+        "admin-mensagem-meta"
+    );
+
+
+    const tipo =
+        document.createElement(
+            "span"
+        );
+
+
+    tipo.classList.add(
+        "admin-mensagem-nova"
+    );
+
+
+    tipo.textContent =
+        mensagem.respondido
+            ? "RESPONDIDA"
+            : mensagem.lida
+                ? "LIDA"
+                : "NOVA";
+
+
     const data =
-        document.createElement("small");
+        document.createElement(
+            "small"
+        );
+
 
     data.textContent =
         formatarTimestamp(
@@ -1084,45 +1312,114 @@ function criarCardMensagem(
         );
 
 
-    topo.append(
-        dados,
+    lado.append(
+        tipo,
         data
     );
 
 
-    /* ASSUNTO */
+    topo.append(
+        usuario,
+        lado
+    );
+
+
+
+    /* =====================================
+       ASSUNTO
+    ===================================== */
 
     const assunto =
-        document.createElement("h3");
+        document.createElement(
+            "div"
+        );
 
-    assunto.textContent =
+
+    assunto.classList.add(
+        "admin-mensagem-assunto"
+    );
+
+
+    const assuntoLabel =
+        document.createElement(
+            "span"
+        );
+
+
+    assuntoLabel.textContent =
+        "ASSUNTO";
+
+
+    const assuntoTexto =
+        document.createElement(
+            "strong"
+        );
+
+
+    assuntoTexto.textContent =
         mensagem.assunto ||
         "Sem assunto";
 
 
-    /* TEXTO */
+    assunto.append(
+        assuntoLabel,
+        assuntoTexto
+    );
+
+
+
+    /* =====================================
+       CORPO
+    ===================================== */
+
+    const corpo =
+        document.createElement(
+            "div"
+        );
+
+
+    corpo.classList.add(
+        "admin-mensagem-corpo"
+    );
+
 
     const texto =
-        document.createElement("p");
+        document.createElement(
+            "p"
+        );
+
 
     texto.textContent =
         mensagem.mensagem ||
-        "";
+        "Mensagem vazia.";
+
+
+    corpo.appendChild(
+        texto
+    );
 
 
     card.append(
         topo,
         assunto,
-        texto
+        corpo
     );
 
 
-    /* RESPOSTA */
 
-    if (mensagem.resposta) {
+    /* =====================================
+       RESPOSTA EXISTENTE
+    ===================================== */
+
+    if (
+        mensagem.resposta
+    ) {
 
         const resposta =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         resposta.classList.add(
             "admin-mensagem-resposta"
@@ -1130,14 +1427,20 @@ function criarCardMensagem(
 
 
         const titulo =
-            document.createElement("strong");
+            document.createElement(
+                "strong"
+            );
+
 
         titulo.textContent =
             "RESPOSTA ENVIADA";
 
 
         const respostaTexto =
-            document.createElement("p");
+            document.createElement(
+                "p"
+            );
+
 
         respostaTexto.textContent =
             mensagem.resposta;
@@ -1155,10 +1458,15 @@ function criarCardMensagem(
 
     } else {
 
-        /* ÁREA DE RESPOSTA */
+        /* =====================================
+           ÁREA PARA RESPONDER
+        ===================================== */
 
         const areaResposta =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         areaResposta.classList.add(
             "admin-resposta-area"
@@ -1166,17 +1474,38 @@ function criarCardMensagem(
 
 
         const textarea =
-            document.createElement("textarea");
+            document.createElement(
+                "textarea"
+            );
+
+
+        textarea.classList.add(
+            "admin-resposta-input"
+        );
+
 
         textarea.maxLength =
             1000;
+
+
+        textarea.rows =
+            4;
+
 
         textarea.placeholder =
             "Digite a resposta para o cliente...";
 
 
         const contador =
-            document.createElement("small");
+            document.createElement(
+                "small"
+            );
+
+
+        contador.classList.add(
+            "admin-resposta-contador"
+        );
+
 
         contador.textContent =
             "0 / 1000";
@@ -1193,7 +1522,10 @@ function criarCardMensagem(
 
 
         const botoes =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         botoes.classList.add(
             "admin-resposta-acoes"
@@ -1201,10 +1533,19 @@ function criarCardMensagem(
 
 
         const enviar =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
+
 
         enviar.type =
             "button";
+
+
+        enviar.classList.add(
+            "admin-botao-responder"
+        );
+
 
         enviar.textContent =
             "Enviar resposta";
@@ -1212,9 +1553,9 @@ function criarCardMensagem(
 
         enviar.addEventListener(
             "click",
-            () => {
+            async () => {
 
-                responderMensagem(
+                await responderMensagem(
                     mensagem.id,
                     textarea,
                     enviar
@@ -1242,19 +1583,45 @@ function criarCardMensagem(
     }
 
 
-    /* MARCAR COMO LIDA */
 
-    if (!mensagem.lida) {
+    /* =====================================
+       AÇÕES DA MENSAGEM
+    ===================================== */
+
+    const acoes =
+        document.createElement(
+            "div"
+        );
+
+
+    acoes.classList.add(
+        "admin-mensagem-acoes"
+    );
+
+
+
+    /* =====================================
+       MARCAR COMO LIDA
+    ===================================== */
+
+    if (
+        !mensagem.lida
+    ) {
 
         const ler =
-            document.createElement("button");
+            document.createElement(
+                "button"
+            );
+
 
         ler.type =
             "button";
 
+
         ler.classList.add(
             "admin-marcar-lida"
         );
+
 
         ler.textContent =
             "Marcar como lida";
@@ -1262,9 +1629,9 @@ function criarCardMensagem(
 
         ler.addEventListener(
             "click",
-            () => {
+            async () => {
 
-                marcarMensagemComoLida(
+                await marcarMensagemComoLida(
                     mensagem.id
                 );
 
@@ -1272,23 +1639,31 @@ function criarCardMensagem(
         );
 
 
-        card.appendChild(
+        acoes.appendChild(
             ler
         );
     }
 
 
-    /* APAGAR */
+
+    /* =====================================
+       APAGAR
+    ===================================== */
 
     const apagar =
-        document.createElement("button");
+        document.createElement(
+            "button"
+        );
+
 
     apagar.type =
         "button";
 
+
     apagar.classList.add(
         "admin-apagar-mensagem"
     );
+
 
     apagar.textContent =
         "Apagar mensagem";
@@ -1296,9 +1671,9 @@ function criarCardMensagem(
 
     apagar.addEventListener(
         "click",
-        () => {
+        async () => {
 
-            apagarMensagem(
+            await apagarMensagem(
                 mensagem.id
             );
 
@@ -1306,8 +1681,13 @@ function criarCardMensagem(
     );
 
 
-    card.appendChild(
+    acoes.appendChild(
         apagar
+    );
+
+
+    card.appendChild(
+        acoes
     );
 
 
@@ -1315,15 +1695,200 @@ function criarCardMensagem(
 }
 
 
-/* =====================================
+
+/* =========================================
+   RESPONDER MENSAGEM
+========================================= */
+
+async function responderMensagem(
+    mensagemId,
+    textarea,
+    botao
+) {
+
+    const resposta =
+        textarea.value.trim();
+
+
+    if (!resposta) {
+
+        alert(
+            "Digite uma resposta antes de enviar."
+        );
+
+        return;
+    }
+
+
+    if (
+        resposta.length > 1000
+    ) {
+
+        alert(
+            "A resposta pode ter no máximo 1000 caracteres."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        botao.disabled =
+            true;
+
+
+        botao.textContent =
+            "Enviando...";
+
+
+        await updateDoc(
+
+            doc(
+                db,
+                "mensagens",
+                mensagemId
+            ),
+
+            {
+                resposta:
+                    resposta,
+
+                respondido:
+                    true,
+
+                respondidoEm:
+                    serverTimestamp(),
+
+                lida:
+                    true
+            }
+        );
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao responder mensagem:",
+            erro
+        );
+
+
+        alert(
+            "Não foi possível enviar a resposta."
+        );
+
+
+        botao.disabled =
+            false;
+
+
+        botao.textContent =
+            "Enviar resposta";
+    }
+}
+
+
+
+/* =========================================
+   MARCAR MENSAGEM COMO LIDA
+========================================= */
+
+async function marcarMensagemComoLida(
+    mensagemId
+) {
+
+    try {
+
+        await updateDoc(
+
+            doc(
+                db,
+                "mensagens",
+                mensagemId
+            ),
+
+            {
+                lida:
+                    true
+            }
+        );
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao marcar mensagem como lida:",
+            erro
+        );
+
+
+        alert(
+            "Não foi possível marcar a mensagem como lida."
+        );
+    }
+}
+
+
+
+/* =========================================
+   APAGAR MENSAGEM
+========================================= */
+
+async function apagarMensagem(
+    mensagemId
+) {
+
+    const confirmou =
+        window.confirm(
+            "Tem certeza que deseja apagar esta mensagem?"
+        );
+
+
+    if (!confirmou) {
+
+        return;
+    }
+
+
+    try {
+
+        await deleteDoc(
+
+            doc(
+                db,
+                "mensagens",
+                mensagemId
+            )
+        );
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao apagar mensagem:",
+            erro
+        );
+
+
+        alert(
+            "Não foi possível apagar a mensagem."
+        );
+    }
+}
+
+
+
+/* =========================================
    RENDERIZAR MENSAGENS
-===================================== */
+========================================= */
 
 function renderizarMensagens(
     mensagens
 ) {
 
     if (!listaMensagens) {
+
         return;
     }
 
@@ -1332,90 +1897,103 @@ function renderizarMensagens(
         "";
 
 
-    if (mensagens.length === 0) {
+    if (
+        mensagens.length === 0
+    ) {
 
         const vazio =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         vazio.classList.add(
             "admin-vazio"
         );
 
+
         vazio.textContent =
             "Nenhuma mensagem recebida.";
+
 
         listaMensagens.appendChild(
             vazio
         );
+
 
         return;
     }
 
 
     mensagens.sort(
-        (a, b) =>
-            timestampParaNumero(
-                b.criadoEm
-            ) -
-            timestampParaNumero(
-                a.criadoEm
-            )
+        (a, b) => {
+
+            return (
+                timestampParaNumero(
+                    b.criadoEm
+                ) -
+
+                timestampParaNumero(
+                    a.criadoEm
+                )
+            );
+        }
     );
 
 
     mensagens.forEach(
-        mensagem => {
+        (mensagem) => {
 
             listaMensagens.appendChild(
                 criarCardMensagem(
                     mensagem
                 )
             );
-
         }
     );
 }
 
 
-/* =====================================
+
+/* =========================================
    LISTENER DE RESERVAS
-===================================== */
+========================================= */
 
 function iniciarListenerReservas() {
 
     if (pararReservas) {
+
         pararReservas();
     }
 
 
     pararReservas =
         onSnapshot(
+
             collection(
                 db,
                 "reservas"
             ),
 
-            snapshot => {
+            (snapshot) => {
 
-                const reservas = [];
+                const reservas =
+                    [];
 
 
                 snapshot.forEach(
-                    documento => {
+                    (documento) => {
 
                         reservas.push({
+
                             id:
                                 documento.id,
 
                             ...documento.data()
+
                         });
 
                     }
-                );
-
-
-                atualizarEstatisticas(
-                    reservas
                 );
 
 
@@ -1425,59 +2003,66 @@ function iniciarListenerReservas() {
 
             },
 
-            erro => {
+            (erro) => {
 
                 console.error(
-                    "Erro ao sincronizar reservas:",
+                    "Erro no listener de reservas:",
                     erro
                 );
 
 
-                if (reservasHoje) {
+                if (listaReservas) {
 
-                    reservasHoje.innerHTML =
+                    listaReservas.innerHTML =
                         `
-                        <div class="admin-erro">
-                            Não foi possível carregar as reservas.
-                        </div>
+                            <div class="admin-erro">
+                                Não foi possível carregar as reservas.
+                            </div>
                         `;
                 }
+
             }
         );
 }
 
 
-/* =====================================
+
+/* =========================================
    LISTENER DE MENSAGENS
-===================================== */
+========================================= */
 
 function iniciarListenerMensagens() {
 
     if (pararMensagens) {
+
         pararMensagens();
     }
 
 
     pararMensagens =
         onSnapshot(
+
             collection(
                 db,
                 "mensagens"
             ),
 
-            snapshot => {
+            (snapshot) => {
 
-                const mensagens = [];
+                const mensagens =
+                    [];
 
 
                 snapshot.forEach(
-                    documento => {
+                    (documento) => {
 
                         mensagens.push({
+
                             id:
                                 documento.id,
 
                             ...documento.data()
+
                         });
 
                     }
@@ -1490,10 +2075,10 @@ function iniciarListenerMensagens() {
 
             },
 
-            erro => {
+            (erro) => {
 
                 console.error(
-                    "Erro ao sincronizar mensagens:",
+                    "Erro no listener de mensagens:",
                     erro
                 );
 
@@ -1502,50 +2087,49 @@ function iniciarListenerMensagens() {
 
                     listaMensagens.innerHTML =
                         `
-                        <div class="admin-erro">
-                            Não foi possível carregar as mensagens.
-                        </div>
+                            <div class="admin-erro">
+                                Não foi possível carregar as mensagens.
+                            </div>
                         `;
                 }
+
             }
         );
 }
 
 
-/* =====================================
-   ABRIR PAINEL
-===================================== */
 
-function abrirPainel(user) {
+/* =========================================
+   PARAR LISTENERS
+========================================= */
 
-    if (nomeAdmin) {
+function pararListeners() {
 
-        nomeAdmin.textContent =
-            user.displayName ||
-            user.email?.split("@")[0] ||
-            "Administrador";
+    if (pararReservas) {
+
+        pararReservas();
+
+        pararReservas =
+            null;
     }
 
 
-    if (loading) {
-        loading.hidden = true;
+    if (pararMensagens) {
+
+        pararMensagens();
+
+        pararMensagens =
+            null;
     }
+}
 
 
-    if (negado) {
-        negado.hidden = true;
-    }
 
+/* =========================================
+   REGISTRAR VISUALIZAÇÃO
+========================================= */
 
-    if (conteudo) {
-        conteudo.hidden = false;
-    }
-
-
-    iniciarListenerReservas();
-
-    iniciarListenerMensagens();
-
+function registrarVisualizacaoAdmin() {
 
     localStorage.setItem(
         "c3_admin_ultima_visualizacao",
@@ -1556,40 +2140,168 @@ function abrirPainel(user) {
 }
 
 
-/* =====================================
-   MOSTRAR ACESSO NEGADO
-===================================== */
 
-function mostrarAcessoNegado() {
+/* =========================================
+   VERIFICAR ADMINISTRADOR
+========================================= */
 
-    pararListeners();
+async function verificarAdministrador(
+    user
+) {
+
+    try {
+
+        const referencia =
+            doc(
+                db,
+                "usuarios",
+                user.uid
+            );
 
 
-    if (loading) {
-        loading.hidden = true;
-    }
+        const resultado =
+            await getDoc(
+                referencia
+            );
 
 
-    if (conteudo) {
-        conteudo.hidden = true;
-    }
+        /* =====================================
+           NÃO É ADMIN
+        ===================================== */
+
+        if (
+            !resultado.exists() ||
+
+            resultado.data().admin !==
+                true
+        ) {
+
+            pararListeners();
 
 
-    if (negado) {
-        negado.hidden = false;
+            if (loading) {
+
+                loading.hidden =
+                    true;
+            }
+
+
+            if (negado) {
+
+                negado.hidden =
+                    false;
+            }
+
+
+            if (conteudo) {
+
+                conteudo.hidden =
+                    true;
+            }
+
+
+            return;
+        }
+
+
+
+        /* =====================================
+           É ADMIN
+        ===================================== */
+
+        if (loading) {
+
+            loading.hidden =
+                true;
+        }
+
+
+        if (negado) {
+
+            negado.hidden =
+                true;
+        }
+
+
+        if (conteudo) {
+
+            conteudo.hidden =
+                false;
+        }
+
+
+
+        /* =====================================
+           NOME DO ADMIN
+        ===================================== */
+
+        if (nomeAdmin) {
+
+            nomeAdmin.textContent =
+
+                user.displayName ||
+
+                user.email ||
+
+                "Administrador";
+        }
+
+
+
+        /* =====================================
+           INICIAR TEMPO REAL
+        ===================================== */
+
+        iniciarListenerReservas();
+
+        iniciarListenerMensagens();
+
+
+        registrarVisualizacaoAdmin();
+
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao verificar administrador:",
+            erro
+        );
+
+
+        pararListeners();
+
+
+        if (loading) {
+
+            loading.hidden =
+                true;
+        }
+
+
+        if (negado) {
+
+            negado.hidden =
+                false;
+        }
+
+
+        if (conteudo) {
+
+            conteudo.hidden =
+                true;
+        }
     }
 }
 
 
-/* =====================================
+
+/* =========================================
    AUTENTICAÇÃO
-===================================== */
+========================================= */
 
 onAuthStateChanged(
     auth,
-    async user => {
-
-        /* SEM LOGIN */
+    async (user) => {
 
         if (!user) {
 
@@ -1600,53 +2312,22 @@ onAuthStateChanged(
                 "./login.html"
             );
 
-            return;
-        }
-
-
-        /* MOSTRAR LOADING */
-
-        if (loading) {
-            loading.hidden = false;
-        }
-
-        if (negado) {
-            negado.hidden = true;
-        }
-
-        if (conteudo) {
-            conteudo.hidden = true;
-        }
-
-
-        /* VERIFICAR ADMIN */
-
-        const ehAdmin =
-            await verificarAdministrador(
-                user
-            );
-
-
-        if (!ehAdmin) {
-
-            mostrarAcessoNegado();
 
             return;
         }
 
 
-        /* ADMIN CONFIRMADO */
-
-        abrirPainel(
+        await verificarAdministrador(
             user
         );
     }
 );
 
 
-/* =====================================
-   BOTÃO SAIR
-===================================== */
+
+/* =========================================
+   LOGOUT
+========================================= */
 
 if (botaoSair) {
 
@@ -1655,13 +2336,6 @@ if (botaoSair) {
         async () => {
 
             try {
-
-                botaoSair.disabled =
-                    true;
-
-                botaoSair.textContent =
-                    "Saindo...";
-
 
                 pararListeners();
 
@@ -1672,8 +2346,9 @@ if (botaoSair) {
 
 
                 window.location.replace(
-                    "./login.html"
+                    "../index.html"
                 );
+
 
             } catch (erro) {
 
@@ -1682,13 +2357,8 @@ if (botaoSair) {
                     erro
                 );
 
-
-                botaoSair.disabled =
-                    false;
-
-                botaoSair.textContent =
-                    "Sair da conta";
             }
+
         }
     );
 }
