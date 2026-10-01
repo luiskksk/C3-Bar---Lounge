@@ -35,50 +35,32 @@ const conteudo =
 const nomeAdmin =
     document.querySelector("#admin-nome");
 
-
 const reservasHoje =
     document.querySelector("#admin-reservas");
 
 const reservasProximas =
-    document.querySelector(
-        "#admin-reservas-proximas"
-    );
+    document.querySelector("#admin-reservas-proximas");
 
 const reservasAntigas =
-    document.querySelector(
-        "#admin-reservas-antigas"
-    );
-
+    document.querySelector("#admin-reservas-antigas");
 
 const listaMensagens =
-    document.querySelector(
-        "#admin-mensagens"
-    );
-
+    document.querySelector("#admin-mensagens");
 
 const totalElemento =
     document.querySelector("#admin-total");
 
 const pendentesElemento =
-    document.querySelector(
-        "#admin-pendentes"
-    );
+    document.querySelector("#admin-pendentes");
 
 const confirmadasElemento =
-    document.querySelector(
-        "#admin-confirmadas"
-    );
+    document.querySelector("#admin-confirmadas");
 
 const canceladasElemento =
-    document.querySelector(
-        "#admin-canceladas"
-    );
-
+    document.querySelector("#admin-canceladas");
 
 const botaoSair =
-    document.querySelector(
-        "#admin-sair"
-    );
+    document.querySelector("#admin-sair");
 
 
 /* =====================================
@@ -86,18 +68,16 @@ const botaoSair =
 ===================================== */
 
 let pararReservas = null;
-
 let pararMensagens = null;
 
 
 /* =====================================
-   DATA LOCAL
+   DATA
 ===================================== */
 
 function dataLocalISO() {
 
-    const agora =
-        new Date();
+    const agora = new Date();
 
     const ano =
         agora.getFullYear();
@@ -179,37 +159,47 @@ function timestampParaNumero(timestamp) {
         return timestamp.toDate().getTime();
     }
 
+    if (timestamp instanceof Date) {
+        return timestamp.getTime();
+    }
+
+    if (typeof timestamp === "number") {
+        return timestamp;
+    }
+
     return 0;
 }
 
 
 function formatarTimestamp(timestamp) {
 
-    if (!timestamp) {
+    const numero =
+        timestampParaNumero(timestamp);
+
+    if (!numero) {
         return "Data não disponível";
     }
 
     const data =
-        typeof timestamp.toDate === "function"
-            ? timestamp.toDate()
-            : new Date(timestamp);
+        new Date(numero);
 
-
-    return data.toLocaleDateString(
-        "pt-BR",
-        {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        }
-    ) +
-    " às " +
-    data.toLocaleTimeString(
-        "pt-BR",
-        {
-            hour: "2-digit",
-            minute: "2-digit"
-        }
+    return (
+        data.toLocaleDateString(
+            "pt-BR",
+            {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            }
+        ) +
+        " às " +
+        data.toLocaleTimeString(
+            "pt-BR",
+            {
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        )
     );
 }
 
@@ -220,23 +210,166 @@ function formatarTimestamp(timestamp) {
 
 function formatarStatus(status) {
 
-    switch (status) {
+    if (status === "confirmada") {
+        return "Confirmada";
+    }
 
-        case "confirmada":
-            return "Confirmada";
+    if (status === "cancelada") {
+        return "Cancelada";
+    }
 
-        case "cancelada":
-            return "Cancelada";
+    return "Pendente";
+}
 
-        case "pendente":
-        default:
-            return "Pendente";
+
+/* =====================================
+   VERIFICAR ADMIN
+===================================== */
+
+async function verificarAdministrador(user) {
+
+    if (!user) {
+        return false;
+    }
+
+    try {
+
+        const referencia =
+            doc(
+                db,
+                "usuarios",
+                user.uid
+            );
+
+        const resultado =
+            await getDoc(
+                referencia
+            );
+
+        if (!resultado.exists()) {
+            return false;
+        }
+
+        const dados =
+            resultado.data();
+
+        return dados.admin === true;
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao verificar administrador:",
+            erro
+        );
+
+        return false;
     }
 }
 
 
 /* =====================================
-   BOTÃO
+   PARAR LISTENERS
+===================================== */
+
+function pararListeners() {
+
+    if (pararReservas) {
+
+        pararReservas();
+
+        pararReservas =
+            null;
+    }
+
+    if (pararMensagens) {
+
+        pararMensagens();
+
+        pararMensagens =
+            null;
+    }
+}
+
+
+/* =====================================
+   ALTERAR STATUS DA RESERVA
+===================================== */
+
+async function alterarStatus(
+    reservaId,
+    novoStatus
+) {
+
+    try {
+
+        await updateDoc(
+            doc(
+                db,
+                "reservas",
+                reservaId
+            ),
+            {
+                status: novoStatus
+            }
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao alterar status:",
+            erro
+        );
+
+        alert(
+            "Não foi possível alterar o status da reserva."
+        );
+    }
+}
+
+
+/* =====================================
+   APAGAR RESERVA
+===================================== */
+
+async function apagarReserva(
+    reservaId
+) {
+
+    const confirmar =
+        window.confirm(
+            "Deseja realmente apagar esta reserva?"
+        );
+
+    if (!confirmar) {
+        return;
+    }
+
+    try {
+
+        await deleteDoc(
+            doc(
+                db,
+                "reservas",
+                reservaId
+            )
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao apagar reserva:",
+            erro
+        );
+
+        alert(
+            "Não foi possível apagar a reserva."
+        );
+    }
+}
+
+
+/* =====================================
+   CRIAR BOTÃO
 ===================================== */
 
 function criarBotao(
@@ -269,86 +402,7 @@ function criarBotao(
 
 
 /* =====================================
-   ALTERAR STATUS
-===================================== */
-
-async function alterarStatus(
-    reservaId,
-    novoStatus
-) {
-
-    try {
-
-        await updateDoc(
-            doc(
-                db,
-                "reservas",
-                reservaId
-            ),
-            {
-                status:
-                    novoStatus
-            }
-        );
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao alterar status:",
-            erro
-        );
-
-        alert(
-            "Não foi possível alterar o status."
-        );
-    }
-}
-
-
-/* =====================================
-   APAGAR RESERVA
-===================================== */
-
-async function apagarReserva(
-    reservaId
-) {
-
-    const confirmar =
-        window.confirm(
-            "Deseja realmente apagar esta reserva?"
-        );
-
-    if (!confirmar) {
-        return;
-    }
-
-
-    try {
-
-        await deleteDoc(
-            doc(
-                db,
-                "reservas",
-                reservaId
-            )
-        );
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao apagar reserva:",
-            erro
-        );
-
-        alert(
-            "Não foi possível apagar a reserva."
-        );
-    }
-}
-
-
-/* =====================================
-   CARD RESERVA
+   CARD DE RESERVA
 ===================================== */
 
 function criarCardReserva(
@@ -362,6 +416,8 @@ function criarCardReserva(
         "admin-reserva-card"
     );
 
+
+    /* TOPO */
 
     const topo =
         document.createElement("div");
@@ -421,6 +477,8 @@ function criarCardReserva(
     );
 
 
+    /* DETALHES */
+
     const detalhes =
         document.createElement("div");
 
@@ -429,29 +487,77 @@ function criarCardReserva(
     );
 
 
-    detalhes.innerHTML =
-        `
-            <div>
-                <span>DATA</span>
-                <strong>
-                    ${formatarData(reserva.data)}
-                </strong>
-            </div>
+    const blocoData =
+        document.createElement("div");
 
-            <div>
-                <span>HORÁRIO</span>
-                <strong>
-                    ${reserva.horario || "--:--"}
-                </strong>
-            </div>
+    const tituloData =
+        document.createElement("span");
 
-            <div>
-                <span>PESSOAS</span>
-                <strong>
-                    ${reserva.pessoas || 0}
-                </strong>
-            </div>
-        `;
+    tituloData.textContent =
+        "DATA";
+
+    const valorData =
+        document.createElement("strong");
+
+    valorData.textContent =
+        formatarData(
+            reserva.data
+        );
+
+    blocoData.append(
+        tituloData,
+        valorData
+    );
+
+
+    const blocoHorario =
+        document.createElement("div");
+
+    const tituloHorario =
+        document.createElement("span");
+
+    tituloHorario.textContent =
+        "HORÁRIO";
+
+    const valorHorario =
+        document.createElement("strong");
+
+    valorHorario.textContent =
+        reserva.horario ||
+        "--:--";
+
+    blocoHorario.append(
+        tituloHorario,
+        valorHorario
+    );
+
+
+    const blocoPessoas =
+        document.createElement("div");
+
+    const tituloPessoas =
+        document.createElement("span");
+
+    tituloPessoas.textContent =
+        "PESSOAS";
+
+    const valorPessoas =
+        document.createElement("strong");
+
+    valorPessoas.textContent =
+        reserva.pessoas || 0;
+
+    blocoPessoas.append(
+        tituloPessoas,
+        valorPessoas
+    );
+
+
+    detalhes.append(
+        blocoData,
+        blocoHorario,
+        blocoPessoas
+    );
 
 
     card.append(
@@ -459,6 +565,8 @@ function criarCardReserva(
         detalhes
     );
 
+
+    /* OBSERVAÇÕES */
 
     if (reserva.observacoes) {
 
@@ -478,6 +586,8 @@ function criarCardReserva(
     }
 
 
+    /* AÇÕES */
+
     const acoes =
         document.createElement("div");
 
@@ -494,11 +604,12 @@ function criarCardReserva(
             criarBotao(
                 "Confirmar",
                 "admin-confirmar",
-                () =>
+                () => {
                     alterarStatus(
                         reserva.id,
                         "confirmada"
-                    )
+                    );
+                }
             )
         );
     }
@@ -512,11 +623,12 @@ function criarCardReserva(
             criarBotao(
                 "Cancelar",
                 "admin-cancelar",
-                () =>
+                () => {
                     alterarStatus(
                         reserva.id,
                         "cancelada"
-                    )
+                    );
+                }
             )
         );
     }
@@ -526,10 +638,11 @@ function criarCardReserva(
         criarBotao(
             "Apagar",
             "admin-apagar",
-            () =>
+            () => {
                 apagarReserva(
                     reserva.id
-                )
+                );
+            }
         )
     );
 
@@ -554,20 +667,17 @@ function atualizarEstatisticas(
     const total =
         reservas.length;
 
-
     const pendentes =
         reservas.filter(
             reserva =>
                 reserva.status === "pendente"
         ).length;
 
-
     const confirmadas =
         reservas.filter(
             reserva =>
                 reserva.status === "confirmada"
         ).length;
-
 
     const canceladas =
         reservas.filter(
@@ -599,7 +709,7 @@ function atualizarEstatisticas(
 
 
 /* =====================================
-   RENDERIZAR RESERVAS
+   RENDERIZAR LISTA
 ===================================== */
 
 function renderizarReservas(
@@ -612,14 +722,11 @@ function renderizarReservas(
         return;
     }
 
-
     elemento.innerHTML =
         "";
 
 
-    if (
-        reservas.length === 0
-    ) {
+    if (reservas.length === 0) {
 
         const vazio =
             document.createElement("div");
@@ -640,7 +747,7 @@ function renderizarReservas(
 
 
     reservas.forEach(
-        (reserva) => {
+        reserva => {
 
             elemento.appendChild(
                 criarCardReserva(
@@ -654,86 +761,7 @@ function renderizarReservas(
 
 
 /* =====================================
-   RENDERIZAR TODAS RESERVAS
-===================================== */
-
-function renderizarTodasReservas(
-    reservas
-) {
-
-    const hoje =
-        dataLocalISO();
-
-
-    const reservasHoje =
-        reservas.filter(
-            reserva =>
-                reserva.data === hoje &&
-                reserva.status !== "cancelada"
-        );
-
-
-    const reservasFuturas =
-        reservas.filter(
-            reserva =>
-                reserva.data > hoje &&
-                reserva.status !== "cancelada"
-        );
-
-
-    const reservasHistorico =
-        reservas.filter(
-            reserva =>
-                reserva.data < hoje ||
-                reserva.status === "cancelada"
-        );
-
-
-    const ordenar =
-        (a, b) => {
-
-            const valorA =
-                `${a.data || ""} ${a.horario || ""}`;
-
-            const valorB =
-                `${b.data || ""} ${b.horario || ""}`;
-
-            return valorA.localeCompare(
-                valorB
-            );
-        };
-
-
-    reservasHoje.sort(ordenar);
-
-    reservasFuturas.sort(ordenar);
-
-    reservasHistorico.sort(
-        (a, b) => {
-
-            const valorA =
-                `${a.data || ""} ${a.horario || ""}`;
-
-            const valorB =
-                `${b.data || ""} ${b.horario || ""}`;
-
-            return valorB.localeCompare(
-                valorA
-            );
-        }
-    );
-
-
-    renderizarReservas(
-        reservasHoje,
-        reservasHoje,
-        "Nenhuma reserva para hoje."
-    );
-}
-
-
-/* =====================================
-   CORREÇÃO DO RENDER
+   RENDERIZAR RESERVAS
 ===================================== */
 
 function renderizarPainelReservas(
@@ -768,32 +796,30 @@ function renderizarPainelReservas(
         );
 
 
-    const ordenarCrescente =
+    hojeLista.sort(
         (a, b) =>
             `${a.data || ""} ${a.horario || ""}`
                 .localeCompare(
                     `${b.data || ""} ${b.horario || ""}`
-                );
+                )
+    );
 
 
-    const ordenarDecrescente =
+    futuras.sort(
+        (a, b) =>
+            `${a.data || ""} ${a.horario || ""}`
+                .localeCompare(
+                    `${b.data || ""} ${b.horario || ""}`
+                )
+    );
+
+
+    antigas.sort(
         (a, b) =>
             `${b.data || ""} ${b.horario || ""}`
                 .localeCompare(
                     `${a.data || ""} ${a.horario || ""}`
-                );
-
-
-    hojeLista.sort(
-        ordenarCrescente
-    );
-
-    futuras.sort(
-        ordenarCrescente
-    );
-
-    antigas.sort(
-        ordenarDecrescente
+                )
     );
 
 
@@ -820,7 +846,165 @@ function renderizarPainelReservas(
 
 
 /* =====================================
-   CARD MENSAGEM
+   RESPONDER MENSAGEM
+===================================== */
+
+async function responderMensagem(
+    mensagemId,
+    textarea,
+    botao
+) {
+
+    const resposta =
+        textarea.value.trim();
+
+
+    if (!resposta) {
+
+        alert(
+            "Digite uma resposta."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        botao.disabled =
+            true;
+
+        botao.textContent =
+            "Enviando...";
+
+
+        await updateDoc(
+            doc(
+                db,
+                "mensagens",
+                mensagemId
+            ),
+            {
+                resposta:
+                    resposta,
+
+                respondido:
+                    true,
+
+                respondidoEm:
+                    serverTimestamp(),
+
+                respondidoPor:
+                    auth.currentUser?.email ||
+                    "Administrador",
+
+                lida:
+                    true,
+
+                lidaEm:
+                    serverTimestamp()
+            }
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao responder mensagem:",
+            erro
+        );
+
+        alert(
+            "Não foi possível enviar a resposta."
+        );
+
+        botao.disabled =
+            false;
+
+        botao.textContent =
+            "Enviar resposta";
+    }
+}
+
+
+/* =====================================
+   MARCAR MENSAGEM COMO LIDA
+===================================== */
+
+async function marcarMensagemComoLida(
+    mensagemId
+) {
+
+    try {
+
+        await updateDoc(
+            doc(
+                db,
+                "mensagens",
+                mensagemId
+            ),
+            {
+                lida:
+                    true,
+
+                lidaEm:
+                    serverTimestamp()
+            }
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao marcar mensagem como lida:",
+            erro
+        );
+    }
+}
+
+
+/* =====================================
+   APAGAR MENSAGEM
+===================================== */
+
+async function apagarMensagem(
+    mensagemId
+) {
+
+    const confirmar =
+        window.confirm(
+            "Deseja realmente apagar esta mensagem?"
+        );
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    try {
+
+        await deleteDoc(
+            doc(
+                db,
+                "mensagens",
+                mensagemId
+            )
+        );
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao apagar mensagem:",
+            erro
+        );
+
+        alert(
+            "Não foi possível apagar a mensagem."
+        );
+    }
+}
+
+
+/* =====================================
+   CARD DE MENSAGEM
 ===================================== */
 
 function criarCardMensagem(
@@ -854,6 +1038,8 @@ function criarCardMensagem(
         );
     }
 
+
+    /* TOPO */
 
     const topo =
         document.createElement("div");
@@ -904,6 +1090,8 @@ function criarCardMensagem(
     );
 
 
+    /* ASSUNTO */
+
     const assunto =
         document.createElement("h3");
 
@@ -911,6 +1099,8 @@ function criarCardMensagem(
         mensagem.assunto ||
         "Sem assunto";
 
+
+    /* TEXTO */
 
     const texto =
         document.createElement("p");
@@ -926,6 +1116,8 @@ function criarCardMensagem(
         texto
     );
 
+
+    /* RESPOSTA */
 
     if (mensagem.resposta) {
 
@@ -962,6 +1154,8 @@ function criarCardMensagem(
         );
 
     } else {
+
+        /* ÁREA DE RESPOSTA */
 
         const areaResposta =
             document.createElement("div");
@@ -1018,77 +1212,14 @@ function criarCardMensagem(
 
         enviar.addEventListener(
             "click",
-            async () => {
+            () => {
 
-                const resposta =
-                    textarea.value.trim();
+                responderMensagem(
+                    mensagem.id,
+                    textarea,
+                    enviar
+                );
 
-                if (!resposta) {
-
-                    alert(
-                        "Digite uma resposta."
-                    );
-
-                    return;
-                }
-
-
-                try {
-
-                    enviar.disabled =
-                        true;
-
-                    enviar.textContent =
-                        "Enviando...";
-
-
-                    await updateDoc(
-                        doc(
-                            db,
-                            "mensagens",
-                            mensagem.id
-                        ),
-                        {
-
-                            resposta:
-                                resposta,
-
-                            respondido:
-                                true,
-
-                            respondidoEm:
-                                serverTimestamp(),
-
-                            respondidoPor:
-                                auth.currentUser?.email ||
-                                "Administrador",
-
-                            lida:
-                                true,
-
-                            lidaEm:
-                                serverTimestamp()
-                        }
-                    );
-
-                } catch (erro) {
-
-                    console.error(
-                        "Erro ao responder:",
-                        erro
-                    );
-
-                    alert(
-                        "Não foi possível enviar a resposta."
-                    );
-
-
-                    enviar.disabled =
-                        false;
-
-                    enviar.textContent =
-                        "Enviar resposta";
-                }
             }
         );
 
@@ -1111,6 +1242,8 @@ function criarCardMensagem(
     }
 
 
+    /* MARCAR COMO LIDA */
+
     if (!mensagem.lida) {
 
         const ler =
@@ -1129,32 +1262,12 @@ function criarCardMensagem(
 
         ler.addEventListener(
             "click",
-            async () => {
+            () => {
 
-                try {
+                marcarMensagemComoLida(
+                    mensagem.id
+                );
 
-                    await updateDoc(
-                        doc(
-                            db,
-                            "mensagens",
-                            mensagem.id
-                        ),
-                        {
-                            lida:
-                                true,
-
-                            lidaEm:
-                                serverTimestamp()
-                        }
-                    );
-
-                } catch (erro) {
-
-                    console.error(
-                        "Erro ao marcar mensagem:",
-                        erro
-                    );
-                }
             }
         );
 
@@ -1164,6 +1277,8 @@ function criarCardMensagem(
         );
     }
 
+
+    /* APAGAR */
 
     const apagar =
         document.createElement("button");
@@ -1181,35 +1296,12 @@ function criarCardMensagem(
 
     apagar.addEventListener(
         "click",
-        async () => {
+        () => {
 
-            const confirmar =
-                window.confirm(
-                    "Deseja realmente apagar esta mensagem?"
-                );
+            apagarMensagem(
+                mensagem.id
+            );
 
-            if (!confirmar) {
-                return;
-            }
-
-
-            try {
-
-                await deleteDoc(
-                    doc(
-                        db,
-                        "mensagens",
-                        mensagem.id
-                    )
-                );
-
-            } catch (erro) {
-
-                console.error(
-                    "Erro ao apagar mensagem:",
-                    erro
-                );
-            }
         }
     );
 
@@ -1240,9 +1332,7 @@ function renderizarMensagens(
         "";
 
 
-    if (
-        mensagens.length === 0
-    ) {
+    if (mensagens.length === 0) {
 
         const vazio =
             document.createElement("div");
@@ -1274,7 +1364,7 @@ function renderizarMensagens(
 
 
     mensagens.forEach(
-        (mensagem) => {
+        mensagem => {
 
             listaMensagens.appendChild(
                 criarCardMensagem(
@@ -1288,7 +1378,7 @@ function renderizarMensagens(
 
 
 /* =====================================
-   LISTENER RESERVAS
+   LISTENER DE RESERVAS
 ===================================== */
 
 function iniciarListenerReservas() {
@@ -1305,13 +1395,13 @@ function iniciarListenerReservas() {
                 "reservas"
             ),
 
-            (snapshot) => {
+            snapshot => {
 
                 const reservas = [];
 
 
                 snapshot.forEach(
-                    (documento) => {
+                    documento => {
 
                         reservas.push({
                             id:
@@ -1335,18 +1425,22 @@ function iniciarListenerReservas() {
 
             },
 
-            (erro) => {
+            erro => {
 
                 console.error(
-                    "Erro no listener de reservas:",
+                    "Erro ao sincronizar reservas:",
                     erro
                 );
 
+
                 if (reservasHoje) {
+
                     reservasHoje.innerHTML =
-                        `<div class="admin-erro">
+                        `
+                        <div class="admin-erro">
                             Não foi possível carregar as reservas.
-                        </div>`;
+                        </div>
+                        `;
                 }
             }
         );
@@ -1354,7 +1448,7 @@ function iniciarListenerReservas() {
 
 
 /* =====================================
-   LISTENER MENSAGENS
+   LISTENER DE MENSAGENS
 ===================================== */
 
 function iniciarListenerMensagens() {
@@ -1371,13 +1465,13 @@ function iniciarListenerMensagens() {
                 "mensagens"
             ),
 
-            (snapshot) => {
+            snapshot => {
 
                 const mensagens = [];
 
 
                 snapshot.forEach(
-                    (documento) => {
+                    documento => {
 
                         mensagens.push({
                             id:
@@ -1396,20 +1490,21 @@ function iniciarListenerMensagens() {
 
             },
 
-            (erro) => {
+            erro => {
 
                 console.error(
-                    "Erro no listener de mensagens:",
+                    "Erro ao sincronizar mensagens:",
                     erro
                 );
+
 
                 if (listaMensagens) {
 
                     listaMensagens.innerHTML =
                         `
-                            <div class="admin-erro">
-                                Não foi possível carregar as mensagens.
-                            </div>
+                        <div class="admin-erro">
+                            Não foi possível carregar as mensagens.
+                        </div>
                         `;
                 }
             }
@@ -1418,53 +1513,10 @@ function iniciarListenerMensagens() {
 
 
 /* =====================================
-   ADMIN
+   ABRIR PAINEL
 ===================================== */
 
-async function verificarAdministrador(
-    user
-) {
-
-    try {
-
-        const referencia =
-            doc(
-                db,
-                "usuarios",
-                user.uid
-            );
-
-
-        const resultado =
-            await getDoc(
-                referencia
-            );
-
-
-        return (
-            resultado.exists() &&
-            resultado.data().admin === true
-        );
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao verificar administrador:",
-            erro
-        );
-
-        return false;
-    }
-}
-
-
-/* =====================================
-   PAINEL
-===================================== */
-
-async function carregarPainel(
-    user
-) {
+function abrirPainel(user) {
 
     if (nomeAdmin) {
 
@@ -1479,9 +1531,11 @@ async function carregarPainel(
         loading.hidden = true;
     }
 
+
     if (negado) {
         negado.hidden = true;
     }
+
 
     if (conteudo) {
         conteudo.hidden = false;
@@ -1493,11 +1547,6 @@ async function carregarPainel(
     iniciarListenerMensagens();
 
 
-    /*
-       Ao entrar no painel,
-       marcamos o momento da visualização.
-    */
-
     localStorage.setItem(
         "c3_admin_ultima_visualizacao",
         String(
@@ -1508,24 +1557,43 @@ async function carregarPainel(
 
 
 /* =====================================
+   MOSTRAR ACESSO NEGADO
+===================================== */
+
+function mostrarAcessoNegado() {
+
+    pararListeners();
+
+
+    if (loading) {
+        loading.hidden = true;
+    }
+
+
+    if (conteudo) {
+        conteudo.hidden = true;
+    }
+
+
+    if (negado) {
+        negado.hidden = false;
+    }
+}
+
+
+/* =====================================
    AUTENTICAÇÃO
 ===================================== */
 
 onAuthStateChanged(
     auth,
-    async (user) => {
+    async user => {
+
+        /* SEM LOGIN */
 
         if (!user) {
 
-            if (pararReservas) {
-                pararReservas();
-                pararReservas = null;
-            }
-
-            if (pararMensagens) {
-                pararMensagens();
-                pararMensagens = null;
-            }
+            pararListeners();
 
 
             window.location.replace(
@@ -1536,10 +1604,22 @@ onAuthStateChanged(
         }
 
 
+        /* MOSTRAR LOADING */
+
         if (loading) {
             loading.hidden = false;
         }
 
+        if (negado) {
+            negado.hidden = true;
+        }
+
+        if (conteudo) {
+            conteudo.hidden = true;
+        }
+
+
+        /* VERIFICAR ADMIN */
 
         const ehAdmin =
             await verificarAdministrador(
@@ -1549,23 +1629,15 @@ onAuthStateChanged(
 
         if (!ehAdmin) {
 
-            if (loading) {
-                loading.hidden = true;
-            }
-
-            if (negado) {
-                negado.hidden = false;
-            }
-
-            if (conteudo) {
-                conteudo.hidden = true;
-            }
+            mostrarAcessoNegado();
 
             return;
         }
 
 
-        await carregarPainel(
+        /* ADMIN CONFIRMADO */
+
+        abrirPainel(
             user
         );
     }
@@ -1573,7 +1645,7 @@ onAuthStateChanged(
 
 
 /* =====================================
-   SAIR
+   BOTÃO SAIR
 ===================================== */
 
 if (botaoSair) {
@@ -1591,15 +1663,7 @@ if (botaoSair) {
                     "Saindo...";
 
 
-                if (pararReservas) {
-                    pararReservas();
-                    pararReservas = null;
-                }
-
-                if (pararMensagens) {
-                    pararMensagens();
-                    pararMensagens = null;
-                }
+                pararListeners();
 
 
                 await signOut(
