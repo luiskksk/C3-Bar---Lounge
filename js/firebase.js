@@ -2,7 +2,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/fireba
 
 import {
     getAuth,
-    GoogleAuthProvider
+    GoogleAuthProvider,
+    setPersistence,
+    browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 import {
@@ -20,13 +22,33 @@ const firebaseConfig = {
 };
 
 
-const app = initializeApp(firebaseConfig);
+const app =
+    initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+const auth =
+    getAuth(app);
 
-const db = getFirestore(app);
+const db =
+    getFirestore(app);
 
-const googleProvider = new GoogleAuthProvider();
+const googleProvider =
+    new GoogleAuthProvider();
+
+
+/* =====================================
+   MANTER LOGIN
+===================================== */
+
+setPersistence(
+    auth,
+    browserLocalPersistence
+).catch((erro) => {
+
+    console.error(
+        "Erro ao salvar sessão:",
+        erro
+    );
+});
 
 
 export {
