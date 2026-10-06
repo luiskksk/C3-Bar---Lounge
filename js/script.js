@@ -298,16 +298,28 @@ notificacao.textContent = "0";
     );
 
 
-    const avatar =
-        document.createElement(
-            "span"
-        );
+    const avatar = document.createElement("div");
 
-    avatar.className =
-        "usuario-avatar";
+avatar.className = "usuario-avatar";
 
-    avatar.textContent =
-        inicial;
+if (user.photoURL) {
+
+    const foto = document.createElement("img");
+
+    foto.src = user.photoURL;
+    foto.alt = "Foto de perfil";
+
+    foto.onerror = () => {
+        avatar.textContent = inicial;
+    };
+
+    avatar.appendChild(foto);
+
+} else {
+
+    avatar.textContent = inicial;
+
+}
 
 
     const nome =

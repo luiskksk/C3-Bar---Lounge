@@ -1166,11 +1166,24 @@ onAuthStateChanged(
 
         if (avatarElemento) {
 
-            avatarElemento.textContent =
-                nome
-                    .charAt(0)
-                    .toUpperCase();
-        }
+    if (user.photoURL) {
+
+        avatarElemento.innerHTML = `
+            <img
+                src="${user.photoURL}"
+                alt="Foto de perfil"
+            >
+        `;
+
+    } else {
+
+        avatarElemento.textContent =
+            nome
+                .charAt(0)
+                .toUpperCase();
+
+    }
+}
 
 
         iniciarListenerReservas(

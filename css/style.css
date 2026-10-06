@@ -14390,3 +14390,53 @@ section { position:relative; isolation:isolate; }
     }
 
 }
+
+/* =========================================
+   FOTO DE PERFIL GOOGLE
+========================================= */
+
+.usuario-avatar {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(168, 85, 247, 0.18);
+}
+
+.usuario-avatar img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+
+    display: block !important;
+    object-fit: cover !important;
+
+    border-radius: 50% !important;
+}
+
+/* =========================================================
+   FOTO DE PERFIL — MINHA CONTA
+========================================================= */
+
+#minha-conta-avatar {
+    overflow: hidden !important;
+    border-radius: 50% !important;
+}
+
+#minha-conta-avatar img {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+
+    object-fit: cover !important;
+    object-position: center !important;
+
+    border-radius: 50% !important;
+}
