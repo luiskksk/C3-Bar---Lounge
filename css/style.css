@@ -15560,3 +15560,463 @@ section { position:relative; isolation:isolate; }
     }
 
 }
+
+/* ============================================================
+   C3 | CHECKOUT
+============================================================ */
+
+#checkout-c3,
+#pedido-sucesso-c3 {
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 10010;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+}
+
+
+.checkout-c3-fundo,
+.pedido-sucesso-fundo {
+
+    position: absolute;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, .78);
+
+    backdrop-filter: blur(8px);
+
+}
+
+
+.checkout-c3-modal,
+.pedido-sucesso-modal {
+
+    position: relative;
+
+    width: min(520px, 100%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 32px;
+
+    border: 1px solid rgba(177, 91, 255, .25);
+
+    border-radius: 22px;
+
+    background:
+        radial-gradient(
+            circle at 100% 0%,
+            rgba(137, 53, 218, .18),
+            transparent 38%
+        ),
+        linear-gradient(
+            145deg,
+            #130d1c,
+            #08070c
+        );
+
+    box-shadow:
+        0 30px 100px rgba(0, 0, 0, .65),
+        0 0 50px rgba(135, 50, 210, .12);
+
+    animation: c3ModalEntrada .3s ease;
+
+}
+
+
+@keyframes c3ModalEntrada {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(20px) scale(.97);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0) scale(1);
+
+    }
+
+}
+
+
+.checkout-c3-fechar {
+
+    position: absolute;
+
+    top: 18px;
+
+    right: 18px;
+
+    width: 36px;
+
+    height: 36px;
+
+    border: 1px solid rgba(255,255,255,.1);
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.04);
+
+    color: #fff;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+}
+
+
+.checkout-c3-conteudo h2,
+.pedido-sucesso-modal h2 {
+
+    margin: 8px 0;
+
+    color: #fff;
+
+    font-size: 27px;
+
+}
+
+
+.checkout-c3-conteudo > p,
+.pedido-sucesso-modal > p {
+
+    margin-bottom: 24px;
+
+    color: rgba(255,255,255,.5);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+}
+
+
+.checkout-tag {
+
+    color: #ad69ed;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 3px;
+
+}
+
+
+/* RESUMO */
+
+.checkout-resumo {
+
+    margin-bottom: 22px;
+
+    padding: 14px;
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    border-radius: 13px;
+
+    background: rgba(255,255,255,.025);
+
+}
+
+
+.checkout-produto {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 8px 0;
+
+    color: rgba(255,255,255,.7);
+
+    font-size: 12px;
+
+}
+
+
+.checkout-produto strong {
+
+    color: #c78cff;
+
+}
+
+
+/* FORM */
+
+#checkout-form label {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    margin-bottom: 15px;
+
+    color: rgba(255,255,255,.65);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+#checkout-form input,
+#checkout-form textarea {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 13px;
+
+    border: 1px solid rgba(255,255,255,.09);
+
+    border-radius: 10px;
+
+    outline: none;
+
+    background: rgba(255,255,255,.04);
+
+    color: #fff;
+
+    font-family: inherit;
+
+}
+
+
+#checkout-form textarea {
+
+    min-height: 75px;
+
+    resize: vertical;
+
+}
+
+
+#checkout-form input:focus,
+#checkout-form textarea:focus {
+
+    border-color: rgba(173,91,255,.6);
+
+    box-shadow:
+        0 0 0 3px rgba(157,65,230,.08);
+
+}
+
+
+.checkout-total {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin: 20px 0;
+
+    padding-top: 17px;
+
+    border-top: 1px solid rgba(255,255,255,.07);
+
+}
+
+
+.checkout-total span {
+
+    color: rgba(255,255,255,.5);
+
+}
+
+
+.checkout-total strong {
+
+    color: #fff;
+
+    font-size: 22px;
+
+}
+
+
+.checkout-enviar {
+
+    width: 100%;
+
+    min-height: 50px;
+
+}
+
+
+/* ============================================================
+   PEDIDO REALIZADO
+============================================================ */
+
+.pedido-sucesso-modal {
+
+    text-align: center;
+
+    max-width: 430px;
+
+}
+
+
+.pedido-sucesso-icone {
+
+    width: 70px;
+
+    height: 70px;
+
+    margin: 0 auto 20px;
+
+    border: 1px solid rgba(176,91,255,.4);
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #d09aff;
+
+    font-size: 32px;
+
+    box-shadow:
+        0 0 35px rgba(145,60,220,.2);
+
+}
+
+
+.pedido-sucesso-status,
+.pedido-sucesso-info,
+.pedido-sucesso-total {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-top: 10px;
+
+    padding: 14px 16px;
+
+    border: 1px solid rgba(255,255,255,.07);
+
+    border-radius: 11px;
+
+    background: rgba(255,255,255,.025);
+
+    text-align: left;
+
+}
+
+
+.pedido-sucesso-status span,
+.pedido-sucesso-info span,
+.pedido-sucesso-total span {
+
+    color: rgba(255,255,255,.45);
+
+    font-size: 11px;
+
+}
+
+
+.pedido-sucesso-status strong {
+
+    color: #c48cff;
+
+}
+
+
+.pedido-sucesso-info strong {
+
+    color: #fff;
+
+    font-size: 12px;
+
+}
+
+
+.pedido-sucesso-total strong {
+
+    color: #fff;
+
+    font-size: 18px;
+
+}
+
+
+.pedido-sucesso-fechar {
+
+    width: 100%;
+
+    min-height: 48px;
+
+    margin-top: 20px;
+
+    border: 0;
+
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        #8738c5,
+        #a653e7
+    );
+
+    color: #fff;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+}
+
+
+@media (max-width: 600px) {
+
+    .checkout-c3-modal,
+    .pedido-sucesso-modal {
+
+        padding: 25px 20px;
+
+    }
+
+    .checkout-c3-conteudo h2,
+    .pedido-sucesso-modal h2 {
+
+        font-size: 23px;
+
+    }
+
+}

@@ -1,10 +1,4 @@
-// ============================================================
-// C3 | CARRINHO + FINALIZAÇÃO DE PEDIDO
-// ============================================================
-
-import {
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 import {
     addDoc,
@@ -12,39 +6,36 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
-import {
-    auth,
-    db
-} from "./firebase.js";
+import { auth, db } from "./firebase.js";
 
+
+/* ============================================================
+   CONFIGURAÇÃO
+============================================================ */
 
 const CHAVE_CARRINHO = "c3_carrinho";
 
-let carrinho =
-    JSON.parse(
-        localStorage.getItem(CHAVE_CARRINHO)
-    ) || [];
+let carrinho = JSON.parse(
+    localStorage.getItem(CHAVE_CARRINHO)
+) || [];
 
 let usuarioAtual = null;
 
 
-// ============================================================
-// AUTENTICAÇÃO
-// ============================================================
+/* ============================================================
+   FIREBASE - USUÁRIO LOGADO
+============================================================ */
 
-onAuthStateChanged(
-    auth,
-    (user) => {
+onAuthStateChanged(auth, (usuario) => {
 
-        usuarioAtual = user;
+    usuarioAtual = usuario;
 
-    }
-);
+});
 
 
-// ============================================================
-// SALVAR
-// ============================================================
+/* ============================================================
+   SALVAR CARRINHO
+============================================================ */
 
 function salvarCarrinho() {
 
@@ -52,26 +43,24 @@ function salvarCarrinho() {
         CHAVE_CARRINHO,
         JSON.stringify(carrinho)
     );
+
 }
 
 
-// ============================================================
-// PREÇO
-// ============================================================
+/* ============================================================
+   PREÇO
+============================================================ */
 
 function formatarPreco(valor) {
 
-    return valor.toLocaleString(
-        "pt-BR",
-        {
-            style: "currency",
-            currency: "BRL"
-        }
-    );
+    return Number(valor)
+        .toFixed(2)
+        .replace(".", ",");
+
 }
 
 
-function converterPreco(texto) {
+function pegarPreco(texto) {
 
     return Number(
         texto
@@ -80,145 +69,75 @@ function converterPreco(texto) {
             .replace(",", ".")
             .trim()
     );
+
 }
 
 
-// ============================================================
-// PREPARAR PRODUTOS
-// ============================================================
+function calcularTotal() {
 
-function prepararProdutos() {
+    return carrinho.reduce(
+        (total, produto) => {
 
-    const produtos =
-        document.querySelectorAll(
-            ".produto-loja-card, .box-c3-destaque"
-        );
+            return total +
+                Number(produto.preco) *
+                Number(produto.quantidade);
 
-    produtos.forEach(
-        (produto, index) => {
-
-            const imagem =
-                produto.querySelector("img");
-
-            const nome =
-                produto.querySelector("h3")
-                    ?.textContent
-                    .trim()
-                ||
-                produto.querySelector("h2")
-                    ?.textContent
-                    .replace(/\s+/g, " ")
-                    .trim()
-                ||
-                "Produto C3";
-
-            const precoElemento =
-                produto.querySelector("strong");
-
-            if (
-                !imagem ||
-                !precoElemento
-            ) {
-                return;
-            }
-
-            const preco =
-                converterPreco(
-                    precoElemento.textContent
-                );
-
-            const imagemSrc =
-                imagem.getAttribute("src");
-
-            const numero =
-                produto.querySelector(
-                    ".box-numero"
-                )?.textContent.trim()
-                ||
-                produto.querySelector(
-                    ".produto-loja-info > span"
-                )?.textContent.trim()
-                ||
-                String(index + 1)
-                    .padStart(2, "0");
-
-            const area =
-                produto.querySelector(
-                    ".produto-loja-info"
-                )
-                ||
-                produto.querySelector(
-                    ".box-c3-conteudo"
-                );
-
-            if (!area) {
-                return;
-            }
-
-            if (
-                area.querySelector(
-                    ".btn-adicionar-carrinho"
-                )
-            ) {
-                return;
-            }
-
-            const botao =
-                document.createElement("button");
-
-            botao.type = "button";
-
-            botao.className =
-                "btn-adicionar-carrinho";
-
-            botao.innerHTML = `
-                <span>＋</span>
-                Adicionar ao carrinho
-            `;
-
-            botao.addEventListener(
-                "click",
-                () => {
-
-                    adicionarAoCarrinho({
-
-                        id:
-                            `c3-produto-${numero}`,
-
-                        numero,
-
-                        nome,
-
-                        preco,
-
-                        imagem:
-                            imagemSrc
-
-                    });
-
-                }
-            );
-
-            area.appendChild(botao);
-
-        }
+        },
+        0
     );
+
 }
 
 
-// ============================================================
-// ADICIONAR
-// ============================================================
+/* ============================================================
+   AVISO
+============================================================ */
 
-function adicionarAoCarrinho(
-    produto
-) {
+function mostrarAviso(mensagem) {
+
+    let aviso =
+        document.querySelector(".c3-carrinho-aviso");
+
+
+    if (!aviso) {
+
+        aviso =
+            document.createElement("div");
+
+        aviso.className =
+            "c3-carrinho-aviso";
+
+        document.body.appendChild(aviso);
+
+    }
+
+
+    aviso.textContent = mensagem;
+
+    aviso.classList.add("ativo");
+
+
+    setTimeout(() => {
+
+        aviso.classList.remove("ativo");
+
+    }, 2500);
+
+}
+
+
+/* ============================================================
+   ADICIONAR PRODUTO
+============================================================ */
+
+function adicionarProduto(nome, preco, imagem) {
 
     const existente =
         carrinho.find(
-            item =>
-                item.id === produto.id
+            produto =>
+                produto.nome === nome
         );
+
 
     if (existente) {
 
@@ -228,7 +147,11 @@ function adicionarAoCarrinho(
 
         carrinho.push({
 
-            ...produto,
+            nome: nome,
+
+            preco: Number(preco),
+
+            imagem: imagem,
 
             quantidade: 1
 
@@ -236,153 +159,322 @@ function adicionarAoCarrinho(
 
     }
 
+
     salvarCarrinho();
 
     atualizarCarrinho();
 
-    abrirCarrinho();
-
     mostrarAviso(
-        `${produto.nome} foi adicionado ao carrinho.`
+        `${nome} foi adicionado ao carrinho.`
     );
+
 }
 
 
-// ============================================================
-// QUANTIDADE
-// ============================================================
+/* ============================================================
+   REMOVER
+============================================================ */
 
-function alterarQuantidade(
-    id,
-    quantidade
-) {
+function removerProduto(nome) {
+
+    carrinho =
+        carrinho.filter(
+            produto =>
+                produto.nome !== nome
+        );
+
+
+    salvarCarrinho();
+
+    atualizarCarrinho();
+
+}
+
+
+/* ============================================================
+   ALTERAR QUANTIDADE
+============================================================ */
+
+function alterarQuantidade(nome, valor) {
 
     const produto =
         carrinho.find(
             item =>
-                item.id === id
+                item.nome === nome
         );
+
 
     if (!produto) {
         return;
     }
 
-    produto.quantidade += quantidade;
 
-    if (
-        produto.quantidade <= 0
-    ) {
+    produto.quantidade += valor;
 
-        carrinho =
-            carrinho.filter(
-                item =>
-                    item.id !== id
-            );
+
+    if (produto.quantidade <= 0) {
+
+        removerProduto(nome);
+
+        return;
+
     }
 
+
     salvarCarrinho();
 
     atualizarCarrinho();
+
 }
 
 
-// ============================================================
-// REMOVER
-// ============================================================
+/* ============================================================
+   PREPARAR PRODUTOS
+============================================================ */
 
-function removerProduto(id) {
+function prepararProdutos() {
 
-    carrinho =
-        carrinho.filter(
-            item =>
-                item.id !== id
+    const produtos =
+        document.querySelectorAll(
+            ".produto-loja-card"
         );
 
-    salvarCarrinho();
 
-    atualizarCarrinho();
-}
+    produtos.forEach((card, index) => {
+
+        if (
+            card.querySelector(
+                ".btn-adicionar-carrinho"
+            )
+        ) {
+            return;
+        }
 
 
-// ============================================================
-// TOTAL
-// ============================================================
+        const nomeElemento =
+            card.querySelector("h3");
 
-function calcularTotal() {
+        const precoElemento =
+            card.querySelector("strong");
 
-    return carrinho.reduce(
-        (
-            total,
-            produto
-        ) => {
+        const imagemElemento =
+            card.querySelector("img");
 
-            return (
-                total +
-                produto.preco *
-                produto.quantidade
+
+        if (
+            !nomeElemento ||
+            !precoElemento
+        ) {
+            return;
+        }
+
+
+        const nome =
+            nomeElemento.textContent.trim();
+
+
+        const preco =
+            pegarPreco(
+                precoElemento.textContent
             );
 
-        },
-        0
-    );
-}
+
+        const imagem =
+            imagemElemento
+                ? imagemElemento.src
+                : "";
 
 
-// ============================================================
-// ESTRUTURA
-// ============================================================
+        const botao =
+            document.createElement("button");
 
-function criarCarrinho() {
+
+        botao.type = "button";
+
+        botao.className =
+            "btn-adicionar-carrinho";
+
+
+        botao.innerHTML = `
+            <span>+</span>
+            Adicionar ao carrinho
+        `;
+
+
+        botao.addEventListener(
+            "click",
+            () => {
+
+                adicionarProduto(
+                    nome,
+                    preco,
+                    imagem
+                );
+
+            }
+        );
+
+
+        const info =
+            card.querySelector(
+                ".produto-loja-info"
+            );
+
+
+        if (info) {
+
+            info.appendChild(botao);
+
+        }
+
+    });
+
+
+    /* ========================================================
+       BOX C3
+    ======================================================== */
+
+    const box =
+        document.querySelector(
+            ".box-c3-destaque"
+        );
+
+
+    if (!box) {
+        return;
+    }
+
 
     if (
-        document.querySelector(
-            ".c3-carrinho"
+        box.querySelector(
+            ".btn-adicionar-carrinho"
         )
     ) {
         return;
     }
 
-    const estrutura =
+
+    const imagem =
+        box.querySelector("img");
+
+
+    const conteudo =
+        box.querySelector(
+            ".box-c3-conteudo"
+        );
+
+
+    if (!conteudo) {
+        return;
+    }
+
+
+    const botao =
+        document.createElement("button");
+
+
+    botao.type = "button";
+
+    botao.className =
+        "btn-adicionar-carrinho";
+
+
+    botao.innerHTML = `
+        <span>+</span>
+        Adicionar ao carrinho
+    `;
+
+
+    botao.addEventListener(
+        "click",
+        () => {
+
+            adicionarProduto(
+                "Box C3",
+                249.90,
+                imagem
+                    ? imagem.src
+                    : ""
+            );
+
+        }
+    );
+
+
+    conteudo.appendChild(botao);
+
+}
+
+
+/* ============================================================
+   CRIAR CARRINHO
+============================================================ */
+
+function criarCarrinho() {
+
+    let estrutura =
+        document.querySelector(
+            "#c3-carrinho-estrutura"
+        );
+
+
+    if (estrutura) {
+        return estrutura;
+    }
+
+
+    estrutura =
         document.createElement("div");
+
+
+    estrutura.id =
+        "c3-carrinho-estrutura";
+
 
     estrutura.innerHTML = `
 
+        <!-- BOTÃO -->
+
         <button
-            class="c3-carrinho-botao"
-            id="c3CarrinhoBotao"
             type="button"
+            class="c3-carrinho-botao"
+            aria-label="Abrir carrinho"
         >
 
             <span class="c3-carrinho-icone">
                 🛒
             </span>
 
-            <span
-                class="c3-carrinho-contador"
-                id="c3CarrinhoContador"
-            >
+            <span class="c3-carrinho-contador">
                 0
             </span>
 
         </button>
 
 
+        <!-- OVERLAY -->
+
         <div
             class="c3-carrinho-overlay"
-            id="c3CarrinhoOverlay"
         ></div>
 
 
+        <!-- CARRINHO -->
+
         <aside
             class="c3-carrinho"
-            id="c3Carrinho"
+            aria-label="Carrinho de compras"
         >
 
-            <div class="c3-carrinho-header">
+            <div
+                class="c3-carrinho-header"
+            >
 
                 <div>
 
-                    <span class="c3-carrinho-tag">
+                    <span
+                        class="c3-carrinho-tag"
+                    >
                         C3 COLLECTION
                     </span>
 
@@ -392,10 +484,11 @@ function criarCarrinho() {
 
                 </div>
 
+
                 <button
-                    class="c3-carrinho-fechar"
-                    id="c3CarrinhoFechar"
                     type="button"
+                    class="c3-carrinho-fechar"
+                    aria-label="Fechar carrinho"
                 >
                     ×
                 </button>
@@ -405,17 +498,17 @@ function criarCarrinho() {
 
             <div
                 class="c3-carrinho-itens"
-                id="c3CarrinhoItens"
             ></div>
 
 
             <div
                 class="c3-carrinho-vazio"
-                id="c3CarrinhoVazio"
             >
 
-                <div class="c3-carrinho-vazio-icone">
-                    ◇
+                <div
+                    class="c3-carrinho-vazio-icone"
+                >
+                    🛒
                 </div>
 
                 <h3>
@@ -423,24 +516,26 @@ function criarCarrinho() {
                 </h3>
 
                 <p>
-                    Escolha seus itens favoritos
-                    da C3 Collection.
+                    Adicione algum produto da C3 Collection
+                    para começar sua compra.
                 </p>
 
             </div>
 
 
-            <div class="c3-carrinho-footer">
+            <div
+                class="c3-carrinho-footer"
+            >
 
-                <div class="c3-carrinho-total">
+                <div
+                    class="c3-carrinho-total"
+                >
 
                     <span>
                         Total
                     </span>
 
-                    <strong
-                        id="c3CarrinhoTotal"
-                    >
+                    <strong>
                         R$ 0,00
                     </strong>
 
@@ -448,480 +543,601 @@ function criarCarrinho() {
 
 
                 <button
-                    class="c3-carrinho-finalizar"
-                    id="c3CarrinhoFinalizar"
                     type="button"
+                    class="c3-carrinho-finalizar"
                 >
-                    Finalizar pedido
-                    <span>→</span>
+
+                    Finalizar compra
+
+                    <span>
+                        →
+                    </span>
+
                 </button>
+
+
+                <p
+                    class="c3-carrinho-info"
+                >
+                    Seu pedido será enviado para análise
+                    após a confirmação.
+                </p>
 
             </div>
 
         </aside>
+
     `;
+
 
     document.body.appendChild(
         estrutura
     );
 
 
-    document
-        .getElementById(
-            "c3CarrinhoBotao"
-        )
-        .addEventListener(
-            "click",
-            abrirCarrinho
-        );
+    return estrutura;
 
-
-    document
-        .getElementById(
-            "c3CarrinhoFechar"
-        )
-        .addEventListener(
-            "click",
-            fecharCarrinho
-        );
-
-
-    document
-        .getElementById(
-            "c3CarrinhoOverlay"
-        )
-        .addEventListener(
-            "click",
-            fecharCarrinho
-        );
-
-
-    document
-        .getElementById(
-            "c3CarrinhoFinalizar"
-        )
-        .addEventListener(
-            "click",
-            abrirFinalizacao
-        );
 }
 
 
-// ============================================================
-// ATUALIZAR
-// ============================================================
+/* ============================================================
+   ATUALIZAR CARRINHO
+============================================================ */
 
 function atualizarCarrinho() {
 
-    const lista =
-        document.getElementById(
-            "c3CarrinhoItens"
+    const estrutura =
+        criarCarrinho();
+
+
+    const botao =
+        estrutura.querySelector(
+            ".c3-carrinho-botao"
         );
 
-    const vazio =
-        document.getElementById(
-            "c3CarrinhoVazio"
-        );
-
-    const totalElemento =
-        document.getElementById(
-            "c3CarrinhoTotal"
-        );
 
     const contador =
-        document.getElementById(
-            "c3CarrinhoContador"
+        estrutura.querySelector(
+            ".c3-carrinho-contador"
         );
 
-    if (
-        !lista ||
-        !vazio ||
-        !totalElemento ||
-        !contador
-    ) {
-        return;
-    }
+
+    const overlay =
+        estrutura.querySelector(
+            ".c3-carrinho-overlay"
+        );
 
 
-    const quantidadeTotal =
+    const painel =
+        estrutura.querySelector(
+            ".c3-carrinho"
+        );
+
+
+    const itensElemento =
+        estrutura.querySelector(
+            ".c3-carrinho-itens"
+        );
+
+
+    const vazio =
+        estrutura.querySelector(
+            ".c3-carrinho-vazio"
+        );
+
+
+    const totalElemento =
+        estrutura.querySelector(
+            ".c3-carrinho-total strong"
+        );
+
+
+    const finalizar =
+        estrutura.querySelector(
+            ".c3-carrinho-finalizar"
+        );
+
+
+    const quantidade =
         carrinho.reduce(
-            (
-                total,
-                produto
-            ) =>
+            (total, produto) =>
                 total +
-                produto.quantidade,
+                Number(produto.quantidade),
             0
         );
 
 
+    /* CONTADOR */
+
     contador.textContent =
-        quantidadeTotal;
+        quantidade;
 
 
-    contador.classList.toggle(
-        "ativo",
-        quantidadeTotal > 0
-    );
+    if (quantidade > 0) {
+
+        contador.classList.add(
+            "ativo"
+        );
+
+    } else {
+
+        contador.classList.remove(
+            "ativo"
+        );
+
+    }
 
 
-    if (
-        carrinho.length === 0
-    ) {
+    /* TOTAL */
 
-        lista.innerHTML = "";
+    totalElemento.textContent =
+        `R$ ${formatarPreco(
+            calcularTotal()
+        )}`;
+
+
+    /* VAZIO */
+
+    if (carrinho.length === 0) {
 
         vazio.classList.add(
             "visivel"
         );
 
-        totalElemento.textContent =
-            "R$ 0,00";
+        itensElemento.style.display =
+            "none";
 
-        return;
+        finalizar.disabled = true;
+
+        finalizar.style.opacity =
+            ".45";
+
+        finalizar.style.cursor =
+            "not-allowed";
+
+    } else {
+
+        vazio.classList.remove(
+            "visivel"
+        );
+
+        itensElemento.style.display =
+            "";
+
+        finalizar.disabled = false;
+
+        finalizar.style.opacity =
+            "1";
+
+        finalizar.style.cursor =
+            "pointer";
+
     }
 
 
-    vazio.classList.remove(
-        "visivel"
-    );
+    /* ========================================================
+       ITENS
+    ======================================================== */
 
-
-    lista.innerHTML =
+    itensElemento.innerHTML =
         carrinho.map(
-            produto => {
+            (produto, index) => `
 
-                const subtotal =
-                    produto.preco *
-                    produto.quantidade;
+            <div
+                class="c3-carrinho-item"
+            >
 
-                return `
+                <div
+                    class="c3-carrinho-item-img"
+                >
 
-                    <article
-                        class="c3-carrinho-item"
-                    >
+                    ${
+                        produto.imagem
 
-                        <div
-                            class="c3-carrinho-item-img"
-                        >
-
+                        ? `
                             <img
                                 src="${produto.imagem}"
                                 alt="${produto.nome}"
                             >
+                        `
 
-                        </div>
-
-
-                        <div
-                            class="c3-carrinho-item-info"
-                        >
-
-                            <span
-                                class="c3-carrinho-item-numero"
-                            >
-                                ${produto.numero}
+                        : `
+                            <span>
+                                C3
                             </span>
+                        `
+                    }
 
-                            <h3>
-                                ${produto.nome}
-                            </h3>
-
-                            <strong>
-                                ${formatarPreco(
-                                    subtotal
-                                )}
-                            </strong>
+                </div>
 
 
-                            <div
-                                class="c3-carrinho-controles"
-                            >
+                <div
+                    class="c3-carrinho-item-info"
+                >
 
-                                <button
-                                    type="button"
-                                    class="c3-carrinho-qtd"
-                                    data-acao="menos"
-                                    data-id="${produto.id}"
-                                >
-                                    −
-                                </button>
+                    <span
+                        class="c3-carrinho-item-numero"
+                    >
+                        ITEM ${String(index + 1).padStart(2, "0")}
+                    </span>
 
-                                <span>
-                                    ${produto.quantidade}
-                                </span>
 
-                                <button
-                                    type="button"
-                                    class="c3-carrinho-qtd"
-                                    data-acao="mais"
-                                    data-id="${produto.id}"
-                                >
-                                    +
-                                </button>
+                    <h3>
+                        ${produto.nome}
+                    </h3>
 
-                            </div>
 
-                        </div>
+                    <strong>
+                        R$ ${formatarPreco(
+                            produto.preco
+                        )}
+                    </strong>
+
+
+                    <div
+                        class="c3-carrinho-controles"
+                    >
+
+                        <button
+                            type="button"
+                            class="c3-carrinho-qtd"
+                            data-nome="${produto.nome}"
+                            data-valor="-1"
+                        >
+                            −
+                        </button>
+
+
+                        <span>
+                            ${produto.quantidade}
+                        </span>
 
 
                         <button
                             type="button"
-                            class="c3-carrinho-remover"
-                            data-acao="remover"
-                            data-id="${produto.id}"
+                            class="c3-carrinho-qtd"
+                            data-nome="${produto.nome}"
+                            data-valor="1"
                         >
-                            ×
+                            +
                         </button>
 
-                    </article>
-                `;
+                    </div>
 
-            }
+                </div>
+
+
+                <button
+                    type="button"
+                    class="c3-carrinho-remover"
+                    data-nome="${produto.nome}"
+                    aria-label="Remover ${produto.nome}"
+                >
+                    ×
+                </button>
+
+            </div>
+
+        `
         ).join("");
 
 
-    lista
+    /* ========================================================
+       BOTÕES DE QUANTIDADE
+    ======================================================== */
+
+    estrutura
         .querySelectorAll(
-            "[data-acao='menos']"
+            ".c3-carrinho-qtd"
         )
-        .forEach(
-            botao => {
+        .forEach(botaoQtd => {
 
-                botao.addEventListener(
-                    "click",
-                    () => {
+            botaoQtd.addEventListener(
+                "click",
+                () => {
 
-                        alterarQuantidade(
-                            botao.dataset.id,
-                            -1
-                        );
+                    alterarQuantidade(
+                        botaoQtd.dataset.nome,
+                        Number(
+                            botaoQtd.dataset.valor
+                        )
+                    );
 
-                    }
-                );
+                }
+            );
 
-            }
-        );
+        });
 
 
-    lista
+    /* ========================================================
+       REMOVER
+    ======================================================== */
+
+    estrutura
         .querySelectorAll(
-            "[data-acao='mais']"
+            ".c3-carrinho-remover"
         )
-        .forEach(
-            botao => {
+        .forEach(botaoRemover => {
 
-                botao.addEventListener(
-                    "click",
-                    () => {
+            botaoRemover.addEventListener(
+                "click",
+                () => {
 
-                        alterarQuantidade(
-                            botao.dataset.id,
-                            1
-                        );
+                    removerProduto(
+                        botaoRemover.dataset.nome
+                    );
 
-                    }
-                );
+                }
+            );
 
-            }
-        );
+        });
 
-
-    lista
-        .querySelectorAll(
-            "[data-acao='remover']"
-        )
-        .forEach(
-            botao => {
-
-                botao.addEventListener(
-                    "click",
-                    () => {
-
-                        removerProduto(
-                            botao.dataset.id
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-
-    totalElemento.textContent =
-        formatarPreco(
-            calcularTotal()
-        );
 }
 
 
-// ============================================================
-// FINALIZAÇÃO
-// ============================================================
+/* ============================================================
+   ABRIR / FECHAR
+============================================================ */
 
-function abrirFinalizacao() {
+function abrirCarrinho() {
 
-    if (
-        carrinho.length === 0
-    ) {
+    const estrutura =
+        criarCarrinho();
+
+
+    estrutura
+        .querySelector(
+            ".c3-carrinho"
+        )
+        .classList.add("aberto");
+
+
+    estrutura
+        .querySelector(
+            ".c3-carrinho-overlay"
+        )
+        .classList.add("ativo");
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+function fecharCarrinho() {
+
+    const estrutura =
+        criarCarrinho();
+
+
+    estrutura
+        .querySelector(
+            ".c3-carrinho"
+        )
+        .classList.remove("aberto");
+
+
+    estrutura
+        .querySelector(
+            ".c3-carrinho-overlay"
+        )
+        .classList.remove("ativo");
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* ============================================================
+   CHECKOUT
+============================================================ */
+
+function abrirCheckout() {
+
+    if (carrinho.length === 0) {
 
         mostrarAviso(
             "Seu carrinho está vazio."
         );
 
         return;
+
     }
 
 
-    const existente =
-        document.querySelector(
-            ".c3-finalizacao"
+    if (!usuarioAtual) {
+
+        mostrarAviso(
+            "Entre na sua conta para finalizar a compra."
         );
 
-    if (existente) {
 
-        existente.remove();
+        setTimeout(() => {
 
+            window.location.href =
+                "./login.html";
+
+        }, 1200);
+
+
+        return;
+
+    }
+
+
+    fecharCarrinho();
+
+
+    const antigo =
+        document.querySelector(
+            "#checkout-c3"
+        );
+
+
+    if (antigo) {
+        antigo.remove();
     }
 
 
     const modal =
         document.createElement("div");
 
-    modal.className =
-        "c3-finalizacao";
+
+    modal.id =
+        "checkout-c3";
 
 
     modal.innerHTML = `
 
-        <div
-            class="c3-finalizacao-overlay"
-        ></div>
+        <div class="checkout-c3-fundo"></div>
 
 
-        <section
-            class="c3-finalizacao-card"
-        >
+        <div class="checkout-c3-modal">
 
             <button
                 type="button"
-                class="c3-finalizacao-fechar"
-                id="c3FinalizacaoFechar"
+                class="checkout-c3-fechar"
             >
                 ×
             </button>
 
 
-            <div class="c3-finalizacao-topo">
+            <div class="checkout-c3-conteudo">
 
-                <span>
+                <span
+                    class="checkout-tag"
+                >
                     C3 COLLECTION
                 </span>
 
+
                 <h2>
-                    Finalizar pedido
+                    Confirmar pedido
                 </h2>
 
+
                 <p>
-                    Preencha seus dados para
-                    enviar o pedido para o C3.
+                    Confira os dados abaixo
+                    antes de enviar seu pedido.
                 </p>
 
-            </div>
 
+                <div class="checkout-resumo">
 
-            <form
-                id="c3FormularioPedido"
-                class="c3-formulario-pedido"
-            >
+                    ${carrinho.map(
+                        produto => `
 
-                <label>
+                        <div
+                            class="checkout-produto"
+                        >
 
-                    Nome completo
+                            <span>
+                                ${produto.quantidade}x
+                                ${produto.nome}
+                            </span>
 
-                    <input
-                        type="text"
-                        id="pedidoNome"
-                        required
-                        autocomplete="name"
-                        placeholder="Seu nome"
-                    >
+                            <strong>
+                                R$
+                                ${formatarPreco(
+                                    produto.preco *
+                                    produto.quantidade
+                                )}
+                            </strong>
 
-                </label>
+                        </div>
 
-
-                <label>
-
-                    E-mail
-
-                    <input
-                        type="email"
-                        id="pedidoEmail"
-                        required
-                        autocomplete="email"
-                        placeholder="seuemail@email.com"
-                    >
-
-                </label>
-
-
-                <label>
-
-                    Telefone
-
-                    <input
-                        type="tel"
-                        id="pedidoTelefone"
-                        required
-                        autocomplete="tel"
-                        placeholder="(00) 00000-0000"
-                    >
-
-                </label>
-
-
-                <label>
-
-                    Observação
-
-                    <textarea
-                        id="pedidoObservacao"
-                        rows="3"
-                        placeholder="Alguma observação sobre o pedido?"
-                    ></textarea>
-
-                </label>
-
-
-                <div
-                    class="c3-finalizacao-resumo"
-                >
-
-                    <span>
-                        Total do pedido
-                    </span>
-
-                    <strong>
-                        ${formatarPreco(
-                            calcularTotal()
-                        )}
-                    </strong>
+                    `
+                    ).join("")}
 
                 </div>
 
 
-                <button
-                    type="submit"
-                    class="c3-pedido-enviar"
-                >
-                    Enviar pedido
-                    <span>→</span>
-                </button>
+                <form id="checkout-form">
 
-            </form>
+                    <label>
+                        Nome completo
 
-        </section>
+                        <input
+                            type="text"
+                            id="checkout-nome"
+                            value="${
+                                usuarioAtual.displayName || ""
+                            }"
+                            required
+                        >
+                    </label>
+
+
+                    <label>
+                        E-mail
+
+                        <input
+                            type="email"
+                            id="checkout-email"
+                            value="${
+                                usuarioAtual.email || ""
+                            }"
+                            required
+                        >
+                    </label>
+
+
+                    <label>
+                        Telefone
+
+                        <input
+                            type="tel"
+                            id="checkout-telefone"
+                            placeholder="(00) 00000-0000"
+                            required
+                        >
+                    </label>
+
+
+                    <label>
+                        Observação
+
+                        <textarea
+                            id="checkout-observacao"
+                            placeholder="Alguma observação sobre o pedido?"
+                        ></textarea>
+                    </label>
+
+
+                    <div
+                        class="checkout-total"
+                    >
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            R$
+                            ${formatarPreco(
+                                calcularTotal()
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="botao botao-roxo checkout-enviar"
+                    >
+                        Confirmar pedido
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
     `;
 
 
@@ -930,103 +1146,87 @@ function abrirFinalizacao() {
     );
 
 
-    const fechar =
-        () => {
+    /* FECHAR */
 
-            modal.remove();
-
-        };
-
-
-    document
-        .getElementById(
-            "c3FinalizacaoFechar"
+    modal
+        .querySelector(
+            ".checkout-c3-fechar"
         )
         .addEventListener(
             "click",
-            fechar
+            () => modal.remove()
         );
 
 
     modal
         .querySelector(
-            ".c3-finalizacao-overlay"
+            ".checkout-c3-fundo"
         )
         .addEventListener(
             "click",
-            fechar
+            () => modal.remove()
         );
 
 
-    document
-        .getElementById(
-            "c3FormularioPedido"
+    modal
+        .querySelector(
+            "#checkout-form"
         )
         .addEventListener(
             "submit",
-            enviarPedido
+            finalizarCompra
         );
 
-
-    if (usuarioAtual) {
-
-        const nome =
-            usuarioAtual.displayName ||
-            "";
-
-        const email =
-            usuarioAtual.email ||
-            "";
-
-        document.getElementById(
-            "pedidoNome"
-        ).value = nome;
-
-        document.getElementById(
-            "pedidoEmail"
-        ).value = email;
-    }
 }
 
 
-// ============================================================
-// ENVIAR PEDIDO PARA FIREBASE
-// ============================================================
+/* ============================================================
+   FINALIZAR COMPRA
+============================================================ */
 
-async function enviarPedido(
-    evento
-) {
+async function finalizarCompra(evento) {
 
     evento.preventDefault();
 
 
+    if (!usuarioAtual) {
+
+        mostrarAviso(
+            "Sua sessão expirou. Entre novamente."
+        );
+
+        return;
+
+    }
+
+
     const botao =
-        evento.target.querySelector(
-            ".c3-pedido-enviar"
+        document.querySelector(
+            ".checkout-enviar"
         );
 
 
     const nome =
-        document.getElementById(
-            "pedidoNome"
+        document.querySelector(
+            "#checkout-nome"
         ).value.trim();
 
 
     const email =
-        document.getElementById(
-            "pedidoEmail"
+        document.querySelector(
+            "#checkout-email"
         ).value.trim();
 
 
     const telefone =
-        document.getElementById(
-            "pedidoTelefone"
+        document.querySelector(
+            "#checkout-telefone"
         ).value.trim();
 
 
     const observacao =
-        document.getElementById(
-            "pedidoObservacao"
+        document.querySelector(
+            "#checkout-observacao"
         ).value.trim();
 
 
@@ -1041,128 +1241,133 @@ async function enviarPedido(
         );
 
         return;
+
     }
-
-
-    botao.disabled = true;
-
-    botao.innerHTML =
-        `
-            Enviando pedido...
-        `;
 
 
     try {
 
+        botao.disabled = true;
+
+        botao.textContent =
+            "Enviando pedido...";
+
+
         const itens =
-            carrinho.map(
-                produto => ({
+            carrinho.map(produto => ({
 
-                    id:
-                        produto.id,
+                nome:
+                    produto.nome,
 
-                    numero:
-                        produto.numero,
+                preco:
+                    Number(produto.preco),
 
-                    nome:
-                        produto.nome,
+                quantidade:
+                    Number(produto.quantidade),
 
-                    preco:
-                        produto.preco,
+                subtotal:
+                    Number(produto.preco) *
+                    Number(produto.quantidade)
 
-                    quantidade:
-                        produto.quantidade,
-
-                    subtotal:
-                        produto.preco *
-                        produto.quantidade,
-
-                    imagem:
-                        produto.imagem
-
-                })
-            );
+            }));
 
 
         const total =
             calcularTotal();
 
 
-        await addDoc(
-            collection(
-                db,
-                "pedidos"
-            ),
-            {
+        /* ====================================================
+           SALVAR FIRESTORE
+        ==================================================== */
 
-                uid:
-                    usuarioAtual?.uid ||
-                    null,
+        const documento =
+            await addDoc(
+                collection(
+                    db,
+                    "pedidos"
+                ),
+                {
 
-                cliente: {
+                    uid:
+                        usuarioAtual.uid,
 
-                    nome,
+                    cliente: {
 
-                    email,
+                        nome:
+                            nome,
 
-                    telefone
+                        email:
+                            email,
 
-                },
+                        telefone:
+                            telefone
 
-                itens,
+                    },
 
-                total,
+                    itens:
+                        itens,
 
-                observacao,
+                    total:
+                        total,
 
-                status:
-                    "pendente",
+                    observacao:
+                        observacao,
 
-                criadoEm:
-                    serverTimestamp()
+                    status:
+                        "pendente",
 
-            }
+                    criadoEm:
+                        serverTimestamp()
+
+                }
+            );
+
+
+        console.log(
+            "Pedido criado:",
+            documento.id
         );
 
+
+        /* LIMPAR */
 
         carrinho = [];
 
         salvarCarrinho();
 
 
-        atualizarCarrinho();
-
-
         document
             .querySelector(
-                ".c3-finalizacao"
+                "#checkout-c3"
             )
             ?.remove();
 
 
-        fecharCarrinho();
+        atualizarCarrinho();
 
 
-        mostrarAviso(
-            "Pedido enviado com sucesso! 🚀"
+        /* ====================================================
+           TELA DE SUCESSO
+        ==================================================== */
+
+        mostrarSucesso(
+            documento.id,
+            total
         );
 
 
     } catch (erro) {
 
         console.error(
-            "Erro ao enviar pedido:",
+            "Erro ao finalizar compra:",
             erro
         );
 
 
         botao.disabled = false;
 
-        botao.innerHTML =
-            `
-                Tentar novamente
-                <span>→</span>
-            `;
+        botao.textContent =
+            "Confirmar pedido";
 
 
         mostrarAviso(
@@ -1170,135 +1375,206 @@ async function enviarPedido(
         );
 
     }
+
 }
 
 
-// ============================================================
-// ABRIR
-// ============================================================
+/* ============================================================
+   SUCESSO
+============================================================ */
 
-function abrirCarrinho() {
+function mostrarSucesso(idPedido, total) {
 
-    document
-        .getElementById(
-            "c3Carrinho"
-        )
-        ?.classList.add(
-            "aberto"
-        );
+    const modal =
+        document.createElement("div");
 
-    document
-        .getElementById(
-            "c3CarrinhoOverlay"
-        )
-        ?.classList.add(
-            "ativo"
-        );
 
-    document.body.classList.add(
-        "c3-carrinho-aberto"
+    modal.id =
+        "pedido-sucesso-c3";
+
+
+    modal.innerHTML = `
+
+        <div class="pedido-sucesso-fundo"></div>
+
+
+        <div class="pedido-sucesso-modal">
+
+            <div class="pedido-sucesso-icone">
+                ✓
+            </div>
+
+
+            <span class="checkout-tag">
+                C3 COLLECTION
+            </span>
+
+
+            <h2>
+                Pedido realizado!
+            </h2>
+
+
+            <p>
+                Seu pedido foi enviado com sucesso
+                e está aguardando análise.
+            </p>
+
+
+            <div class="pedido-sucesso-status">
+
+                <span>
+                    Status do pedido
+                </span>
+
+                <strong>
+                    Em análise
+                </strong>
+
+            </div>
+
+
+            <div class="pedido-sucesso-info">
+
+                <span>
+                    Número do pedido
+                </span>
+
+                <strong>
+                    #${idPedido.slice(-8).toUpperCase()}
+                </strong>
+
+            </div>
+
+
+            <div class="pedido-sucesso-total">
+
+                <span>
+                    Total
+                </span>
+
+                <strong>
+                    R$ ${formatarPreco(total)}
+                </strong>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="pedido-sucesso-fechar"
+            >
+                Continuar
+            </button>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modal
     );
-}
 
 
-// ============================================================
-// FECHAR
-// ============================================================
-
-function fecharCarrinho() {
-
-    document
-        .getElementById(
-            "c3Carrinho"
+    modal
+        .querySelector(
+            ".pedido-sucesso-fechar"
         )
-        ?.classList.remove(
-            "aberto"
-        );
-
-    document
-        .getElementById(
-            "c3CarrinhoOverlay"
-        )
-        ?.classList.remove(
-            "ativo"
-        );
-
-    document.body.classList.remove(
-        "c3-carrinho-aberto"
-    );
-}
-
-
-// ============================================================
-// AVISO
-// ============================================================
-
-function mostrarAviso(
-    mensagem
-) {
-
-    let aviso =
-        document.querySelector(
-            ".c3-carrinho-aviso"
-        );
-
-
-    if (!aviso) {
-
-        aviso =
-            document.createElement(
-                "div"
-            );
-
-        aviso.className =
-            "c3-carrinho-aviso";
-
-        document.body.appendChild(
-            aviso
-        );
-    }
-
-
-    aviso.textContent =
-        mensagem;
-
-    aviso.classList.add(
-        "ativo"
-    );
-
-
-    clearTimeout(
-        aviso.timer
-    );
-
-
-    aviso.timer =
-        setTimeout(
+        .addEventListener(
+            "click",
             () => {
 
-                aviso.classList.remove(
-                    "ativo"
-                );
+                modal.remove();
 
-            },
-            2600
+            }
         );
+
 }
 
 
-// ============================================================
-// INICIAR
-// ============================================================
+/* ============================================================
+   EVENTOS
+============================================================ */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+function configurarEventos() {
 
+    const estrutura =
         criarCarrinho();
 
-        prepararProdutos();
 
-        atualizarCarrinho();
+    estrutura
+        .querySelector(
+            ".c3-carrinho-botao"
+        )
+        .addEventListener(
+            "click",
+            abrirCarrinho
+        );
 
-    }
-);
+
+    estrutura
+        .querySelector(
+            ".c3-carrinho-fechar"
+        )
+        .addEventListener(
+            "click",
+            fecharCarrinho
+        );
+
+
+    estrutura
+        .querySelector(
+            ".c3-carrinho-overlay"
+        )
+        .addEventListener(
+            "click",
+            fecharCarrinho
+        );
+
+
+    estrutura
+        .querySelector(
+            ".c3-carrinho-finalizar"
+        )
+        .addEventListener(
+            "click",
+            abrirCheckout
+        );
+
+
+    document.addEventListener(
+        "keydown",
+        evento => {
+
+            if (
+                evento.key === "Escape"
+            ) {
+
+                fecharCarrinho();
+
+                document
+                    .querySelector(
+                        "#checkout-c3"
+                    )
+                    ?.remove();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   INICIAR
+============================================================ */
+
+prepararProdutos();
+
+criarCarrinho();
+
+atualizarCarrinho();
+
+configurarEventos();
