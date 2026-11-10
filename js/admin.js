@@ -2057,6 +2057,26 @@ function formatarDinheiroPedido(valor) {
     });
 }
 
+
+async function concluirPedidoAdmin(pedidoId, botao) {
+    if (!window.confirm("Marcar este pedido como concluído?")) return;
+
+    try {
+        botao.disabled = true;
+        botao.textContent = "Salvando...";
+        await updateDoc(doc(db, "pedidos", pedidoId), {
+            status: "concluido",
+            concluidoEm: serverTimestamp(),
+            atualizadoEm: serverTimestamp()
+        });
+    } catch (erro) {
+        console.error("Erro ao concluir pedido:", erro);
+        alert("Não foi possível atualizar este pedido.");
+        botao.disabled = false;
+        botao.textContent = "Marcar como concluído";
+    }
+}
+
 function criarCardPedidoAdmin(pedido) {
     const card = document.createElement("article");
     card.className = "admin-pedido-card";
@@ -2112,6 +2132,19 @@ function criarCardPedidoAdmin(pedido) {
     rodape.append(telefone, total);
 
     card.append(topo, meta, itens, rodape);
+
+    if (!pedidoEstaConcluido(pedido.status) && !pedidoEstaCancelado(pedido.status)) {
+        const acoes = document.createElement("div");
+        acoes.className = "admin-pedido-acoes";
+        const concluir = document.createElement("button");
+        concluir.type = "button";
+        concluir.className = "admin-pedido-concluir";
+        concluir.textContent = "Marcar como concluído";
+        concluir.addEventListener("click", () => concluirPedidoAdmin(pedido.id, concluir));
+        acoes.appendChild(concluir);
+        card.appendChild(acoes);
+    }
+
     if (pedido.observacao) {
         const obs = document.createElement("p");
         obs.className = "admin-pedido-observacao";
@@ -2148,7 +2181,8 @@ function renderizarPainelPedidos(pedidos) {
     const abertos = pedidos.filter(p => !pedidoEstaConcluido(p.status) && !pedidoEstaCancelado(p.status));
     const concluidosHoje = pedidos.filter(p => {
         const data = timestampParaNumero(p.criadoEm);
-        return pedidoEstaConcluido(p.status) && data >= inicioHoje && data < inicioAmanha;
+        const dataConclusao = timestampParaNumero(p.concluidoEm || p.atualizadoEm || p.criadoEm);
+        return pedidoEstaConcluido(p.status) && dataConclusao >= inicioHoje && dataConclusao < inicioAmanha;
     });
     const historico = pedidos.filter(p => {
         const data = timestampParaNumero(p.criadoEm);
