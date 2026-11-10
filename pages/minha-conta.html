@@ -231,7 +231,72 @@
 
             </div>
 
+            <div class="minha-conta-editar-acao">
+                <button
+                    type="button"
+                    id="conta-editar"
+                    class="botao botao-roxo"
+                >
+                    Editar meu nome
+                </button>
+            </div>
+
         </section>
+
+
+        <!-- =====================================
+             EDITAR PERFIL
+        ====================================== -->
+
+        <div
+            class="conta-edicao-modal"
+            id="conta-edicao-modal"
+            aria-hidden="true"
+        >
+            <div class="conta-edicao-conteudo" role="dialog" aria-modal="true" aria-labelledby="conta-edicao-titulo">
+                <button
+                    type="button"
+                    class="conta-edicao-fechar"
+                    id="conta-edicao-fechar"
+                    aria-label="Fechar edição"
+                >
+                    ×
+                </button>
+
+                <p class="tag">SEU PERFIL</p>
+                <h2 id="conta-edicao-titulo">EDITAR <span>NOME.</span></h2>
+                <p class="conta-edicao-descricao">Altere como seu nome aparece na sua conta C3.</p>
+
+                <form id="conta-edicao-form">
+                    <label for="conta-novo-nome">Nome de exibição</label>
+                    <input
+                        type="text"
+                        id="conta-novo-nome"
+                        name="nome"
+                        maxlength="50"
+                        minlength="2"
+                        autocomplete="name"
+                        required
+                    >
+
+                    <p
+                        class="conta-edicao-mensagem"
+                        id="conta-edicao-mensagem"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
+
+                    <div class="conta-edicao-botoes">
+                        <button type="button" class="botao botao-outline" id="conta-edicao-cancelar">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="botao botao-roxo" id="conta-edicao-salvar">
+                            Salvar alterações
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
 
         <!-- =====================================
