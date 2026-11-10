@@ -16020,3 +16020,139 @@ section { position:relative; isolation:isolate; }
     }
 
 }
+
+/* =====================================
+   EDIÇÃO DO PERFIL - MINHA CONTA
+===================================== */
+
+.minha-conta-editar-acao {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 24px;
+}
+
+.conta-edicao-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.conta-edicao-modal.ativo {
+    opacity: 1;
+    visibility: visible;
+}
+
+.conta-edicao-conteudo {
+    position: relative;
+    width: min(100%, 520px);
+    padding: 42px;
+    border: 1px solid rgba(164, 92, 255, 0.38);
+    background:
+        radial-gradient(circle at 90% 0%, rgba(164, 92, 255, 0.16), transparent 42%),
+        #101016;
+    box-shadow: 0 0 60px rgba(121, 61, 198, 0.2);
+    transform: translateY(14px);
+    transition: transform 0.25s ease;
+}
+
+.conta-edicao-modal.ativo .conta-edicao-conteudo {
+    transform: translateY(0);
+}
+
+.conta-edicao-fechar {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    border: 0;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.conta-edicao-conteudo h2 {
+    margin: 12px 0;
+    font-size: clamp(2rem, 5vw, 2.8rem);
+}
+
+.conta-edicao-conteudo h2 span {
+    color: #a45cff;
+}
+
+.conta-edicao-descricao {
+    margin-bottom: 28px;
+    color: rgba(255, 255, 255, 0.62);
+    line-height: 1.6;
+}
+
+.conta-edicao-conteudo label {
+    display: block;
+    margin-bottom: 9px;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.9rem;
+}
+
+.conta-edicao-conteudo input {
+    width: 100%;
+    min-height: 52px;
+    padding: 0 15px;
+    border: 1px solid rgba(164, 92, 255, 0.42);
+    outline: none;
+    background: rgba(255, 255, 255, 0.045);
+    color: #fff;
+    font: inherit;
+}
+
+.conta-edicao-conteudo input:focus {
+    border-color: #a45cff;
+    box-shadow: 0 0 0 3px rgba(164, 92, 255, 0.13);
+}
+
+.conta-edicao-mensagem {
+    min-height: 24px;
+    margin: 12px 0;
+    font-size: 0.9rem;
+}
+
+.conta-edicao-mensagem.sucesso {
+    color: #8ee6ad;
+}
+
+.conta-edicao-mensagem.erro {
+    color: #ff8585;
+}
+
+.conta-edicao-botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.conta-edicao-botoes button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+@media (max-width: 600px) {
+    .conta-edicao-conteudo {
+        padding: 34px 22px 26px;
+    }
+
+    .conta-edicao-botoes {
+        flex-direction: column;
+    }
+
+    .conta-edicao-botoes button {
+        width: 100%;
+    }
+}
