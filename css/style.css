@@ -17096,3 +17096,30 @@ body.conta-modal-aberto {
     padding-bottom: 55px;
   }
 }
+
+
+/* Destaque inicial: somente a logo original do C3 */
+.home-hero-visual::before,
+.home-hero-visual::after {
+  display: none !important;
+  content: none !important;
+}
+
+.home-hero-visual {
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.home-hero-visual .hero-logo {
+  display: block;
+  width: min(29vw, 380px);
+  max-height: 430px;
+  object-fit: contain;
+  z-index: 2;
+}
+
+@media (max-width: 850px) {
+  .home-hero-visual .hero-logo {
+    width: min(65vw, 265px);
+  }
+}
