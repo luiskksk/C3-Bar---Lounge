@@ -16994,3 +16994,105 @@ body.conta-modal-aberto {
         transition: none !important;
     }
 }
+
+
+/* ==================================================
+   AJUSTES DE ESPAÇAMENTO — PÁGINA SOBRE
+   Mantém a logo original e elimina áreas vazias.
+================================================== */
+
+.sobre-hero {
+  min-height: min(780px, calc(100svh - 145px));
+  padding-top: 80px;
+  padding-bottom: 65px;
+  gap: clamp(28px, 4vw, 60px);
+}
+
+.sobre-cena {
+  min-height: 420px;
+}
+
+.sobre-cena-planeta {
+  display: block;
+  width: clamp(230px, 27vw, 350px);
+}
+
+.historia {
+  min-height: 0;
+  padding-top: 85px;
+  padding-bottom: 85px;
+  gap: clamp(24px, 3vw, 45px);
+}
+
+.conceito {
+  padding-top: 78px;
+  padding-bottom: 82px;
+}
+
+.conceito-header {
+  margin-bottom: 42px;
+}
+
+.conceito-item {
+  min-height: 270px;
+}
+
+.universo-c3 {
+  min-height: 0;
+  padding-top: 70px;
+  padding-bottom: 70px;
+  gap: clamp(25px, 4vw, 55px);
+}
+
+.universo-cena {
+  min-height: 390px;
+}
+
+.universo-cena-planeta {
+  display: block;
+  width: clamp(220px, 25vw, 320px);
+  flex: 0 0 auto;
+}
+
+.sobre-final {
+  min-height: 390px;
+  padding-top: 65px;
+  padding-bottom: 65px;
+}
+
+@media (max-width: 850px) {
+  .sobre-hero {
+    min-height: 0;
+    padding-top: 65px;
+    padding-bottom: 45px;
+  }
+
+  .sobre-cena {
+    min-height: 340px;
+  }
+
+  .historia,
+  .conceito,
+  .universo-c3 {
+    padding-top: 62px;
+    padding-bottom: 62px;
+  }
+
+  .conceito-header {
+    margin-bottom: 32px;
+  }
+
+  .conceito-item {
+    min-height: 235px;
+  }
+
+  .universo-cena {
+    min-height: 330px;
+  }
+
+  .sobre-final {
+    min-height: 320px;
+    padding-top: 55px;
+    padding-bottom: 55px;
+  }
+}
