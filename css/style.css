@@ -16729,3 +16729,268 @@ body.conta-modal-aberto {
     .home-planeta-imagem { width: 115%; }
     .experiencia-planeta-imagem { width: 100%; }
 }
+
+
+/* ==================================================
+   SOBRE C3 — VISUAIS DE OUTRA ÓRBITA
+================================================== */
+.sobre-hero {
+    position: relative;
+    overflow: hidden;
+}
+.sobre-hero-conteudo {
+    position: relative;
+    z-index: 5;
+}
+.sobre-hero-conteudo .tag::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin: 0 10px 1px 0;
+    border-radius: 50%;
+    background: #bd7bff;
+    box-shadow: 0 0 14px #a45cff;
+}
+.sobre-cena {
+    min-height: 540px;
+    isolation: isolate;
+}
+.sobre-cena-nebulosa {
+    position: absolute;
+    width: 105%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(ellipse at 55% 48%, rgba(139,62,255,.25), transparent 38%),
+        radial-gradient(ellipse at 45% 60%, rgba(65,44,145,.18), transparent 58%);
+    filter: blur(24px);
+    animation: c3-nebulosa-pulso 8s ease-in-out infinite;
+}
+.sobre-cena-planeta {
+    position: relative;
+    z-index: 2;
+    width: min(31vw, 390px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(ellipse at 28% 26%, rgba(236,206,255,.9) 0 1%, transparent 13%),
+        radial-gradient(ellipse at 35% 38%, #8e4bd1 0 5%, transparent 32%),
+        radial-gradient(ellipse at 65% 65%, #2b1450 0 22%, transparent 55%),
+        radial-gradient(circle at 35% 30%, #60318d, #1c102d 56%, #050309 78%);
+    box-shadow:
+        inset -42px -35px 65px rgba(0,0,0,.9),
+        inset 10px 5px 35px rgba(199,135,255,.24),
+        0 0 55px rgba(142,64,255,.45),
+        0 0 120px rgba(115,50,220,.18);
+    animation: c3-planeta-flutuar 9s ease-in-out infinite;
+}
+.sobre-cena-planeta::before {
+    content: "";
+    position: absolute;
+    inset: 18% -27%;
+    border: 2px solid rgba(194,129,255,.88);
+    border-radius: 50%;
+    transform: rotate(-23deg) scaleY(.31);
+    box-shadow: 0 0 14px rgba(177,86,255,.7), inset 0 0 12px rgba(177,86,255,.4);
+}
+.sobre-cena-planeta::after {
+    content: "";
+    position: absolute;
+    inset: 25% -34%;
+    border: 1px solid rgba(94,95,255,.6);
+    border-radius: 50%;
+    transform: rotate(-23deg) scaleY(.25);
+}
+.sobre-cena-cratera {
+    position: absolute;
+    z-index: 2;
+    border-radius: 50%;
+    background: rgba(7,4,14,.4);
+    box-shadow: inset 3px 4px 8px rgba(0,0,0,.7), 0 0 9px rgba(197,135,255,.12);
+}
+.sobre-cena-cratera.cratera-a { width: 35px; height: 24px; top: 28%; left: 24%; }
+.sobre-cena-cratera.cratera-b { width: 23px; height: 17px; top: 57%; right: 25%; }
+.sobre-cena-cratera.cratera-c { width: 14px; height: 11px; bottom: 24%; left: 39%; }
+.sobre-cena-lua {
+    position: absolute;
+    z-index: 3;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 25%, #9c77bd, #21132f 65%, #07050b);
+    box-shadow: 0 0 24px rgba(159,88,255,.28);
+    animation: c3-lua-flutuar 7s ease-in-out infinite;
+}
+.sobre-cena-lua.lua-a { width: 72px; height: 72px; top: 12%; right: 13%; }
+.sobre-cena-lua.lua-b { width: 34px; height: 34px; bottom: 16%; left: 9%; animation-delay: -3s; }
+.sobre-cena-estrela {
+    position: absolute;
+    z-index: 4;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 10px 3px #a85cff, 0 0 25px #7d42ff;
+    animation: c3-estrela-piscar 2.8s ease-in-out infinite alternate;
+}
+.sobre-cena-estrela.estrela-a { top: 19%; left: 20%; }
+.sobre-cena-estrela.estrela-b { top: 38%; right: 7%; animation-delay: -1s; }
+.sobre-cena-estrela.estrela-c { bottom: 20%; right: 19%; animation-delay: -2s; }
+.sobre-cena-selo {
+    position: absolute;
+    z-index: 5;
+    right: 0;
+    bottom: 4%;
+    display: grid;
+    gap: 6px;
+    padding: 16px 19px;
+    border: 1px solid rgba(182,119,255,.23);
+    border-radius: 13px;
+    background: rgba(9,6,16,.76);
+    box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    backdrop-filter: blur(12px);
+}
+.sobre-cena-selo span,
+.sobre-cena-selo small {
+    color: #a985c9;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+}
+.sobre-cena-selo strong { font-size: 14px; letter-spacing: 1px; }
+.sobre-cena-selo small { font-size: 8px; letter-spacing: 1px; }
+
+/* Conceito: cards com detalhes gráficos e hover elegante */
+.conceito-item {
+    min-height: 340px;
+    border: 1px solid rgba(173,111,255,.13);
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 85% 18%, rgba(145,76,225,.13), transparent 37%),
+        linear-gradient(145deg, rgba(24,17,35,.72), rgba(8,8,12,.95));
+    transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+.conceito-item:hover {
+    transform: translateY(-8px);
+    border-color: rgba(180,112,255,.42);
+    box-shadow: 0 24px 55px rgba(0,0,0,.3), 0 0 35px rgba(144,71,230,.1);
+}
+.conceito-item .conceito-numero {
+    position: absolute;
+    top: 27px;
+    left: 35px;
+    color: rgba(255,255,255,.28);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+.conceito-simbolo {
+    width: 68px;
+    height: 68px;
+    display: grid;
+    place-items: center;
+    margin-bottom: auto;
+    border: 1px solid rgba(177,112,255,.3);
+    border-radius: 19px;
+    color: #d8b2ff;
+    background: linear-gradient(145deg, rgba(156,80,238,.2), rgba(42,23,65,.25));
+    box-shadow: 0 0 35px rgba(139,65,220,.12), inset 0 0 20px rgba(174,99,255,.08);
+    font-size: 28px;
+}
+.conceito-item h3 { margin-top: 30px; }
+.conceito-item p { max-width: 300px; line-height: 1.75; }
+
+/* Universo C3: visual espacial com informação */
+.universo-cena {
+    min-height: 500px;
+    isolation: isolate;
+    overflow: hidden;
+}
+.universo-cena-brilho {
+    position: absolute;
+    width: 90%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(135,63,238,.23), transparent 65%);
+    filter: blur(20px);
+}
+.universo-cena-planeta {
+    position: relative;
+    z-index: 2;
+    width: min(27vw, 340px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background:
+        radial-gradient(ellipse at 28% 28%, rgba(210,161,255,.8), transparent 12%),
+        radial-gradient(ellipse at 63% 63%, #5d2b91, transparent 40%),
+        radial-gradient(circle at 38% 35%, #48216d, #160d25 67%, #050308 82%);
+    box-shadow: inset -35px -25px 65px #020106, 0 0 65px rgba(151,75,255,.36);
+    animation: c3-planeta-flutuar 10s ease-in-out infinite reverse;
+}
+.universo-cena-anel {
+    position: absolute;
+    z-index: 3;
+    width: min(39vw, 490px);
+    height: 130px;
+    border: 2px solid rgba(185,115,255,.78);
+    border-radius: 50%;
+    transform: rotate(-24deg);
+    box-shadow: 0 0 22px rgba(158,76,255,.42), inset 0 0 15px rgba(158,76,255,.22);
+}
+.universo-cena-ponto {
+    position: absolute;
+    z-index: 4;
+    border-radius: 50%;
+    background: #d8b4ff;
+    box-shadow: 0 0 14px 5px rgba(172,91,255,.5);
+}
+.universo-cena-ponto.ponto-1 { width: 11px; height: 11px; top: 20%; right: 20%; }
+.universo-cena-ponto.ponto-2 { width: 7px; height: 7px; bottom: 23%; left: 16%; }
+.universo-cena-ponto.ponto-3 { width: 5px; height: 5px; top: 34%; left: 15%; }
+.universo-cena-legenda {
+    position: absolute;
+    z-index: 5;
+    right: 0;
+    bottom: 2%;
+    display: grid;
+    gap: 5px;
+    padding: 14px 18px;
+    border: 1px solid rgba(175,111,255,.2);
+    border-radius: 12px;
+    background: rgba(8,7,13,.78);
+    backdrop-filter: blur(10px);
+}
+.universo-cena-legenda span,
+.universo-cena-legenda small {
+    color: #a985c9;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 1.7px;
+}
+.universo-cena-legenda strong { font-size: 15px; letter-spacing: 1px; }
+@keyframes c3-nebulosa-pulso {
+    0%,100% { opacity: .55; transform: scale(.94); }
+    50% { opacity: 1; transform: scale(1.06); }
+}
+@keyframes c3-lua-flutuar {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+@keyframes c3-estrela-piscar {
+    from { opacity: .35; transform: scale(.7); }
+    to { opacity: 1; transform: scale(1.3); }
+}
+@media (max-width: 850px) {
+    .sobre-cena { min-height: 390px; }
+    .sobre-cena-planeta { width: min(62vw, 330px); }
+    .sobre-cena-selo { right: 2%; bottom: 0; }
+    .universo-cena { min-height: 390px; }
+    .universo-cena-planeta { width: min(58vw, 300px); }
+    .universo-cena-anel { width: 78vw; height: 95px; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .sobre-cena-planeta, .sobre-cena-nebulosa, .sobre-cena-lua,
+    .sobre-cena-estrela, .universo-cena-planeta, .conceito-item {
+        animation: none !important;
+        transition: none !important;
+    }
+}
