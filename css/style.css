@@ -16204,3 +16204,186 @@ body.conta-modal-aberto {
         padding: 16px !important;
     }
 }
+
+
+/* =====================================
+   MINHAS COMPRAS - HISTÓRICO DO CLIENTE
+===================================== */
+
+.minhas-compras-page {
+    min-height: 100vh;
+    padding: 100px max(6vw, 22px) 90px;
+    background:
+        radial-gradient(circle at 85% 8%, rgba(121, 61, 198, .16), transparent 34%),
+        linear-gradient(180deg, #09070e, #050509);
+    color: #fff;
+}
+
+.minhas-compras-container {
+    width: min(100%, 1120px);
+    margin: 0 auto;
+}
+
+.minhas-compras-topo {
+    margin-bottom: 48px;
+}
+
+.minhas-compras-topo .tag {
+    color: #b56cff;
+    letter-spacing: 4px;
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.minhas-compras-topo h1 {
+    margin: 12px 0;
+    font-size: clamp(38px, 6vw, 70px);
+    line-height: 1;
+    font-weight: 900;
+}
+
+.minhas-compras-topo h1 span {
+    color: #ad5cff;
+}
+
+.minhas-compras-topo p:last-child {
+    max-width: 620px;
+    color: rgba(255,255,255,.58);
+    line-height: 1.7;
+}
+
+.minhas-compras-lista {
+    display: grid;
+    gap: 18px;
+}
+
+.compra-card {
+    padding: 25px;
+    border: 1px solid rgba(174, 105, 255, .2);
+    border-radius: 17px;
+    background: linear-gradient(145deg, rgba(25, 18, 35, .92), rgba(10, 9, 15, .96));
+    box-shadow: 0 15px 45px rgba(0,0,0,.16);
+}
+
+.compra-card-topo,
+.compra-card-rodape {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.compra-card-numero {
+    color: #b56cff;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 2px;
+}
+
+.compra-card-data {
+    margin-top: 7px;
+    color: rgba(255,255,255,.52);
+    font-size: 12px;
+}
+
+.compra-card-status {
+    padding: 8px 12px;
+    border: 1px solid rgba(181,108,255,.28);
+    border-radius: 999px;
+    color: #d7b5ff;
+    background: rgba(150,80,220,.1);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.compra-card-status.concluido {
+    color: #9ce8b5;
+    border-color: rgba(100,220,140,.25);
+    background: rgba(70,180,110,.08);
+}
+
+.compra-card-status.cancelado {
+    color: #ffaaaa;
+    border-color: rgba(255,100,100,.25);
+    background: rgba(220,70,70,.08);
+}
+
+.compra-card-itens {
+    display: grid;
+    gap: 10px;
+    margin: 22px 0;
+    padding: 18px 0;
+    border-top: 1px solid rgba(255,255,255,.07);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+}
+
+.compra-card-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    color: rgba(255,255,255,.78);
+    font-size: 13px;
+}
+
+.compra-card-item strong {
+    color: #fff;
+    white-space: nowrap;
+}
+
+.compra-card-observacao {
+    margin: 0 0 18px;
+    color: rgba(255,255,255,.48);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.compra-card-total {
+    color: rgba(255,255,255,.55);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.compra-card-total strong {
+    margin-left: 9px;
+    color: #c17cff;
+    font-size: 20px;
+    letter-spacing: 0;
+}
+
+.minhas-compras-estado {
+    padding: 38px 24px;
+    border: 1px dashed rgba(174,105,255,.25);
+    border-radius: 16px;
+    color: rgba(255,255,255,.58);
+    text-align: center;
+    line-height: 1.7;
+}
+
+.minhas-compras-estado strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #fff;
+    font-size: 18px;
+}
+
+.minhas-compras-voltar {
+    display: inline-flex;
+    margin-top: 30px;
+}
+
+@media (max-width: 600px) {
+    .minhas-compras-page {
+        padding: 70px 18px;
+    }
+
+    .compra-card {
+        padding: 19px;
+    }
+
+    .compra-card-total strong {
+        display: block;
+        margin: 8px 0 0;
+    }
+}
