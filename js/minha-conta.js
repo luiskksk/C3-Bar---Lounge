@@ -1,6 +1,7 @@
 import {
     onAuthStateChanged,
-    signOut
+    signOut,
+    updateProfile
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 import {
@@ -37,6 +38,32 @@ const avatarElemento =
 
 const botaoSair =
     document.querySelector("#conta-sair");
+
+const botaoEditarNome =
+    document.querySelector("#conta-editar");
+
+const modalEdicao =
+    document.querySelector("#conta-edicao-modal");
+
+const formularioEdicao =
+    document.querySelector("#conta-edicao-form");
+
+const campoNovoNome =
+    document.querySelector("#conta-novo-nome");
+
+const mensagemEdicao =
+    document.querySelector("#conta-edicao-mensagem");
+
+const botaoSalvarNome =
+    document.querySelector("#conta-edicao-salvar");
+
+const botaoFecharEdicao =
+    document.querySelector("#conta-edicao-fechar");
+
+const botaoCancelarEdicao =
+    document.querySelector("#conta-edicao-cancelar");
+
+let usuarioAtual = null;
 
 const listaReservas =
     document.querySelector("#lista-reservas");
@@ -1107,6 +1134,150 @@ function iniciarListenerMensagens(
 
 
 /* =====================================
+   EDITAR NOME DO PERFIL
+===================================== */
+
+function abrirEdicaoNome() {
+
+    if (!modalEdicao || !campoNovoNome || !usuarioAtual) {
+        return;
+    }
+
+    campoNovoNome.value =
+        usuarioAtual.displayName ||
+        usuarioAtual.email?.split("@")[0] ||
+        "";
+
+    if (mensagemEdicao) {
+        mensagemEdicao.textContent = "";
+        mensagemEdicao.className = "conta-edicao-mensagem";
+    }
+
+    modalEdicao.classList.add("ativo");
+    modalEdicao.setAttribute("aria-hidden", "false");
+    campoNovoNome.focus();
+}
+
+
+function fecharEdicaoNome() {
+
+    if (!modalEdicao) {
+        return;
+    }
+
+    modalEdicao.classList.remove("ativo");
+    modalEdicao.setAttribute("aria-hidden", "true");
+}
+
+
+function atualizarNomeNaTela(nome) {
+
+    if (nomeElemento) {
+        nomeElemento.textContent = nome;
+    }
+
+    if (avatarElemento && !usuarioAtual?.photoURL) {
+        avatarElemento.textContent =
+            nome.charAt(0).toUpperCase();
+    }
+}
+
+
+if (botaoEditarNome) {
+    botaoEditarNome.addEventListener("click", abrirEdicaoNome);
+}
+
+if (botaoFecharEdicao) {
+    botaoFecharEdicao.addEventListener("click", fecharEdicaoNome);
+}
+
+if (botaoCancelarEdicao) {
+    botaoCancelarEdicao.addEventListener("click", fecharEdicaoNome);
+}
+
+if (modalEdicao) {
+    modalEdicao.addEventListener("click", (evento) => {
+        if (evento.target === modalEdicao) {
+            fecharEdicaoNome();
+        }
+    });
+}
+
+document.addEventListener("keydown", (evento) => {
+    if (evento.key === "Escape" && modalEdicao?.classList.contains("ativo")) {
+        fecharEdicaoNome();
+    }
+});
+
+if (formularioEdicao) {
+    formularioEdicao.addEventListener("submit", async (evento) => {
+
+        evento.preventDefault();
+
+        const nome = campoNovoNome?.value.trim() || "";
+
+        if (!usuarioAtual) {
+            if (mensagemEdicao) {
+                mensagemEdicao.textContent = "Entre novamente na sua conta para editar o perfil.";
+                mensagemEdicao.classList.add("erro");
+            }
+            return;
+        }
+
+        if (nome.length < 2 || nome.length > 50) {
+            if (mensagemEdicao) {
+                mensagemEdicao.textContent = "O nome deve ter entre 2 e 50 caracteres.";
+                mensagemEdicao.classList.add("erro");
+            }
+            return;
+        }
+
+        if (nome === (usuarioAtual.displayName || "")) {
+            fecharEdicaoNome();
+            return;
+        }
+
+        try {
+
+            if (botaoSalvarNome) {
+                botaoSalvarNome.disabled = true;
+                botaoSalvarNome.textContent = "Salvando...";
+            }
+
+            await updateProfile(usuarioAtual, {
+                displayName: nome
+            });
+
+            atualizarNomeNaTela(nome);
+
+            if (mensagemEdicao) {
+                mensagemEdicao.textContent = "Nome atualizado com sucesso!";
+                mensagemEdicao.classList.add("sucesso");
+            }
+
+            window.setTimeout(fecharEdicaoNome, 700);
+
+        } catch (erro) {
+
+            console.error("Erro ao atualizar nome:", erro);
+
+            if (mensagemEdicao) {
+                mensagemEdicao.textContent = "Não foi possível atualizar seu nome. Tente novamente.";
+                mensagemEdicao.classList.add("erro");
+            }
+
+        } finally {
+
+            if (botaoSalvarNome) {
+                botaoSalvarNome.disabled = false;
+                botaoSalvarNome.textContent = "Salvar alterações";
+            }
+        }
+    });
+}
+
+
+/* =====================================
    AUTENTICAÇÃO
 ===================================== */
 
@@ -1134,6 +1305,8 @@ onAuthStateChanged(
             return;
         }
 
+
+        usuarioAtual = user;
 
         const nome =
             user.displayName ||
