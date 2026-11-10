@@ -16681,3 +16681,51 @@ body.conta-modal-aberto {
     .admin-pedidos-titulo { align-items: flex-start; flex-direction: column; }
     .home-planeta-decorativo { width: min(66vw, 340px); }
 }
+
+
+/* PLANETAS ENVIADOS — POSICIONAMENTO */
+.home-planeta-imagem-wrap {
+    position: relative;
+    width: min(39vw, 540px);
+    aspect-ratio: 1.5 / 1;
+    display: grid;
+    place-items: center;
+    animation: c3-planeta-flutuar 9s ease-in-out infinite;
+}
+.home-planeta-imagem {
+    width: 125%;
+    max-width: none;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 32px rgba(151,55,255,.25));
+}
+.experiencia-planeta-imagem {
+    display: block;
+    width: min(120%, 520px);
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 0 35px rgba(151,55,255,.3));
+    animation: c3-planeta-flutuar 11s ease-in-out infinite reverse;
+}
+.experiencia-visual .planeta,
+.experiencia-visual .anel-planeta { display: none !important; }
+.admin-pedido-acoes { display: flex; justify-content: flex-end; margin-top: 15px; }
+.admin-pedido-concluir {
+    border: 1px solid rgba(163,91,255,.45);
+    border-radius: 10px;
+    padding: 11px 16px;
+    color: #fff;
+    background: linear-gradient(120deg,#7733b5,#a34be7);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform .2s ease, filter .2s ease;
+}
+.admin-pedido-concluir:hover { transform: translateY(-2px); filter: brightness(1.12); }
+.admin-pedido-concluir:disabled { opacity: .6; cursor: wait; }
+@media (max-width: 760px) {
+    .home-planeta-imagem-wrap { width: min(76vw, 430px); margin: 0 auto; }
+    .home-planeta-imagem { width: 115%; }
+    .experiencia-planeta-imagem { width: 100%; }
+}
