@@ -309,6 +309,67 @@
 
 
             <!-- =====================================
+                 PEDIDOS E COMPRAS
+            ====================================== -->
+            <section class="admin-section admin-pedidos-section">
+                <div class="admin-section-header">
+                    <div>
+                        <p class="tag">COMPRAS</p>
+                        <h2>PEDIDOS <span>DA C3.</span></h2>
+                        <p class="admin-section-descricao">Acompanhe pedidos em aberto, os concluídos hoje e o histórico recente.</p>
+                    </div>
+                </div>
+
+                <div class="admin-pedidos-resumo">
+                    <article class="admin-pedido-resumo">
+                        <span>EM ABERTO</span>
+                        <strong id="admin-pedidos-abertos-total">0</strong>
+                        <small>Precisam de acompanhamento</small>
+                    </article>
+                    <article class="admin-pedido-resumo">
+                        <span>CONCLUÍDOS HOJE</span>
+                        <strong id="admin-pedidos-hoje-total">0</strong>
+                        <small>Finalizados neste dia</small>
+                    </article>
+                    <article class="admin-pedido-resumo">
+                        <span>ÚLTIMOS 30 DIAS</span>
+                        <strong id="admin-pedidos-historico-total">0</strong>
+                        <small>Pedidos anteriores de até 30 dias</small>
+                    </article>
+                </div>
+
+                <div class="admin-pedidos-grupo">
+                    <div class="admin-pedidos-titulo">
+                        <div><p class="tag">ACOMPANHAMENTO</p><h3>COMPRAS <span>EM ABERTO.</span></h3></div>
+                        <span class="admin-pedidos-contador" id="admin-pedidos-abertos-label">0 pedidos</span>
+                    </div>
+                    <div class="admin-pedidos-lista" id="admin-pedidos-abertos">
+                        <div class="admin-reservas-loading">Carregando pedidos em aberto...</div>
+                    </div>
+                </div>
+
+                <div class="admin-pedidos-grupo">
+                    <div class="admin-pedidos-titulo">
+                        <div><p class="tag">FINALIZADOS</p><h3>CONCLUÍDOS <span>HOJE.</span></h3></div>
+                        <span class="admin-pedidos-contador" id="admin-pedidos-hoje-label">0 pedidos</span>
+                    </div>
+                    <div class="admin-pedidos-lista" id="admin-pedidos-hoje">
+                        <div class="admin-reservas-loading">Carregando pedidos concluídos...</div>
+                    </div>
+                </div>
+
+                <div class="admin-pedidos-grupo">
+                    <div class="admin-pedidos-titulo">
+                        <div><p class="tag">HISTÓRICO RECENTE</p><h3>ÚLTIMOS <span>30 DIAS.</span></h3></div>
+                        <span class="admin-pedidos-contador" id="admin-pedidos-historico-label">0 pedidos</span>
+                    </div>
+                    <div class="admin-pedidos-lista" id="admin-pedidos-historico">
+                        <div class="admin-reservas-loading">Carregando histórico...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =====================================
                  RESERVAS DE HOJE
             ====================================== -->
 
