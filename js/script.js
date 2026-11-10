@@ -65,6 +65,14 @@ function caminhoMinhaConta() {
 }
 
 
+function caminhoMinhasCompras() {
+
+    return estaNaPastaPages()
+        ? "./minhas-compras.html"
+        : "./pages/minhas-compras.html";
+}
+
+
 function caminhoAdmin() {
 
     return estaNaPastaPages()
@@ -449,6 +457,34 @@ if (user.photoURL) {
 
     usuarioMenu.appendChild(
         minhaConta
+    );
+
+
+    /* ==============================================
+       MINHAS COMPRAS
+    ============================================== */
+
+    const minhasCompras =
+        document.createElement("a");
+
+    minhasCompras.href =
+        caminhoMinhasCompras();
+
+    minhasCompras.className =
+        "usuario-menu-item usuario-compras";
+
+    minhasCompras.innerHTML =
+        `
+        <span class="usuario-menu-icone">
+            ▤
+        </span>
+        <span>
+            Minhas compras
+        </span>
+        `;
+
+    usuarioMenu.appendChild(
+        minhasCompras
     );
 
 
