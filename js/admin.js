@@ -2186,7 +2186,8 @@ function renderizarPainelPedidos(pedidos) {
     });
     const historico = pedidos.filter(p => {
         const data = timestampParaNumero(p.criadoEm);
-        return data >= inicio30Dias && data < inicioHoje;
+        const encerrado = pedidoEstaConcluido(p.status) || pedidoEstaCancelado(p.status);
+        return encerrado && data >= inicio30Dias && data < inicioHoje;
     });
 
     const ordenarRecentes = (a, b) => timestampParaNumero(b.criadoEm) - timestampParaNumero(a.criadoEm);
