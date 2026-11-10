@@ -133,6 +133,8 @@ let pararReservas = null;
 
 let pararMensagens = null;
 
+let pararPedidos = null;
+
 
 
 /* =========================================
@@ -2027,6 +2029,176 @@ function iniciarListenerReservas() {
 
 
 
+
+/* =========================================
+   PEDIDOS / COMPRAS
+========================================= */
+
+const listaPedidosAbertos = document.querySelector("#admin-pedidos-abertos");
+const listaPedidosHoje = document.querySelector("#admin-pedidos-hoje");
+const listaPedidosHistorico = document.querySelector("#admin-pedidos-historico");
+
+function pedidoEstaConcluido(status) {
+    return ["concluido", "concluído", "entregue", "finalizado"].includes(
+        String(status || "").toLowerCase()
+    );
+}
+
+function pedidoEstaCancelado(status) {
+    return ["cancelado", "cancelada", "recusado", "recusada"].includes(
+        String(status || "").toLowerCase()
+    );
+}
+
+function formatarDinheiroPedido(valor) {
+    return Number(valor || 0).toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+}
+
+function criarCardPedidoAdmin(pedido) {
+    const card = document.createElement("article");
+    card.className = "admin-pedido-card";
+
+    const topo = document.createElement("div");
+    topo.className = "admin-pedido-card-topo";
+
+    const cliente = document.createElement("div");
+    const nome = document.createElement("h4");
+    nome.textContent = pedido.cliente?.nome || "Cliente C3";
+    const email = document.createElement("p");
+    email.textContent = pedido.cliente?.email || "E-mail não informado";
+    cliente.append(nome, email);
+
+    const status = document.createElement("span");
+    const statusTexto = String(pedido.status || "pendente");
+    status.className = "admin-pedido-status";
+    if (pedidoEstaConcluido(statusTexto)) status.classList.add("concluido");
+    else if (pedidoEstaCancelado(statusTexto)) status.classList.add("cancelado");
+    else status.classList.add("aberto");
+    status.textContent = statusTexto.replaceAll("_", " ");
+
+    topo.append(cliente, status);
+
+    const meta = document.createElement("div");
+    meta.className = "admin-pedido-meta";
+    const numero = document.createElement("span");
+    numero.textContent = "PEDIDO #" + pedido.id.slice(-8).toUpperCase();
+    const data = document.createElement("span");
+    data.textContent = formatarTimestamp(pedido.criadoEm);
+    meta.append(numero, data);
+
+    const itens = document.createElement("div");
+    itens.className = "admin-pedido-itens";
+    (Array.isArray(pedido.itens) ? pedido.itens : []).forEach(item => {
+        const linha = document.createElement("p");
+        linha.textContent = (item.quantidade || 1) + "x " + (item.nome || "Item") +
+            " · " + formatarDinheiroPedido(item.subtotal ?? (Number(item.preco || 0) * Number(item.quantidade || 1)));
+        itens.appendChild(linha);
+    });
+    if (!itens.children.length) {
+        const vazio = document.createElement("p");
+        vazio.textContent = "Itens não informados neste pedido.";
+        itens.appendChild(vazio);
+    }
+
+    const rodape = document.createElement("div");
+    rodape.className = "admin-pedido-rodape";
+    const telefone = document.createElement("span");
+    telefone.textContent = pedido.cliente?.telefone || "Telefone não informado";
+    const total = document.createElement("strong");
+    total.textContent = formatarDinheiroPedido(pedido.total);
+    rodape.append(telefone, total);
+
+    card.append(topo, meta, itens, rodape);
+    if (pedido.observacao) {
+        const obs = document.createElement("p");
+        obs.className = "admin-pedido-observacao";
+        obs.textContent = "Observação: " + pedido.observacao;
+        card.appendChild(obs);
+    }
+    return card;
+}
+
+function renderizarGrupoPedidos(elemento, pedidos, textoVazio) {
+    if (!elemento) return;
+    elemento.innerHTML = "";
+    if (!pedidos.length) {
+        const vazio = document.createElement("div");
+        vazio.className = "admin-vazio";
+        vazio.textContent = textoVazio;
+        elemento.appendChild(vazio);
+        return;
+    }
+    pedidos.forEach(pedido => elemento.appendChild(criarCardPedidoAdmin(pedido)));
+}
+
+function atualizarContadorPedido(id, quantidade) {
+    const elemento = document.querySelector(id);
+    if (elemento) elemento.textContent = quantidade + (quantidade === 1 ? " pedido" : " pedidos");
+}
+
+function renderizarPainelPedidos(pedidos) {
+    const agora = new Date();
+    const inicioHoje = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate()).getTime();
+    const inicioAmanha = inicioHoje + 24 * 60 * 60 * 1000;
+    const inicio30Dias = inicioHoje - 30 * 24 * 60 * 60 * 1000;
+
+    const abertos = pedidos.filter(p => !pedidoEstaConcluido(p.status) && !pedidoEstaCancelado(p.status));
+    const concluidosHoje = pedidos.filter(p => {
+        const data = timestampParaNumero(p.criadoEm);
+        return pedidoEstaConcluido(p.status) && data >= inicioHoje && data < inicioAmanha;
+    });
+    const historico = pedidos.filter(p => {
+        const data = timestampParaNumero(p.criadoEm);
+        return data >= inicio30Dias && data < inicioHoje;
+    });
+
+    const ordenarRecentes = (a, b) => timestampParaNumero(b.criadoEm) - timestampParaNumero(a.criadoEm);
+    abertos.sort(ordenarRecentes);
+    concluidosHoje.sort(ordenarRecentes);
+    historico.sort(ordenarRecentes);
+
+    renderizarGrupoPedidos(listaPedidosAbertos, abertos, "Nenhum pedido em aberto.");
+    renderizarGrupoPedidos(listaPedidosHoje, concluidosHoje, "Nenhum pedido foi concluído hoje.");
+    renderizarGrupoPedidos(listaPedidosHistorico, historico, "Nenhum pedido nos últimos 30 dias.");
+
+    const contadores = [
+        ["#admin-pedidos-abertos-total", abertos.length],
+        ["#admin-pedidos-hoje-total", concluidosHoje.length],
+        ["#admin-pedidos-historico-total", historico.length]
+    ];
+    contadores.forEach(([id, valor]) => {
+        const elemento = document.querySelector(id);
+        if (elemento) elemento.textContent = valor;
+    });
+    atualizarContadorPedido("#admin-pedidos-abertos-label", abertos.length);
+    atualizarContadorPedido("#admin-pedidos-hoje-label", concluidosHoje.length);
+    atualizarContadorPedido("#admin-pedidos-historico-label", historico.length);
+}
+
+function iniciarListenerPedidos() {
+    if (pararPedidos) pararPedidos();
+    pararPedidos = onSnapshot(
+        collection(db, "pedidos"),
+        snapshot => {
+            const pedidos = [];
+            snapshot.forEach(documento => pedidos.push({
+                id: documento.id,
+                ...documento.data()
+            }));
+            renderizarPainelPedidos(pedidos);
+        },
+        erro => {
+            console.error("Erro ao carregar pedidos:", erro);
+            [listaPedidosAbertos, listaPedidosHoje, listaPedidosHistorico].forEach(elemento => {
+                if (elemento) elemento.innerHTML = '<div class="admin-erro">Não foi possível carregar os pedidos.</div>';
+            });
+        }
+    );
+}
+
 /* =========================================
    LISTENER DE MENSAGENS
 ========================================= */
@@ -2120,6 +2292,11 @@ function pararListeners() {
 
         pararMensagens =
             null;
+    }
+
+    if (pararPedidos) {
+        pararPedidos();
+        pararPedidos = null;
     }
 }
 
@@ -2255,6 +2432,8 @@ async function verificarAdministrador(
         iniciarListenerReservas();
 
         iniciarListenerMensagens();
+
+        iniciarListenerPedidos();
 
 
         registrarVisualizacaoAdmin();
