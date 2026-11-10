@@ -1153,8 +1153,10 @@ function abrirEdicaoNome() {
         mensagemEdicao.className = "conta-edicao-mensagem";
     }
 
+    modalEdicao.hidden = false;
     modalEdicao.classList.add("ativo");
     modalEdicao.setAttribute("aria-hidden", "false");
+    document.body.classList.add("conta-modal-aberto");
     campoNovoNome.focus();
 }
 
@@ -1167,6 +1169,8 @@ function fecharEdicaoNome() {
 
     modalEdicao.classList.remove("ativo");
     modalEdicao.setAttribute("aria-hidden", "true");
+    modalEdicao.hidden = true;
+    document.body.classList.remove("conta-modal-aberto");
 }
 
 
